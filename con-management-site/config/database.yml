@@ -81,7 +81,7 @@ test:
 production:
   <<: *default
   database: convention
-  username: samsok
+  username: application
   password: 
 #  username: con-management-site
 #  password: <%= ENV['CON-MANAGEMENT-SITE_DATABASE_PASSWORD'] %>
