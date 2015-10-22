@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  
+  get 'convention/index'
+
+  get 'convention/events'
+
+  get 'convention/schedule'
+
+  get 'convention/documents'
+
+  get 'convention/details'
+  
+  get 'home/index'
+  
+  root 'home#index'
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
