@@ -1,36 +1,30 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/index">LepreCon!!</a></li>
-	<li class="active">Events</li>
+	<li><a href="/convention/<%= params[:name] %>/index"><%= params[:name] %></a></li>
+	<li class="active">Details</li>
 </ol>
 
 <div class="container">
 	<div class="row-fluid">
-		
 		<div class="col-xs-12">
-			<div class="panel panel-default">
-				<div class="panel-heading"><h3>How to Search for Gold</h3></div>
-				<div class="panel-body">
-					<p>Host: Rainbow Hunter Denise</p>
-					<p>Description: A tutorial on how to find a pot of gold at the end of a rainbow. Given by a seasoned Rainbow Professional with almost 40 pots under her belt.</p>
-				</div>
-			</div>
-			
-			<div class="panel panel-default">
-				<div class="panel-heading"><h3>How to Search for Gold</h3></div>
-				<div class="panel-body">
-					<p>Host: Shamrock Shaun</p>
-					<p>Description: A tutorial on how to hide a pot of gold at the end of a rainbow. Given by a seasoned Pot-of-gold-hiding Professional with no recorded lost pots to date.</p>
-				</div>
-			</div>
-			
-			<div class="panel panel-default">
-				<div class="panel-heading"><h3>Eye of Argon</h3></div>
-				<div class="panel-body">
-					<p>Host: Kyle Samson</p>
-					<p>Description: Kyle has erroneously decided to run an Eye or Argon panel. Wrong convention buddy.</p>
-				</div>
+			<div class="well">
+				<a href="/convention/<%= params[:name] %>/events/add">Add event</a>
 			</div>
 		</div>
-		
+		<div class="col-xs-12">
+
+			<% @events.each do |e| %>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3><%= e.name %><div class="pull-right"><button class="btn btn-default"><a href="#trash-event"><span class="glyphicon glyphicon-trash"></span></a></button></div></h3>
+				</div>
+				<div class="panel-body">
+					<p><b>Host:</b> <%= e.host_name %></p>
+					<p><b>Description:</b> <%= e.description %></p>
+				</div>
+			</div>
+			<% end %>
+
+		</div>
+
 	</div>
 </div>

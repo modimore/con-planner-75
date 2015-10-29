@@ -1,43 +1,43 @@
 <div class="container-fluid">
-	
+
 	<div class="row">
 		<div class="col-xs-12 page-header home-banner">
-			<h1>LepreCon!!</h1>
+			<h1><%= @convention.name %> <small><%= @convention.description %></small></h1>
 		</div>
 	</div>
-	
+
 	<div class="row-fluid">
-		
+
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/details">Details</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/details">Details</a></h4></div>
 			</div>
 		</div>
-		
+
 		<div class="col-xs-6">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4><a href="#">Organizers</a></h4></div>
 			</div>
 		</div>
-		
+
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/events">Events</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/events">Events</a></h4></div>
 			</div>
 		</div>
-		
+
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/schedule">Schedule(s)</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule">Schedule(s)</a></h4></div>
 			</div>
 		</div>
-		
+
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/documents">Documents</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/documents">Documents</a></h4></div>
 			</div>
 		</div>
-		
+
 	</div>
-	
+
 </div>

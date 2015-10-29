@@ -1,44 +1,48 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/index">LepreCon!!</a></li>
+	<li><a href="/convention/<%= params[:name] %>/index"><%= params[:name] %></a></li>
 	<li class="active">Details</li>
 </ol>
 
 <div class="container-fluid">
-	
+
 	<%# Rooms %>
 	<div class="row">
 		<div class="col-xs-6">
 			<ul class="list-group">
 				<li class="list-group-item disabled">Rooms</li>
-				<li class="list-group-item">Room 501</li>
-				<li class="list-group-item">Room 502</li>
-				<li class="list-group-item">Room 415</li>
-				<li class="list-group-item">Hotel Lobby</li>
-				<li class="list-group-item">Conference Room</li>
-				<li class="list-group-item">Executive Breakfast Suite</li>
+				<% @rooms.each do |r| %>
+				<li class="list-group-item"><%= r.room_name %></li>
+				<% end %>
 			</ul>
 		</div>
+
 		<div class="col-xs-6">
-			<label for="room-input">Rooms to add</label><br>
-			<textarea id="room-input"></textarea><br>
-			<button class="btn btn-default">Add rooms</button>
+			<form action="/convention/<%= params[:name] %>/rooms/add" method="post">
+				<label for="room_name">Rooms to add</label><br>
+				<textarea id="room_name" name="room_name"></textarea><br>
+				<button type="submit" class="btn btn-default">Add rooms</button>
+			</form>
 		</div>
+
 	</div>
-	
+
 	<%# Hosts %>
 	<div class="row">
 		<div class="col-xs-6">
 			<ul class="list-group">
 				<li class="list-group-item disabled">Hosts</li>
-				<li class="list-group-item">Shamrock Shaun</li>
-				<li class="list-group-item">Rainbow Hunter Denise</li>
-				<li class="list-group-item">Kyle Samson</li>
-			</ul>
+				<% @hosts.each do |h| %>
+				<li class="list-group-item"><%= h.name %></li>
+				<% end %>
 		</div>
+
 		<div class="col-xs-6">
-			<label for="host-input">Hosts to add</label><br>
-			<textarea id="host-input"></textarea><br>
-			<button class="btn btn-default">Add hosts</button>
+			<form action="/convention/<%= params[:name] %>/hosts/add" method="post">
+				<label for="host_name">Hosts to add</label><br>
+				<textarea id="host_name" name="host_name"></textarea><br>
+				<button type="submit" class="btn btn-default">Add hosts</button>
+			</form>
 		</div>
+
 	</div>
 </div>

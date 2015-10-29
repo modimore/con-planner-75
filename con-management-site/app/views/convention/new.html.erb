@@ -1,0 +1,9 @@
+<%= form_for @convention, url: { action: "create_convention"} do |f| %>
+  <%= label_tag(:name, "Convention Name:") %><br>
+  <%= f.text_field :name %><br>
+  <%= label_tag(:description, "Description:") %><br>
+  <%= f.text_area :description, size: "60x12" %><br>
+  <%= label_tag(:location, "Location:") %><br>
+  <%= f.text_field :location %><br>
+  <%= f.submit "Create" %>
+<% end %>
