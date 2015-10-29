@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:name] %>/index"><%= params[:name] %></a></li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
 	<li class="active">Details</li>
 </ol>
 
@@ -12,8 +12,9 @@
 				<div class="panel-heading"><h4>Documents</h4></div>
 				<table class="table">
 					<tbody>
-						<tr><td><a>LepreCon!! Schedule</a></td></tr>
-						<tr><td><a>Shamrock Shaun Picture</a></td></tr>
+						<% @documents.each do |d| %>
+						<tr><td><a><%= d.display_name %></a></td></tr>
+						<% end %>
 					</tbody>
 				</table>
 			</div>
@@ -24,13 +25,12 @@
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Document Upload</h4></div>
 				<div class="panel-body">
-					<form id="convention-document-upload">
-
-						<input type="text" placeholder="Display Name">
-						<textarea placeholder="Description"></textarea>
-						<input type="file">
-
-					</form>
+					<%= form_tag({ action: :upload_document }, multipart: true) do %>
+						<%= label_tag(:display_name, "Document Name") %><br>
+						<%= text_field_tag :display_name %><br>
+						<%= file_field_tag 'document' %>
+						<%= submit_tag("Upload") %>
+					<% end %>
 				</div>
 			</div>
 		</div>

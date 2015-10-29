@@ -16,6 +16,10 @@ class ConventionController < ApplicationController
     end
   end
 
+  def all
+    @conventions = Convention.all
+  end
+
   def index
     @convention = Convention.find_by(name: params[:name])
   end
@@ -45,6 +49,23 @@ class ConventionController < ApplicationController
   end
 
   def documents
+    @documents = Document.where(convention_name: params[:convention_name])
+    @document = Document.new
+  end
+
+  def upload_document
+    uploaded_io = params[:document]
+    @document = Document.new({ display_name: params[:display_name],
+                               convention_name: params[:convention_name],
+                               location: Rails.root.join('public','uploads',uploaded_io.original_filename)})
+    if @document.save
+      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+        file.write(uploaded_io.read)
+      end
+      redirect_to '/convention/'+params[:convention_name]+'/documents'
+    else
+      redirect_to '/convention/'+params[:convention_name]+'/documents'
+    end
   end
 
   # Convention details

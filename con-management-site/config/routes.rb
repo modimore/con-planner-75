@@ -8,17 +8,19 @@ Rails.application.routes.draw do
 
   # convention controller pages
   get 'convention/new'
+  get 'convention/all'
   get 'convention/:name/index' => 'convention#index'
   get 'convention/:name/details' => 'convention#details'
   get 'convention/:name/events' => 'convention#events'
   get 'convention/:name/schedule' => 'convention#schedule'
-  get 'convention/:name/documents' => 'convention#documents'
-  get 'convention/:name/events/add' => 'convention#add_event'
+  get 'convention/:convention_name/documents' => 'convention#documents'
+  get 'convention/:convention_name/events/add' => 'convention#add_event'
 
   post 'convention/new' => 'convention#create_convention'
   post 'convention/:convention_name/rooms/add' => 'convention#add_room'
   post 'convention/:convention_name/hosts/add' => 'convention#add_host'
   post 'convention/:convention_name/events/add' => 'convention#create_event'
+  post 'convention/:convention_name/documents/add' => 'convention#upload_document'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
