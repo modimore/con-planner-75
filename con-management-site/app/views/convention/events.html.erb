@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:name] %>/index"><%= params[:name] %></a></li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
 	<li class="active">Details</li>
 </ol>
 
@@ -7,7 +7,7 @@
 	<div class="row-fluid">
 		<div class="col-xs-12">
 			<div class="well">
-				<a href="/convention/<%= params[:name] %>/events/add">Add event</a>
+				<a href="/convention/<%= params[:convention_name] %>/events/add">Add event</a>
 			</div>
 		</div>
 		<div class="col-xs-12">
@@ -15,7 +15,12 @@
 			<% @events.each do |e| %>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3><%= e.name %><div class="pull-right"><button class="btn btn-default"><a href="#trash-event"><span class="glyphicon glyphicon-trash"></span></a></button></div></h3>
+					<h3>
+					  <%= e.name %>
+						<div class="pull-right">
+							<a href="<%= root_url << '/convention/' + params[:convention_name] + '/remove_event/' + e.name %>"><span class="glyphicon glyphicon-trash"></span></a>
+						</div>
+					</h3>
 				</div>
 				<div class="panel-body">
 					<p><b>Host:</b> <%= e.host_name %></p>

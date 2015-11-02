@@ -1,19 +1,30 @@
 class ConventionController < ApplicationController
   protect_from_forgery except: :details
 
+  # Convention information
   def new
     @convention = Convention.new
   end
 
   def create_convention
-    @convention = Convention.new({ name: params[:convention][:name],
-                                   description: params[:convention][:description],
-                                   location: params[:convention][:location] })
-    if @convention.save
-      redirect_to '/convention/'+params[:convention][:name]+'/index'
+    if Convention.where(name: params[:convention][:name]).length > 0
+      redirect_to '/convention/all'
     else
-      redirect_to '/'
+      @convention = Convention.new({ name: params[:convention][:name],
+                                     description: params[:convention][:description],
+                                     location: params[:convention][:location] })
+      if @convention.save
+        redirect_to '/convention/'+params[:convention][:name]+'/index'
+      else
+        redirect_to '/'
+      end
     end
+  end
+
+  def delete
+    @convention = Convention.find_by(name: params[:convention_name])
+    @convention.destroy
+    redirect_to '/convention/all'
   end
 
   def all
@@ -21,12 +32,50 @@ class ConventionController < ApplicationController
   end
 
   def index
-    @convention = Convention.find_by(name: params[:name])
+    @convention = Convention.find_by(name: params[:convention_name])
+  end
+
+  # Convention details
+  def details
+    @rooms = Room.where(convention_name: params[:convention_name])
+    @new_room = Room.new
+    @hosts = Host.where(convention_name: params[:convention_name])
+    @new_host = Host.new
+  end
+
+  def add_room
+    @room = Room.new({ room_name: params[:room_name], convention_name: params[:convention_name] })
+    if @room.save
+      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
+    else
+      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
+    end
+  end
+
+  def remove_room
+    @room = Room.where( room_name: params[:room_name], convention_name: params[:convention_name] )
+    @room.each { |r| r.destroy }
+    redirect_to '/convention/' + params[:convention_name] + '/details'
+  end
+
+  def add_host
+    @host = Host.new({ name: params[:host_name], convention_name: params[:convention_name] })
+    if @host.save
+      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
+    else
+      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
+    end
+  end
+
+  def remove_host
+    @host = Host.where( name: params[:host_name], convention_name: params[:convention_name] )
+    @host.each { |h| h.destroy }
+    redirect_to '/convention/' + params[:convention_name] + '/details'
   end
 
   # Event information for Convetion
   def events
-    @events = Event.where(convention_name: params[:name])
+    @events = Event.where(convention_name: params[:convention_name])
   end
 
   def add_event
@@ -48,6 +97,7 @@ class ConventionController < ApplicationController
   def schedule
   end
 
+  # Documents for convention
   def documents
     @documents = Document.where(convention_name: params[:convention_name])
     @document = Document.new
@@ -57,41 +107,20 @@ class ConventionController < ApplicationController
     uploaded_io = params[:document]
     @document = Document.new({ display_name: params[:display_name],
                                convention_name: params[:convention_name],
-                               location: Rails.root.join('public','uploads',uploaded_io.original_filename)})
+                               location: 'uploads/'+uploaded_io.original_filename })
     if @document.save
       File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
         file.write(uploaded_io.read)
       end
-      redirect_to '/convention/'+params[:convention_name]+'/documents'
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/documents'
     end
+    redirect_to '/convention/'+params[:convention_name]+'/documents'
   end
 
-  # Convention details
-  def details
-    @rooms = Room.where(convention_name: params[:name])
-    @new_room = Room.new
-    @hosts = Host.where(convention_name: params[:name])
-    @new_host = Host.new
-  end
-
-  def add_room
-    @room = Room.new({ room_name: params[:room_name], convention_name: params[:convention_name] })
-    if @room.save
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    end
-  end
-
-  def add_host
-    @host = Host.new({ name: params[:host_name], convention_name: params[:convention_name] })
-    if @host.save
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    end
+  def remove_document
+    @document = Document.find_by( convention_name: params[:convention_name], display_name: params[:doc_name])
+    File.delete(Rails.root.join('public', @document.location))
+    @document.destroy
+    redirect_to '/convention/'+params[:convention_name]+'/documents'
   end
 
 end

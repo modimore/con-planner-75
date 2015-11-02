@@ -13,7 +13,14 @@
 				<table class="table">
 					<tbody>
 						<% @documents.each do |d| %>
-						<tr><td><a><%= d.display_name %></a></td></tr>
+						<tr><td>
+						  <%= link_to d.display_name, root_url << d.location %>
+							<div class="pull-right">
+								<%= form_for d, url: { action: "remove_document", doc_name: d.display_name } do |f| %>
+									<%= f.submit "Delete" %>
+								<% end %>
+							</div>
+						</td></tr>
 						<% end %>
 					</tbody>
 				</table>

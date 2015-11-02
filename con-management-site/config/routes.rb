@@ -9,18 +9,25 @@ Rails.application.routes.draw do
   # convention controller pages
   get 'convention/new'
   get 'convention/all'
-  get 'convention/:name/index' => 'convention#index'
-  get 'convention/:name/details' => 'convention#details'
-  get 'convention/:name/events' => 'convention#events'
-  get 'convention/:name/schedule' => 'convention#schedule'
+  get 'convention/:convention_name/index' => 'convention#index'
+  get 'convention/:convention_name/details' => 'convention#details'
+  get 'convention/:convention_name/events' => 'convention#events'
+  get 'convention/:convention_name/schedule' => 'convention#schedule'
   get 'convention/:convention_name/documents' => 'convention#documents'
   get 'convention/:convention_name/events/add' => 'convention#add_event'
 
+  # convention controller creations
   post 'convention/new' => 'convention#create_convention'
   post 'convention/:convention_name/rooms/add' => 'convention#add_room'
   post 'convention/:convention_name/hosts/add' => 'convention#add_host'
   post 'convention/:convention_name/events/add' => 'convention#create_event'
   post 'convention/:convention_name/documents/add' => 'convention#upload_document'
+  # convention controller deletions
+  patch 'convention/:convention_name/delete' => 'convention#delete'
+  patch 'convention/:convention_name/remove_event/:event_name' => 'convention#remove_event'
+  patch 'convention/:convention_name/remove_room/:room_name' => 'convention#remove_room'
+  patch 'convention/:convention_name/remove_host/:host_name' => 'convention#remove_host'
+  patch 'convention/:convention_name/remove_document/:doc_name' => 'convention#remove_document'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

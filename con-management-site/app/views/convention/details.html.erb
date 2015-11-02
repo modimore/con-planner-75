@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:name] %>/index"><%= params[:name] %></a></li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
 	<li class="active">Details</li>
 </ol>
 
@@ -11,13 +11,20 @@
 			<ul class="list-group">
 				<li class="list-group-item disabled">Rooms</li>
 				<% @rooms.each do |r| %>
-				<li class="list-group-item"><%= r.room_name %></li>
+				<li class="list-group-item">
+				  <%= r.room_name %>
+					<div class="pull-right">
+						<%= form_for r, url: { action: "remove_room", room_name: r.room_name } do |f| %>
+							<%= f.submit "Delete" %>
+						<% end %>
+				  </div>
+				</li>
 				<% end %>
 			</ul>
 		</div>
 
 		<div class="col-xs-6">
-			<form action="/convention/<%= params[:name] %>/rooms/add" method="post">
+			<form action="/convention/<%= params[:convention_name] %>/rooms/add" method="post">
 				<label for="room_name">Rooms to add</label><br>
 				<textarea id="room_name" name="room_name"></textarea><br>
 				<button type="submit" class="btn btn-default">Add rooms</button>
@@ -32,12 +39,19 @@
 			<ul class="list-group">
 				<li class="list-group-item disabled">Hosts</li>
 				<% @hosts.each do |h| %>
-				<li class="list-group-item"><%= h.name %></li>
+				<li class="list-group-item">
+				  <%= h.name %>
+					<div class="pull-right">
+						<%= form_for h, url: { action: "remove_host", host_name: h.name } do |f| %>
+							<%= f.submit "Delete" %>
+						<% end %>
+					</div>
+				</li>
 				<% end %>
 		</div>
 
 		<div class="col-xs-6">
-			<form action="/convention/<%= params[:name] %>/hosts/add" method="post">
+			<form action="/convention/<%= params[:convention_name] %>/hosts/add" method="post">
 				<label for="host_name">Hosts to add</label><br>
 				<textarea id="host_name" name="host_name"></textarea><br>
 				<button type="submit" class="btn btn-default">Add hosts</button>
