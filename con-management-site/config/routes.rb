@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'convention/new'
   get 'convention/all'
   get 'convention/:convention_name/index' => 'convention#index'
+  get 'convention/:convention_name/edit' => 'convention#edit'
   get 'convention/:convention_name/details' => 'convention#details'
   get 'convention/:convention_name/events' => 'convention#events'
   get 'convention/:convention_name/schedule' => 'convention#schedule'
@@ -23,6 +24,7 @@ Rails.application.routes.draw do
   post 'convention/:convention_name/events/add' => 'convention#create_event'
   post 'convention/:convention_name/documents/add' => 'convention#upload_document'
   # convention controller deletions
+  post 'convention/:convention_name/edit' => 'convention#edit_details'
   patch 'convention/:convention_name/delete' => 'convention#delete'
   patch 'convention/:convention_name/remove_event/:event_name' => 'convention#remove_event'
   patch 'convention/:convention_name/remove_room/:room_name' => 'convention#remove_room'

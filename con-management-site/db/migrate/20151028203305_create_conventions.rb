@@ -4,7 +4,6 @@ class CreateConventions < ActiveRecord::Migration
       t.string :name
       t.text :description
       t.string :location
-      t.datetime :start, :end
       t.timestamps null: false
     end
   end

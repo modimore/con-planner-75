@@ -1,6 +1,10 @@
 class ConventionController < ApplicationController
   protect_from_forgery except: :details
 
+  def all
+    @conventions = Convention.all
+  end
+
   # Convention information
   def new
     @convention = Convention.new
@@ -22,25 +26,43 @@ class ConventionController < ApplicationController
   end
 
   def delete
-    @convention = Convention.find_by(name: params[:convention_name])
-    @convention.destroy
+    @documents = Document.where(convention_name: params[:convention_name])
+    @documents.each do |d|
+      File.delete(Rails.root.join('public', d.location))
+      d.destroy
+    end
+    Room.where(convention_name: params[:convention_name]).each { |r| r.destroy }
+    Host.where(convention_name: params[:convention_name]).each { |h| h.destroy }
+    Event.where(convention_name: params[:convention_name]).each { |e| e.destroy }
+    Convention.find_by(name: params[:convention_name]).destroy
     redirect_to '/convention/all'
-  end
-
-  def all
-    @conventions = Convention.all
   end
 
   def index
     @convention = Convention.find_by(name: params[:convention_name])
   end
 
+  def edit
+    @convention = Convention.find_by(name: params[:convention_name])
+  end
+
   # Convention details
   def details
+    @convention = Convention.find_by(name: params[:convention_name])
     @rooms = Room.where(convention_name: params[:convention_name])
     @new_room = Room.new
     @hosts = Host.where(convention_name: params[:convention_name])
     @new_host = Host.new
+  end
+
+  def edit_details
+    @convention = Convention.find_by(name: params[:convention_name])
+    @convention.description = params[:con_descr]
+    @convention.location = params[:con_location]
+    @convention.start = params[:con_start_time]
+    @convention.end = params[:con_end_time]
+    @convention.save
+    redirect_to '/convention/'+params[:convention_name]+'/details'
   end
 
   def add_room

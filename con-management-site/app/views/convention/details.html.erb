@@ -4,7 +4,27 @@
 </ol>
 
 <div class="container-fluid">
-
+	<%# Time & Location %>
+	<div class="row">
+		<div class="col-xs-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Location</div>
+				<div class="panel-body"><%= @convention.location %></div>
+			</div>
+		</div>
+		<div class="col-xs-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Start Time</div>
+				<div class="panel-body"><%= @convention.start %></div>
+			</div>
+		</div>
+		<div class="col-xs-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">End Time</div>
+				<div class="panel-body"><%= @convention.end %></div>
+			</div>
+		</div>
+	</div>
 	<%# Rooms %>
 	<div class="row">
 		<div class="col-xs-6">
