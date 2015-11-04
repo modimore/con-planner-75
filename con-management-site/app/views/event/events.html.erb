@@ -18,7 +18,12 @@
 					<h3>
 					  <%= e.name %>
 						<div class="pull-right">
-							<a href="<%= root_url << '/convention/' + params[:convention_name] + '/remove_event/' + e.name %>"><span class="glyphicon glyphicon-trash"></span></a>
+							<%= form_for e, url: { action: "remove", event_name: e.name } do |f| %>
+								<%= f.submit "Delete" %>
+							<% end %>
+						</div>
+						<div class="pull-right">
+							<a href="/convention/<%= params[:convention_name] %>/events/<%= e.name %>/edit">Edit</a>
 						</div>
 					</h3>
 				</div>
