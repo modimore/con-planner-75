@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ConventionTest < ActiveSupport::TestCase
+<<<<<<< HEAD
 
   def setup
     @convention = ConventionController.new(name: "Example", description: "An example convention", location: "Troy, NY")
@@ -15,3 +16,9 @@ class ConventionTest < ActiveSupport::TestCase
   	assert_not @convention.valid?
   end
 end
+=======
+  # test "the truth" do
+  #   assert true
+  # end
+end
+>>>>>>> master

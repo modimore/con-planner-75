@@ -1,36 +1,43 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/index">LepreCon!!</a></li>
-	<li class="active">Documents</li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
+	<li class="active">Details</li>
 </ol>
 
 <div class="container">
 	<div class="row">
-		
+
 		<%# Convention document list %>
 		<div class="col-xs-8">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Documents</h4></div>
 				<table class="table">
 					<tbody>
-						<tr><td><a>LepreCon!! Schedule</a></td></tr>
-						<tr><td><a>Shamrock Shaun Picture</a></td></tr>
+						<% @documents.each do |d| %>
+						<tr><td>
+						  <%= link_to d.display_name, root_url << d.location %>
+							<div class="pull-right">
+								<%= form_for d, url: { action: "remove_document", doc_name: d.display_name } do |f| %>
+									<%= f.submit "Delete" %>
+								<% end %>
+							</div>
+						</td></tr>
+						<% end %>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		
+
 		<%# Document upload form %>
 		<div class="col-xs-4">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Document Upload</h4></div>
 				<div class="panel-body">
-					<form id="convention-document-upload">
-						
-						<input type="text" placeholder="Display Name">
-						<textarea placeholder="Description"></textarea>
-						<input type="file">
-						
-					</form>
+					<%= form_tag({ action: :upload_document }, multipart: true) do %>
+						<%= label_tag(:display_name, "Document Name") %><br>
+						<%= text_field_tag :display_name %><br>
+						<%= file_field_tag 'document' %>
+						<%= submit_tag("Upload") %>
+					<% end %>
 				</div>
 			</div>
 		</div>

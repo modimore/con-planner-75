@@ -8,28 +8,26 @@
 	<div class="row">
 
 		<%# Convention List %>
-		<div class="col-xs-8">
+		<div class="col-xs-12">
 			<div class="panel panel-primary">
 
 				<div class="panel-heading"><h4>My Conventions</h4></div>
+
 				<table class="table">
 					<tbody>
 						<% @conventions.each do |c| %>
-						<tr><td><a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %></td></tr>
+						<tr><td>
+							<a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %>
+							<div class="pull-right">
+								<%= form_for c, url: { action: "delete", convention_name: c.name } do |f| %>
+								  <%= f.submit "Delete" %>
+								<% end %>
+							</div>
+						</td></tr>
 						<% end %>
 					</tbody>
 				</table>
 
-			</div>
-		</div>
-
-		<%# Convention Search Box %>
-		<div class="col-xs-4">
-			<div class="input-group">
-				<input class="form-control" type="text" placeholder="Search Cons...">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">Go!</button>
-				</span>
 			</div>
 		</div>
 
