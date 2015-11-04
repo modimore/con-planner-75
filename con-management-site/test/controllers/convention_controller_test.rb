@@ -26,4 +26,10 @@ class ConventionControllerTest < ActionController::TestCase
     get :details
     assert_response :success
   end
+
+  test "create convention" do
+    post( :create_convention, convention: {name: "Example", description: => "Some convention", location: => "Troy, NY"})
+    assert_response :success
+    assert_redirect_to '/convention/'+params[:convention][:name]+'/index'
+  end
 end
