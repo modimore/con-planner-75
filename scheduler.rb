@@ -22,7 +22,7 @@ end
 
 class Scheduler
 
-	attr_reader :events, :rooms, :times, :availability
+	attr_reader :events
 
 	# vars: list of Event objects to be scheduled; number of rooms available; time brackets during which convention runs
 	def initialize(rooms, times)
