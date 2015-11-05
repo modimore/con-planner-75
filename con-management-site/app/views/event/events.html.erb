@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
 	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
-	<li class="active">Details</li>
+	<li class="active">Events</li>
 </ol>
 
 <div class="container">
@@ -23,7 +23,9 @@
 							<% end %>
 						</div>
 						<div class="pull-right">
-							<a href="/convention/<%= params[:convention_name] %>/events/<%= e.name %>/edit">Edit</a>
+							<%= form_for e, url: { action: "edit", event_name: e.name }, method: "get" do |f| %>
+								<%= f.submit "Edit" %>
+							<% end %>
 						</div>
 					</h3>
 				</div>

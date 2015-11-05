@@ -11,5 +11,7 @@
   <%= f.text_field :host_name %><br>
   <%= label_tag(:description, "Description") %><br>
   <%= f.text_area :description, size: "60x12" %><br>
+	<%= label_tag(:length, "Length (in hours)") %><br>
+	<%= f.number_field :length %><br>
   <%= f.submit "Edit Event" %>
 <% end %>

@@ -13,7 +13,8 @@ class EventController < ApplicationController
     @event = Event.new({ name: params[:event][:name],
                          convention_name: params[:convention_name],
                          host_name: params[:event][:host_name],
-                         description: params[:event][:description] })
+                         description: params[:event][:description],
+                         length: params[:event][:length] })
     if @event.save
       redirect_to '/convention/'+params[:convention_name]+'/events'
     else
@@ -30,6 +31,7 @@ class EventController < ApplicationController
     @event.name = params[:event][:name]
     @event.host_name = params[:event][:host_name]
     @event.description = params[:event][:description]
+    @event.length = params[:event][:length]
     @event.save
     redirect_to '/convention/'+params[:convention_name]+'/events'
   end

@@ -1,6 +1,7 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:name] %></a></li>
-	<li class="active">Details</li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
+	<li><a href="/convention/<%= params[:convention_name] %>/index">Events</a></li>
+	<li class="active">Add</li>
 </ol>
 
 <%= form_for @event, url: { action: "create"} do |f| %>
@@ -10,5 +11,7 @@
   <%= f.text_field :host_name %><br>
   <%= label_tag(:description, "Description") %><br>
   <%= f.text_area :description, size: "60x12" %><br>
+	<%= label_tag(:length, "Length (in hours)") %><br>
+	<%= f.number_field :length %><br>
   <%= f.submit "Create" %>
 <% end %>
