@@ -1,4 +1,5 @@
 
+
 # mini event class (not connected to db) for testing purposes
 class Event
 
@@ -43,9 +44,9 @@ class Scheduler
 		solution = backtrack(eventlist)
 		unless solution=="fail"
 			@events = solution
-			puts "success"
+			"success"
 		else
-			puts "failure"
+			"failure"
 		end
 	end
 
@@ -189,12 +190,8 @@ contime = [[10,16],[34,40]]
 sch = Scheduler.new(3,contime)
 
 
-sch.run(elist)
+puts sch.run(elist)
 
 sch.events.each do |e|
 	puts "#{e.name}: " + e.times.to_s
 end
-
-
-
-
