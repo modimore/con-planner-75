@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">con-management-app</string>
+    <string name="title_event_detail">Event Detail</string>
+</resources>
