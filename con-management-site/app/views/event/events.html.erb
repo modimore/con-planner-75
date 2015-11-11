@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
 	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
-	<li class="active">Details</li>
+	<li class="active">Events</li>
 </ol>
 
 <div class="container">
@@ -18,7 +18,14 @@
 					<h3>
 					  <%= e.name %>
 						<div class="pull-right">
-							<a href="<%= root_url << '/convention/' + params[:convention_name] + '/remove_event/' + e.name %>"><span class="glyphicon glyphicon-trash"></span></a>
+							<%= form_for e, url: { action: "remove", event_name: e.name } do |f| %>
+								<%= f.submit "Delete" %>
+							<% end %>
+						</div>
+						<div class="pull-right">
+							<%= form_for e, url: { action: "edit", event_name: e.name }, method: "get" do |f| %>
+								<%= f.submit "Edit" %>
+							<% end %>
 						</div>
 					</h3>
 				</div>

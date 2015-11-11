@@ -95,27 +95,6 @@ class ConventionController < ApplicationController
     redirect_to '/convention/' + params[:convention_name] + '/details'
   end
 
-  # Event information for Convetion
-  def events
-    @events = Event.where(convention_name: params[:convention_name])
-  end
-
-  def add_event
-    @event = Event.new
-  end
-
-  def create_event
-    @event = Event.new({ name: params[:event][:name],
-                         convention_name: params[:convention_name],
-                         host_name: params[:event][:host_name],
-                         description: params[:event][:description] })
-    if @event.save
-      redirect_to '/convention/'+params[:convention_name]+'/events'
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/events'
-    end
-  end
-
   def schedule
   end
 
@@ -130,6 +109,7 @@ class ConventionController < ApplicationController
     @document = Document.new({ display_name: params[:display_name],
                                convention_name: params[:convention_name],
                                location: 'uploads/'+uploaded_io.original_filename })
+    if @document.display_name == ""; @document.display_name = "<no name>"; end
     if @document.save
       File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
         file.write(uploaded_io.read)
