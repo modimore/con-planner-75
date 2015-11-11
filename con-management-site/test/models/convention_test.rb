@@ -1,24 +1,17 @@
 require 'test_helper'
 
 class ConventionTest < ActiveSupport::TestCase
-<<<<<<< HEAD
 
   def setup
-    @convention = ConventionController.new(name: "Example", description: "An example convention", location: "Troy, NY")
+    @no_name = Convention.new(name: " ", description: "con", location: "here")
   end
 
   test "ensure convention is valid" do
-    assert @convention.valid?
+    assert conventions(:base).valid?
   end
 
   test "name requirement" do
-  	@convention.name = " "
-  	assert_not @convention.valid?
+  	assert_not @no_name.valid?
   end
 end
-=======
-  # test "the truth" do
-  #   assert true
-  # end
-end
->>>>>>> master
+
