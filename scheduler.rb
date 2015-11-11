@@ -1,5 +1,4 @@
 
-
 # mini event class (not connected to db) for testing purposes
 class Event
 
@@ -21,20 +20,28 @@ class Event
 end
 
 
+
+
 class Scheduler
 
-	attr_reader :events
+	attr_reader :events, :roomhash, :rooms
 
-	# vars: list of Event objects to be scheduled; number of rooms available; time brackets during which convention runs
+	# vars: list of rooms available; time brackets during which convention runs
 	def initialize(rooms, times)
 		@rooms = rooms
 		@times = times
+
+		# create 1 key per each room in hash
+		@roomhash = Hash.new
+		@rooms.each do |r|
+			@roomhash[r] = Array.new
+		end
 
 		# initialize to all rooms available at all times
 		@availability = Hash.new
 		@times.each do |t|
 			for i in t[0]..t[1]
-				@availability[i] = @rooms
+				@availability[i] = @rooms.dup
 			end
 		end
 	end
@@ -44,7 +51,13 @@ class Scheduler
 		solution = backtrack(eventlist)
 		unless solution=="fail"
 			@events = solution
-			"success"
+			@roomhash.each do |k,v|
+				v.sort! do |event1, event2|
+					event1.times[0][0] <=> event2.times[0][0]
+				end
+			end
+
+			@roomhash
 		else
 			"failure"
 		end
@@ -91,7 +104,9 @@ class Scheduler
 	end
 
 	# backtracking algorithm to find a successful schedule assignment
-	def backtrack(elist)
+	def backtrack(input_elist)
+
+		elist = Marshal.load(Marshal.dump(input_elist))
 
 		# sort events based on slack
 		elist.sort! do |event1, event2|
@@ -108,31 +123,35 @@ class Scheduler
 				start_vals.push(i)
 			end
 		end
-
+		puts "starting #{curr_event.name}, all times: #{curr_event.times}"
 		# try each assigning each possible value until one works
 		start_vals.each do |v1|
 			v2 = v1+curr_event.length
 			curr_event.times=([[v1,v2]])
 
 			# uses 1 room for the chosen time value
-			overbooked = false
-			for i in v1..v2
-				@availability[i] -= 1
-
-				# check that it hasn't used more rooms than are available
-				if @availability[i] < 0
-					overbooked = true
-				end
+			# make an array containing every room that is available for the entire chosen time bracket
+			intersect = @availability[v1]
+			for i in (v1+1)...v2
+				intersect = intersect & @availability[i]
 			end
-			
-			# if rooms are overbooked, undo availability adjustment and remove this time value from possible assignments
-			if overbooked 
-				for i in v1..v2
-					@availability[i] += 1
-				end
-				start_vals.delete(v1)
+			puts "looking for room for #{curr_event.name} from #{v1} to #{v2}. Available: #{intersect}"
+			#puts "available times for next event: #{elist[0].times}"
+			# assign curr_event to the first room in the array of available rooms
+			unless intersect.empty?
+				# variable to store name of room; used later if chosen time value fails
+				curr_room = intersect[0]
 
-				# skip the rest of this iteration of the loop
+				@roomhash[curr_room].push(curr_event)
+
+				# this room becomes unavailable for every hour in the chosen time bracket
+				for i in v1...v2
+					@availability[i].delete(curr_room)
+				end
+
+				puts "trying #{curr_event.name} from #{v1} to #{v2} in #{curr_room}"
+			else
+				# no available room; skip the rest of this iteration of the loop
 				next
 			end
 			
@@ -141,6 +160,9 @@ class Scheduler
 				return [curr_event]
 			end
 			
+			# store current state of events list, to revert back to later if this path fails
+			temp_elist = Marshal.load(Marshal.dump(elist))
+
 			# check for host conflicts - a host can't be at 2 events at the same time
 			elist.each do |e|
 				curr_event.hosts.each do |h|
@@ -163,14 +185,20 @@ class Scheduler
 				return result + [curr_event] unless result=="fail"
 			end
 			
-			# didn't return success in if statements; remove v from potential start times, reset room availability
-			for i in v1..v2
-				@availability[i] += 1
+			# didn't return success in if statements; remove v from potential start times,
+			# remove curr_event from room hash, reset room availability, un-trim altered times
+			# for i in v1..v2
+			# 	@availability[i] += 1
+			# end
+			for i in v1...v2
+				@availability[i].push(curr_room)
 			end
-			start_vals.delete(v1)
+			roomhash[curr_room].delete(curr_event)
+			elist = Marshal.load(Marshal.dump(temp_elist))
 		end
 
 		# went through all recursive calls without returning a success
+		puts "returning fail on #{curr_event.name}"
 		return "fail"
 	end
 
@@ -179,19 +207,21 @@ end
 
 # testing
 
-e1 = Event.new(1, [[10,14],[34,37]], ["a","b"], "event1")
-e2 = Event.new(1, [[10,12],[35,38]], ["a","c","d"], "event2")
+e1 = Event.new(3, [[10,14],[34,37]], ["a","b"], "event1")
+e2 = Event.new(2, [[10,12],[35,38]], ["a","c","d"], "event2")
 e3 = Event.new(2, [[11,12],[38,40]], ["a","b"], "event3")
-e4 = Event.new(1, [[10,14]], ["b","c","a","d"], "event4")
-e5 = Event.new(2, [[12,14],[34,38]], ["c","d","a","b"], "event5")
+e4 = Event.new(2, [[10,14]], ["b","c","a","d"], "event4")
+e5 = Event.new(2, [[12,14],[34,38]], ["c","d"], "event5")
 
 elist = [e1,e2,e3,e4,e5]
+rlist = ["DCC308", "Commons", "ShirleysThroneRoom"]
 contime = [[10,16],[34,40]]
-sch = Scheduler.new(3,contime)
+sch = Scheduler.new(rlist,contime)
 
 
 puts sch.run(elist)
 
-sch.events.each do |e|
-	puts "#{e.name}: " + e.times.to_s
-end
+
+sch.events.each {|e| puts "#{e.name}: #{e.times}"} unless sch.events==nil
+
+
