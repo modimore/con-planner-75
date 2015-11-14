@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
+	<li><a href="/convention/<%= params[:con_name] %>/index"><%= params[:con_name] %></a></li>
 	<li class="active">Details</li>
 </ol>
 
@@ -16,3 +16,12 @@
 		</div>
 	</div>
 </div>
+
+<% @schedule.keys.each do |r| %>
+  <%= r %>
+	<ul>
+	  <% @schedule[r].each do |e| %>
+		  <li><%= "#{e.name}: #{e.times[0][0]} - #{e.times[0][1]}" %></li>
+		<% end %>
+	</ul>
+<% end %>

@@ -1,11 +1,11 @@
 <ol class="breadcrumb">
-	<li><a href="/convention/<%= params[:convention_name] %>/index"><%= params[:convention_name] %></a></li>
+	<li><a href="/convention/<%= params[:con_name] %>/index"><%= params[:con_name] %></a></li>
 	<li class="active">Edit</li>
 </ol>
 
 <div class="container-fluid">
   <div class="row-fluid">
-    <form action="/convention/<%= params[:convention_name] %>/edit" method="post">
+    <form action="/convention/<%= params[:con_name] %>/edit" method="post">
       <div class="form-group col-xs-12">
         <label for="description">Description</label>
         <input type="textarea" class="form-control" id="description" name="con_descr" value="<%= @convention.description %>">
@@ -16,11 +16,11 @@
       </div>
 			<div class="form-group col-xs-6">
 				<label for="con_start_time">Start Time</label>
-				<input type="datetime-local" class="form-control" id="con_start_time" name="con_start_time">
+				<input type="datetime-local" class="form-control" id="con_start_time" name="con_start_time" value="<%= @convention.start.to_s(:html_datetime_local) %>">
 			</div>
 			<div class="form-group col-xs-6">
 				<label for="con_end_time">End Time</label>
-				<input type="datetime-local" class="form-control" id="con_end_time" name="con_end_time">
+				<input type="datetime-local" class="form-control" id="con_end_time" name="con_end_time" value="<%= @convention.end.to_s(:html_datetime_local) %>">
 			</div>
       <input type="submit" value="Edit Convention">
     </form>
