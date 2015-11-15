@@ -5,5 +5,8 @@ package utils;
  */
 public class Event {
     private String name;
-
+    private String convetion_name;
+    private String host_name;
+    private String description;
+    private int length;
 }
