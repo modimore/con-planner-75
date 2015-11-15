@@ -2,7 +2,12 @@
 
 	<div class="row">
 		<div class="col-xs-12 page-header home-banner">
-			<h1><%= @convention.name %> <small><%= @convention.description %></small></h1>
+			<h1 style="display:inline-block;"><%= @convention.name %> <small><%= @convention.description %></small></h1>
+			<div class="pull-right" style="display:inline-block;">
+				<%= form_for @convention, url: { action: "edit" }, method: "get" do |f| %>
+					<%= f.submit "Edit" %>
+				<% end %>
+			</div>
 		</div>
 	</div>
 
