@@ -6,7 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
+
+import java.io.File;
+import java.util.List;
+
+import utils.Convention;
+import utils.DownloadConventionTask;
+import utils.SearchConventionsTask;
 
 
 /**
@@ -37,6 +45,28 @@ public class EventListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //////////////////////////
+        //EXAMPLES OF USE. PLEASE REMOVE WHEN DONE
+        /*
+        try {
+            List<Convention> conventionList = new SearchConventionsTask().execute("o").get();
+            Log.d("SearchResults", conventionList.toString());
+
+            Convention c = new DownloadConventionTask(this).execute("holds").get();
+            if(c != null) {
+                Log.d("DownloadResults", c.toString());
+            } else {
+                Log.d("DownloadResults", "null");
+            }
+
+
+        } catch (Exception e) {
+            Log.e("Results", e.getMessage(), e);
+        }
+        */
+
         setContentView(R.layout.activity_event_app_bar);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
