@@ -46,6 +46,10 @@ public class EventListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        //////////////////////////
+        //EXAMPLES OF USE. PLEASE REMOVE WHEN DONE
+        /*
         try {
             List<Convention> conventionList = new SearchConventionsTask().execute("o").get();
             Log.d("SearchResults", conventionList.toString());
@@ -61,6 +65,7 @@ public class EventListActivity extends AppCompatActivity
         } catch (Exception e) {
             Log.e("Results", e.getMessage(), e);
         }
+        */
 
         setContentView(R.layout.activity_event_app_bar);
 
