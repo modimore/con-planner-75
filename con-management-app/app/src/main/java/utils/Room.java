@@ -5,5 +5,13 @@ package utils;
  */
 public class Room {
     private String name;
-    private String convention_name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

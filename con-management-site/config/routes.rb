@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   # convention controller pages
   get 'convention/new'
   get 'convention/all'
+  get 'convention/search'
+  get 'convention/:convention_name/download' => 'convention#download'
   get 'convention/:convention_name/index' => 'convention#index'
   get 'convention/:convention_name/edit' => 'convention#edit'
   get 'convention/:convention_name/details' => 'convention#details'
