@@ -1,5 +1,6 @@
 class ConventionController < ApplicationController
   protect_from_forgery except: :details
+  before_action :require_user
 
   def all; @conventions = Convention.all; end
 

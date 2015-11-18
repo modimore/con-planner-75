@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   # home controller pages
   get 'home/index'
 
+  get 'signup' => 'user#new'
+  post 'signup' => 'user#create'
+  get 'login' => 'user#login'
+  post 'login' => 'user#login_x'
+
   # convention controller pages
   get 'convention/new'
   get 'convention/all'

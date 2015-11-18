@@ -1,7 +1,5 @@
 class HomeController < ApplicationController
 
-	def index
-		@conventions = Convention.all
-	end
+	def index; @conventions = Convention.all; end
 
 end
