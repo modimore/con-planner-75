@@ -21,10 +21,9 @@ public class UtilTests extends InstrumentationTestCase {
     @Test
     public void testConventionExists() throws Exception {
 
-        File convention = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions/holds");
-        assertTrue(convention.exists());
+        //File convention = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions/holds");
+        //assertTrue(convention.exists());
 
-        /*
         try {
             List<Convention> conventionList = new SearchConventionsTask().execute("o").get();
             Log.d("SearchResults", conventionList.toString());
@@ -35,11 +34,18 @@ public class UtilTests extends InstrumentationTestCase {
             } else {
                 Log.d("DownloadResults", "null");
             }
+            c = new DownloadConventionTask().execute("bold").get();
+            if(c != null) {
+                Log.d("DownloadResults", c.toString());
+            } else {
+                Log.d("DownloadResults", "null");
+            }
 
+            List<Convention> allDownloaded = AppUtils.getDownloadedConventions();
+            Log.d("DownloadResults", allDownloaded.toString());
 
         } catch (Exception e) {
             Log.e("Results", e.getMessage(), e);
         }
-        */
     }
 }

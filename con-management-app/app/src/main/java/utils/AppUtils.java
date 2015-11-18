@@ -10,10 +10,13 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import utils.Convention;
@@ -27,7 +30,20 @@ public class AppUtils {
      *          ps: checks for existance of JSON file.
      */
     public static List<Convention> getDownloadedConventions() {
-        throw new RuntimeException("Not Implemented yet");
+        File file = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/");
+        String[] directories = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+
+        List<Convention> conventions = new LinkedList<>();
+        for(String s : directories)
+        {
+            conventions.add(parseConvention(s));
+        }
+        return conventions;
     }
 
     public static Convention parseConvention(String con_name) {
