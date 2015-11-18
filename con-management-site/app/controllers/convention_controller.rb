@@ -11,7 +11,7 @@ class ConventionController < ApplicationController
   end
 
   #Sends a lean json that has all of the conveniton names matching the query string
-  def search
+  def client_search
     @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
 
     if @conventions.empty?

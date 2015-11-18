@@ -25,6 +25,27 @@ import utils.Convention;
  * Created by samsok on 11/15/15.
  */
 public class AppUtils {
+
+    /**
+     * Deletes all of the downloaded conventions. Mainly used for testing.
+     */
+    public static void deleteDownloadedConventions() {
+        File con_dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions");
+        deleteFolder(con_dir);
+    }
+
+    private static void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) {
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                }
+                f.delete();
+            }
+        }
+    }
+
     /**
      * @return a list of all conventions whose files are on the machine
      *          ps: checks for existance of JSON file.

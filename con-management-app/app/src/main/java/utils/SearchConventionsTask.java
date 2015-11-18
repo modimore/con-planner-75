@@ -27,7 +27,7 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
         ArrayList<Convention> results = new ArrayList<>();
 
         try {
-            URL url = new URL("http://127.0.0.1:3000/convention/search?query="  + params[0]);
+            URL url = new URL("http://127.0.0.1:3000/convention/client_search?query="  + params[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
