@@ -29,12 +29,6 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
      *          It will store everything in a file in the appropriate location on the machine
      */
 
-    private Context mContext;
-
-    public DownloadConventionTask(Context context) {
-        mContext = context;
-    }
-
     @Override
     protected Convention doInBackground(String... params) {
         //URL("localhost:3000/convention/search?query="  + query);
