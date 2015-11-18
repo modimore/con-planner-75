@@ -93,7 +93,7 @@ class ConventionController < ApplicationController
   def schedule
     require 'convention_helper'
 
-    con = Convention.find_by(name: params[:con_name])
+    @con = Convention.find_by(name: params[:con_name])
 
     # get events for convention from database
     elist = []
@@ -108,7 +108,7 @@ class ConventionController < ApplicationController
     end
 
     # proceed to scheduling
-    contime = [[0,(con.end - con.start).to_i/3600]]
+    contime = [[0,(@con.end - @con.start).to_i/3600]]
     scheduler = Scheduler.new(rlist,contime)
     @schedule = scheduler.run(elist)
   end
