@@ -14,21 +14,13 @@ Rails.application.routes.draw do
   # convention controller pages
   get 'convention/new'
   get 'convention/all'
-<<<<<<< HEAD
+  get 'convention/client_search'
+  get 'convention/:convention_name/download' => 'convention#download'
   get 'convention/:con_name/index' => 'convention#index'
   get 'convention/:con_name/edit' => 'convention#edit'
   get 'convention/:con_name/details' => 'convention#details'
   get 'convention/:con_name/schedule' => 'convention#schedule'
   get 'convention/:con_name/documents' => 'convention#documents'
-=======
-  get 'convention/client_search'
-  get 'convention/:convention_name/download' => 'convention#download'
-  get 'convention/:convention_name/index' => 'convention#index'
-  get 'convention/:convention_name/edit' => 'convention#edit'
-  get 'convention/:convention_name/details' => 'convention#details'
-  get 'convention/:convention_name/schedule' => 'convention#schedule'
-  get 'convention/:convention_name/documents' => 'convention#documents'
->>>>>>> origin/master
 
   # convention controller creations
   post 'convention/new' => 'convention#create_convention'
