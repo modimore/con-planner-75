@@ -10,6 +10,8 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import utils.*;
+
 /**
  * An activity representing a single Event detail screen. This
  * activity is only used on handset devices. On tablet-size devices,

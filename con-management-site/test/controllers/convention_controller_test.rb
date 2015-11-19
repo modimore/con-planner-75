@@ -1,29 +1,31 @@
 require 'test_helper'
 
 class ConventionControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
+
+  def setup
+    @convention = Convention.new(name: "Example", description: "An example convention", location: "Troy, NY")
+    
+  end
+
+  test "get convention" do
+    get :index, convention_name: conventions(:base).name
     assert_response :success
   end
 
-  test "should get events" do
-    get :events
-    assert_response :success
+  test "create convention" do
+    assert_difference('Convention.count') do
+      post :create_convention, convention: {name: @convention.name, description: @convention.description, location: @convention.location}
+    end
+    assert_response :redirect
+    assert_redirected_to '/convention/'+@convention.name+'/index'
   end
 
-  test "should get schedule" do
-    get :schedule
-    assert_response :success
+test "delete convention" do
+    assert_differences([['Convention.count', -1],['Document.count', -1]]) do
+      patch :delete, convention_name: conventions(:base).name
+    end
+    assert_response :redirect
+    assert_redirected_to '/convention/all'
   end
-
-  test "should get documents" do
-    get :documents
-    assert_response :success
-  end
-
-  test "should get details" do
-    get :details
-    assert_response :success
-  end
-
 end
+
