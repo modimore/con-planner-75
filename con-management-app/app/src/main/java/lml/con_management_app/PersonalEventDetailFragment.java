@@ -12,14 +12,12 @@ import android.widget.TextView;
 import lml.con_management_app.dummy.DummyContent;
 
 /**
- * A fragment representing a single Event detail screen.
- * This fragment is either contained in a {@link EventListActivity}
- * in two-pane mode (on tablets) or a {@link EventDetailActivity}
+ * A fragment representing a single PersonalEvent detail screen.
+ * This fragment is either contained in a {@link PersonalEventListActivity}
+ * in two-pane mode (on tablets) or a {@link PersonalEventDetailActivity}
  * on handsets.
  */
-
-//test
-public class EventDetailFragment extends Fragment {
+public class PersonalEventDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -35,7 +33,7 @@ public class EventDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public EventDetailFragment() {
+    public PersonalEventDetailFragment() {
     }
 
     @Override
@@ -59,11 +57,11 @@ public class EventDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_event_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_personalevent_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.event_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.personalevent_detail)).setText(mItem.details);
         }
 
         return rootView;

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context=".EventDetailActivity" tools:ignore="MergeRootFrame">
+    tools:context="lml.con_management_app.PersonalEventDetailActivity"
+    tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout android:id="@+id/app_bar"
         android:layout_width="match_parent" android:layout_height="@dimen/app_bar_height"
@@ -24,14 +25,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView android:id="@+id/event_detail_container"
+    <android.support.v4.widget.NestedScrollView android:id="@+id/personalevent_detail_container"
         android:layout_width="match_parent" android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_add"
-        app:layout_anchor="@+id/event_detail_container" app:layout_anchorGravity="top|end" />
+        android:src="@android:drawable/stat_notify_chat"
+        app:layout_anchor="@+id/personalevent_detail_container"
+        app:layout_anchorGravity="top|end" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,33 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
-
-import java.io.File;
-import java.util.List;
-
+/*
 import utils.Convention;
 import utils.DownloadConventionTask;
 import utils.SearchConventionsTask;
-
-
-/**
- * An activity representing a list of Events. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link EventDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- * <p/>
- * The activity makes heavy use of fragments. The list of items is a
- * {@link EventListFragment} and the item details
- * (if present) is a {@link EventDetailFragment}.
- * <p/>
- * This activity also implements the required
- * {@link EventListFragment.Callbacks} interface
- * to listen for item selections.
  */
+
 public class EventListActivity extends AppCompatActivity
         implements EventListFragment.Callbacks {
 
@@ -45,21 +25,12 @@ public class EventListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_event_app_bar);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         if (findViewById(R.id.event_detail_container) != null) {
             // The detail container view will be present only in the
@@ -75,7 +46,8 @@ public class EventListActivity extends AppCompatActivity
                     .setActivateOnItemClick(true);
         }
 
-        // TODO: If exposing deep links into your app, handle intents here.
+        //"up" button - links back to parent activity defined in manifest
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**

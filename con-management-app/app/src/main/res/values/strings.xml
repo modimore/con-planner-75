@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">con-management-app</string>
     <string name="title_event_detail">Event Detail</string>
+    <string name="title_activity_convention_page">ConventionPageActivity</string>
+    <string name="ScheduleButton">Schedule of Events</string>
+    <string name="title_activity_docs_page">DocsPageActivity</string>
+    <string name="title_personalevent_list">PersonalEvents</string>
+    <string name="title_personalevent_detail">PersonalEvent Detail</string>
+    <string name="title_activity_home_page">HomePage</string>
 </resources>
