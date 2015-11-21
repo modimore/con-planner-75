@@ -17,14 +17,19 @@ class UserController < ApplicationController
     end
   end
 
-  def login; end
+  def login_page; end
 
-  def login_x
+  def login
     @user = User.find_by(username: params[:username])
     if @user && @user.authenticate(params[:password])
       session[:username] = @user.username
       redirect_to '/home/index'
     else; redirect_to '/login'; end
+  end
+
+  def logout
+    session.delete(:username)
+    redirect_to '/'
   end
 
 end

@@ -2,25 +2,26 @@ class ConventionController < ApplicationController
   protect_from_forgery except: :details
   before_action :require_user
 
+  # Get all conventions
   def all; @conventions = Convention.all; end
 
-  # Convention information
-  def new; @convention = Convention.new; end
-
-  #Sends a lean json that has all of the conveniton names matching the query string
-  def client_search
-    @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
-
-    if @conventions.empty?
-      render json: {}
-    else
-      results = {}
-      results[:conventions] = @conventions.as_json
-      render json: results
-    end
+  def by_user
+    convention_names = Organizer.where(username: session[:username]).select("convention")
+    puts convention_names
+    @conventions = Convention.where(name: convention_names)
   end
 
+  def search
+    @conventions = Convention.where("name LIKE ?", "%#{params[:search_term]}%")
+  end
+
+  # Convention creation page, give new empty convention
+  def new; @convention = Convention.new; end
+
+  # Add convention to database
   def create_convention
+    # If the convention exists already return to list of conventions
+    # If not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
       redirect_to '/convention/all'
     else
@@ -32,26 +33,7 @@ class ConventionController < ApplicationController
     end
   end
 
-  def download
-    @convention = Convention.find_by(name: params[:convention_name])
-    @events = Event.where(convention_name: params[:convention_name])
-    @rooms = Room.where(convention_name: params[:convention_name])
-    @hosts = Host.where(convention_name: params[:convention_name])
-    @documents = Document.where(convention_name: params[:convention_name])
-
-    convention_info = {}
-    convention_info[:name] = @convention.name
-    convention_info[:description] = @convention.description
-    convention_info[:location] = @convention.location
-    convention_info[:start] = @convention.start
-    convention_info[:end] = @convention.end
-    convention_info[:events] = @events.as_json
-    convention_info[:rooms] = @rooms.as_json
-    convention_info[:hosts] = @hosts.as_json
-    convention_info[:documents] = @documents.as_json
-    render json: convention_info
-  end
-
+  # Delete convention and everything associated from database
   def delete
     @documents = Document.where(convention_name: params[:con_name])
     @documents.each do |d|
@@ -65,8 +47,10 @@ class ConventionController < ApplicationController
     redirect_to '/convention/all'
   end
 
+  # Convention's index page, send specific convention details
   def index; @convention = Convention.find_by(name: params[:con_name]); end
 
+  # Edit convention information page
   def edit; @convention = Convention.find_by(name: params[:con_name]); end
 
   # Convention details =============================================
@@ -103,6 +87,14 @@ class ConventionController < ApplicationController
     @room = Room.where( room_name: params[:room_name], convention_name: params[:con_name] )
     @room.each { |r| r.destroy }
     redirect_to '/convention/' + params[:con_name] + '/details'
+  end
+  # ================================================================
+
+  # Organizers =====================================================
+  def add_organizer
+    @organizer = Organizer.new({ username: session[:username], convention: params[:con_name]})
+    if @organizer.save; redirect_to '/conventions'
+    else; redirect_to '/conventions/search/' + params[:con_name]; end
   end
   # ================================================================
 
@@ -175,5 +167,40 @@ class ConventionController < ApplicationController
     redirect_to '/convention/'+params[:con_name]+'/documents'
   end
   # ================================================================
+
+  # Mobile app stuff ===============================================
+  #Sends a lean json that has all of the conveniton names matching the query string
+  def client_search
+    @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
+
+    if @conventions.empty?
+      render json: {}
+    else
+      results = {}
+      results[:conventions] = @conventions.as_json
+      render json: results
+    end
+  end
+
+  def download
+    @convention = Convention.find_by(name: params[:convention_name])
+    @events = Event.where(convention_name: params[:convention_name])
+    @rooms = Room.where(convention_name: params[:convention_name])
+    @hosts = Host.where(convention_name: params[:convention_name])
+    @documents = Document.where(convention_name: params[:convention_name])
+
+    convention_info = {}
+    convention_info[:name] = @convention.name
+    convention_info[:description] = @convention.description
+    convention_info[:location] = @convention.location
+    convention_info[:start] = @convention.start
+    convention_info[:end] = @convention.end
+    convention_info[:events] = @events.as_json
+    convention_info[:rooms] = @rooms.as_json
+    convention_info[:hosts] = @hosts.as_json
+    convention_info[:documents] = @documents.as_json
+    render json: convention_info
+  end
+  # Mobile app stuff ===============================================
 
 end

@@ -1,5 +1,5 @@
 class EventController < ApplicationController
-  before_action: :require_user
+  before_action :require_user
 
   # Event information for Convetion
   def events; @events = Event.where(convention_name: params[:con_name]); end

@@ -19,8 +19,8 @@
 						<tr><td>
 							<a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %>
 							<div class="pull-right">
-								<%= form_for c, url: { action: "add_organizer", con_name: c.name }, method: "post" do |f| %>
-								  <%= f.submit "Add" %>
+								<%= form_for c, url: { action: "delete", con_name: c.name } do |f| %>
+								  <%= f.submit "Delete" %>
 								<% end %>
 							</div>
 						</td></tr>
