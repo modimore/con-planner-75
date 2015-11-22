@@ -72,8 +72,8 @@ Rails.application.routes.draw do
   get 'convention/:con_name/events/add' => 'event#add'
   post 'convention/:con_name/events/add' => 'event#create'
   get 'convention/:con_name/events/:event_name/edit' => 'event#edit'
-  post 'convention/:con_name/events/:event_name/edit' => 'event#edit_details'
-  patch 'convention/:con_name/remove_event/:event_name' => 'event#remove'
+  post 'convention/:con_name/events/:event_name/edit' => 'event#update'
+  patch 'convention/:con_name/remove_event/:event_name' => 'event#delete'
   # ============================================================================
 
   # The priority is based upon order of creation: first created -> highest priority.

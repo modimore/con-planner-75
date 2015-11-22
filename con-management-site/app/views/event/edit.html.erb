@@ -4,14 +4,32 @@
   <li class="active"><%= @event.name %></li>
 </ol>
 
-<%= form_for @event, url: { action: "edit_details" }, method: "post" do |f| %>
-  <%= label_tag(:name, "Event Name") %><br>
-  <%= f.text_field :name %><br>
-  <%= label_tag(:host_name, "Host Name") %><br>
-  <%= f.text_field :host_name %><br>
-  <%= label_tag(:description, "Description") %><br>
-  <%= f.text_area :description, size: "60x12" %><br>
-	<%= label_tag(:length, "Length (in hours)") %><br>
-	<%= f.number_field :length %><br>
-  <%= f.submit "Edit Event" %>
-<% end %>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<%= form_for @event, url: { action: "update"}, method: "post" do |f| %>
+			<div class="form-group col-xs-4">
+			  <%= label_tag(:name, "Event Name") %><br>
+			  <%= f.text_field :name, class: "form-control" %><br>
+			</div>
+			<div class="form-group col-xs-4">
+				<label for="host-name">Host Name</label>
+				<select id="host-name" name="host_name" class="form-control">
+					<%= @hosts.each do |h| %>
+					  <option value="<%= h %>"><%= h %></option>
+					<% end %>
+				</select>
+			</div>
+			<div class="form-group col-xs-4">
+				<%= label_tag(:length, "Length (in hours)") %><br>
+				<%= f.number_field :length, class: "form-control", min: 0, value: 1 %><br>
+			</div>
+			<div class="form-group col-xs-12">
+		  	<%= label_tag(:description, "Description") %><br>
+		  	<%= f.text_area :description, class: "form-control" %><br>
+			</div>
+			<div class="pull-right">
+		  	<button type="submit" class="btn cp75-colors">Edit Event</button>
+			</div>
+		<% end %>
+	</div>
+</div>
