@@ -1,9 +1,10 @@
 package utils;
+import java.io.Serializable;
 
 /**
  * Created by samsok on 11/11/15.
  */
-public class Event {
+public class Event implements Serializable{
     private String name;
     private String description;
     private int length;

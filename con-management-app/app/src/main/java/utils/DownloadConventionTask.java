@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.Serializable;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;

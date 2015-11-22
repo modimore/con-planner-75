@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="lml.con_management_app.HomePageActivity">
+    tools:context="lml.con_management_app.SearchPageActivity">
 
     <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
@@ -15,16 +15,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_home_page" />
+    <include layout="@layout/content_search_page" />
 
     <!-- add a linear layout to format buttons and display content properly-->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:orientation="vertical"
-        android:id="@+id/homeLayout_id"
         android:weightSum="1">
 
         <!--edit text to add offset for the toolbar - this is bad !-->
@@ -34,21 +34,32 @@
             android:layout_weight="0.05" />
 
 
+
+        <!-- USER INPUT FOR SEARCH -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchEditText_id"
+            android:layout_weight="0.05" />
+
+
         <!-- BUTTONS: !-->
         <Button
-            android:id="@+id/conventionButton_id"
+            android:id="@+id/submitButton_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
+            android:text="Search"
+            android:layout_weight="0.05" />
 
-        <Button
-            android:id="@+id/searchButton_id"
+        <!-- TEXT VIEW FOR RESPONSE DISPLAY -->
+        <TextView
+            android:id="@+id/feedbackText_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="Search for a Convention"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:textColor="#A4C639" />
 
     </LinearLayout>
 

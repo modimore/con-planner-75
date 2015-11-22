@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.Serializable;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
