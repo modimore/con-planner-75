@@ -93,6 +93,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
 
         } catch (Exception e) {
             Log.e("Download", e.getMessage(), e);
+            return  null;
         } finally {
             try {
                 if (is != null) {
@@ -147,6 +148,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
 
             } catch (Exception e) {
                 Log.e("Download", e.getMessage(), e);
+                return null;
             }
         }
 

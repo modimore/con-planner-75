@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lml.con_management_app" >
 
+    <!-- Allows DB hookup -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Allow application to read&write data from external storage location -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

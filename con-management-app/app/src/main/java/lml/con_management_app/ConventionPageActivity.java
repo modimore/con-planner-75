@@ -2,12 +2,17 @@ package lml.con_management_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+
+import java.io.File;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import android.util.Log;
+import utils.*;
+import test.UtilTests;
 
 public class ConventionPageActivity extends AppCompatActivity {
 
@@ -45,7 +50,6 @@ public class ConventionPageActivity extends AppCompatActivity {
                 gotoPersonal();
             }
         });
-
 
         //"up" button - links back to parent activity defined in manifest
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

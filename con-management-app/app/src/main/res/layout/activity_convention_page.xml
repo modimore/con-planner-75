@@ -60,6 +60,15 @@
             android:text="PERSONAL SCHEDULE"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" />
+
+        <Button
+            android:id="@+id/dbTestButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="tap me!"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
     </LinearLayout>
 
 
