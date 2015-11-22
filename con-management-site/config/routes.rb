@@ -1,44 +1,61 @@
 Rails.application.routes.draw do
 
-  # start at 'home/index' page
-  root 'home#index'
+  # site root
+  root 'home#home'
 
   # home controller ============================================================
-  get 'home/index'
+  get 'home' => 'home#home'
   # ============================================================================
 
   # user controller ============================================================
+  # new accounts
   get 'signup' => 'user#new'
   post 'signup' => 'user#create'
+
+  # session management
   get 'login' => 'user#login_page'
   post 'login' => 'user#login'
   post 'logout' => 'user#logout'
+
+  # user's conventions
+  get 'conventions/mine' => 'user#conventions'
   # ============================================================================
 
   # convention controller ======================================================
-  # pages
-  get 'conventions' => 'convention#by_user'
+  # actions not for a specific convention
   get 'conventions/all' => 'convention#all'
-  get 'convention/new'
-  get 'convention/:con_name/index' => 'convention#index'
-  get 'convention/:con_name/edit' => 'convention#edit'
-  get 'convention/:con_name/details' => 'convention#details'
-  get 'convention/:con_name/schedule' => 'convention#schedule'
-  get 'convention/:con_name/documents' => 'convention#documents'
   get 'convention/search'
-
-  # creations
+  get 'convention/new'
   post 'convention/new' => 'convention#create_convention'
-  post 'convention/:con_name/rooms/add' => 'convention#add_room'
-  post 'convention/:con_name/hosts/add' => 'convention#add_host'
-  post 'convention/:con_name/documents/add' => 'convention#upload_document'
-  post 'convention/:con_name/add_organizer' => 'convention#add_organizer'
 
-  # deletions
-  post 'convention/:con_name/edit' => 'convention#edit_details'
+  # actions for a specific convention
+  get 'convention/:con_name' => 'convention#index'
+  get 'convention/:con_name/index' => 'convention#index'
   patch 'convention/:con_name/delete' => 'convention#delete'
+  get 'convention/:con_name/schedule' => 'convention#schedule'
+
+  #details
+  get 'convention/:con_name/details' => 'convention#details'
+  get 'convention/:con_name/edit' => 'convention#edit'
+  post 'convention/:con_name/edit' => 'convention#edit_details'
+
+  # organizers
+  get 'convention/:con_name/organizers' => 'convention#organizers'
+  post 'convention/:con_name/add_organizer' => 'convention#add_organizer'
+  post 'conventions/:con_name/organizers/change_role' => 'convention#change_organizer_role'
+  patch 'convention/:con_name/remove_organizer' => 'convention#remove_organizer'
+
+  # rooms
+  post 'convention/:con_name/rooms/add' => 'convention#add_room'
   patch 'convention/:con_name/remove_room/:room_name' => 'convention#remove_room'
+
+  # hosts
+  post 'convention/:con_name/hosts/add' => 'convention#add_host'
   patch 'convention/:con_name/remove_host/:host_name' => 'convention#remove_host'
+
+  #documents
+  get 'convention/:con_name/documents' => 'convention#documents'
+  post 'convention/:con_name/documents/add' => 'convention#upload_document'
   patch 'convention/:con_name/remove_document/:doc_name' => 'convention#remove_document'
 
   # mobile application
@@ -57,12 +74,6 @@ Rails.application.routes.draw do
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

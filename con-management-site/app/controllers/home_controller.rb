@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
 
-	def index; @conventions = Convention.all; end
+	def home; @conventions = Convention.all; end
 
 end

@@ -2,10 +2,10 @@
 
 	<div class="row">
 		<div class="col-xs-12 page-header home-banner">
-			<h1 style="display:inline-block;"><%= @convention.name %> <small><%= @convention.description %></small></h1>
-			<div class="pull-right" style="display:inline-block;">
-				<%= form_for @convention, url: { action: "edit" }, method: "get" do |f| %>
-					<%= f.submit "Edit" %>
+			<h1 style="display:inline-block"><%= @convention.name %> <small><%= @convention.description %></small></h1>
+			<div class="pull-right" style="display:inline-block">
+				<%= form_tag({ action: "edit" }, method: "get") do %>
+					<button type="submit" class="btn btn-warning">Edit</button>
 				<% end %>
 			</div>
 		</div>
@@ -21,7 +21,7 @@
 
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="#">Organizers</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/organizers">Organizers</a></h4></div>
 			</div>
 		</div>
 

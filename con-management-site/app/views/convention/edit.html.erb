@@ -4,25 +4,89 @@
 </ol>
 
 <div class="container-fluid">
+
+	<%# General details %>
   <div class="row-fluid">
     <form action="/convention/<%= params[:con_name] %>/edit" method="post">
+			<%# Convention name %>
       <div class="form-group col-xs-12">
         <label for="description">Description</label>
         <input type="textarea" class="form-control" id="description" name="con_descr" value="<%= @convention.description %>">
       </div>
+			<%# Convention description %>
       <div class="form-group col-xs-12">
         <label for="location">Location</label>
         <input type="text" class="form-control" id="location" name="con_location" value="<%= @convention.location %>">
       </div>
+			<%# Start time %>
 			<div class="form-group col-xs-6">
 				<label for="con_start_time">Start Time</label>
-				<input type="datetime-local" class="form-control" id="con_start_time" name="con_start_time" value="<%= @convention.start.to_s(:html_datetime_local) %>">
+				<input type="datetime-local" class="form-control" id="con_start_time" name="con_start_time" value="<%= (@convention.start || DateTime.now).to_s(:html_datetime_local) %>">
 			</div>
+			<%# End time %>
 			<div class="form-group col-xs-6">
 				<label for="con_end_time">End Time</label>
-				<input type="datetime-local" class="form-control" id="con_end_time" name="con_end_time" value="<%= @convention.end.to_s(:html_datetime_local) %>">
+				<input type="datetime-local" class="form-control" id="con_end_time" name="con_end_time" value="<%= (@convention.end || DateTime.now).to_s(:html_datetime_local) %>">
 			</div>
-      <input type="submit" value="Edit Convention">
+      <div class="pull-right"><button role="submit" class="btn">Edit Convention</button></div>
     </form>
   </div>
+
+	<%# Line Break %>
+	<div class="col-xs-12"></div>
+
+	<%# Rooms and hosts %>
+	<div class="row-fluid">
+		<%# Add rooms %>
+		<div class="col-xs-6">
+			<form action="/convention/<%= params[:con_name] %>/rooms/add" method="post">
+				<label for="room_name">Rooms to add</label><br>
+				<textarea id="room_name" name="room_name"></textarea>
+				<div class="pull-right"><button type="submit" class="btn btn-default">Add rooms</button></div>
+			</form>
+		</div>
+		<%# Add hosts %>
+		<div class="col-xs-6">
+			<form action="/convention/<%= params[:con_name] %>/hosts/add" method="post">
+				<label for="host_name">Hosts to add</label><br>
+				<textarea id="host_name" name="host_name"></textarea>
+				<div class="pull-right"><button type="submit" class="btn btn-default">Add hosts</button></div>
+			</form>
+		</div>
+
+		<%# View and remove rooms %>
+		<div class="col-xs-6">
+			<ul class="list-group">
+				<li class="list-group-item disabled">Rooms</li>
+				<% @rooms.each do |r| %>
+				<li class="list-group-item">
+					<%= r.room_name %>
+					<div class="pull-right">
+						<%= form_for r, url: { action: "remove_room", room_name: r.room_name } do |f| %>
+							<%= f.submit "Delete" %>
+						<% end %>
+					</div>
+				</li>
+				<% end %>
+			</ul>
+		</div>
+		<%# View and remove hosts %>
+		<div class="col-xs-6">
+			<ul class="list-group">
+				<li class="list-group-item disabled">Hosts</li>
+				<% @hosts.each do |h| %>
+				<li class="list-group-item">
+					<%= h.name %>
+					<div class="pull-right">
+						<%= form_for h, url: { action: "remove_host", host_name: h.name } do |f| %>
+							<%= f.submit "Delete" %>
+						<% end %>
+					</div>
+				</li>
+				<% end %>
+		</div>
+
+
+	</div>
+
 </div>

@@ -1,9 +1,4 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-xs-12 page-header home-banner">
-			<h1>Con Planner 75</h1>
-		</div>
-	</div>
 
 	<div class="row">
 
@@ -19,8 +14,8 @@
 						<tr><td>
 							<a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %>
 							<div class="pull-right">
-								<%= form_for c, url: { action: "delete", con_name: c.name } do |f| %>
-								  <%= f.submit "Delete" %>
+								<%= form_for c, url: { controller: "convention", action: "remove_organizer", con_name: c.name } do |f| %>
+								  <%= f.submit "Remove" %>
 								<% end %>
 							</div>
 						</td></tr>

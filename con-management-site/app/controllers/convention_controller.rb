@@ -1,39 +1,46 @@
 class ConventionController < ApplicationController
-  protect_from_forgery except: :details
-  before_action :require_user
+  protect_from_forgery except: [:edit_details,:add_room,:add_host]
+  before_action :require_user, except: [:client_search,:download]
 
-  # Get all conventions
+  # page to view all conventions
   def all; @conventions = Convention.all; end
 
-  def by_user
-    convention_names = Organizer.where(username: session[:username]).select("convention")
-    puts convention_names
-    @conventions = Convention.where(name: convention_names)
-  end
-
+  # search for convention
   def search
+    # currently entire search term must be in convention's name
     @conventions = Convention.where("name LIKE ?", "%#{params[:search_term]}%")
   end
 
-  # Convention creation page, give new empty convention
+  # convention creation page, given new empty convention
   def new; @convention = Convention.new; end
 
-  # Add convention to database
+  # add convention to database
   def create_convention
-    # If the convention exists already return to list of conventions
-    # If not make it and go to its page
+    # if the convention exists already return to list of conventions
+    # if not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
       redirect_to '/convention/all'
     else
+      # create an entry in the conventions table
+      # and an administrator in the organizers table
       @convention = Convention.new({ name: params[:convention][:name],
                                      description: params[:convention][:description],
-                                     location: params[:convention][:location] })
-      if @convention.save; redirect_to '/convention/'+params[:convention][:name]+'/index'
+                                     location: params[:convention][:location],
+                                     start: params[:convention][:start],
+                                     end: params[:convention][:end] })
+      @organizer = Organizer.new({ username: session[:username],
+                                   convention: params[:convention][:name],
+                                   role: "Administrator" })
+      g_admin = Organizer.new({ username: session[:username],
+                                convention: params[:convention][:name],
+                                role: "Administrator" })
+      if @convention.save && @organizer.save && g_admin.save
+        redirect_to '/convention/'+params[:convention][:name]+'/index'
       else; redirect_to '/'; end
     end
   end
 
-  # Delete convention and everything associated from database
+  # delete convention and everything associated from database
   def delete
     @documents = Document.where(convention_name: params[:con_name])
     @documents.each do |d|
@@ -43,23 +50,22 @@ class ConventionController < ApplicationController
     Room.where(convention_name: params[:con_name]).each { |r| r.destroy }
     Host.where(convention_name: params[:con_name]).each { |h| h.destroy }
     Event.where(convention_name: params[:con_name]).each { |e| e.destroy }
+    Organizer.where(convention: params[:con_name]).each { |o| o.destroy }
     Convention.find_by(name: params[:con_name]).destroy
     redirect_to '/convention/all'
   end
 
-  # Convention's index page, send specific convention details
+  # convention's index page, send specific convention details
   def index; @convention = Convention.find_by(name: params[:con_name]); end
 
-  # Edit convention information page
-  def edit; @convention = Convention.find_by(name: params[:con_name]); end
-
-  # Convention details =============================================
-  def details
+  # convention table editing =======================================
+  # edit convention information page
+  def edit
     @convention = Convention.find_by(name: params[:con_name])
     @rooms = Room.where(convention_name: params[:con_name])
-    @new_room = Room.new
+    @room = Room.new
     @hosts = Host.where(convention_name: params[:con_name])
-    @new_host = Host.new
+    @host = Host.new
   end
 
   def edit_details
@@ -68,8 +74,47 @@ class ConventionController < ApplicationController
     @convention.location = params[:con_location]
     @convention.start = params[:con_start_time]
     @convention.end = params[:con_end_time]
-    @convention.save
-    redirect_to '/convention/'+params[:con_name]+'/details'
+    if @convention.save; redirect_to '/convention/'+params[:con_name]
+    else; redirect_to '/'; end
+  end
+  # ================================================================
+
+  # Convention information pages ===================================
+  def details
+    @convention = Convention.find_by(name: params[:con_name])
+    @rooms = Room.where(convention_name: params[:con_name])
+    @new_room = Room.new
+    @hosts = Host.where(convention_name: params[:con_name])
+    @new_host = Host.new
+  end
+  # ================================================================
+
+  # Organizers =====================================================
+  def organizers
+    @organizers = Organizer.where(convention: params[:con_name])
+  end
+
+  def add_organizer
+    @organizer = Organizer.new({ username: session[:username], convention: params[:con_name], role: "Volunteer"})
+    if @organizer.save; redirect_to '/conventions/mine'
+    else; redirect_to '/conventions/search/' + params[:con_name]; end
+  end
+
+  def change_organizer_role
+    @organizer = Organizer.find_by(username: params[:username], convention: params[:con_name])
+    @organizer.role = params[:new_role]
+    @organizer.save
+    redirect_to '/convention/' + params[:con_name] + '/organizers'
+  end
+
+  def remove_organizer
+    username = params[:username] || session[:username]
+    @organizer = Organizer.find_by(convention: params[:con_name], username: username)
+    @organizer.destroy
+    if Organizer.where(convention: params[:con_name]).length <= 0
+      delete
+    elsif username == session[:username]; redirect_to '/conventions/mine'
+    else; redirect_to '/convention/' + params[:con_name] + '/organizers'; end
   end
   # ================================================================
 
@@ -87,14 +132,6 @@ class ConventionController < ApplicationController
     @room = Room.where( room_name: params[:room_name], convention_name: params[:con_name] )
     @room.each { |r| r.destroy }
     redirect_to '/convention/' + params[:con_name] + '/details'
-  end
-  # ================================================================
-
-  # Organizers =====================================================
-  def add_organizer
-    @organizer = Organizer.new({ username: session[:username], convention: params[:con_name]})
-    if @organizer.save; redirect_to '/conventions'
-    else; redirect_to '/conventions/search/' + params[:con_name]; end
   end
   # ================================================================
 
@@ -169,7 +206,7 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Mobile app stuff ===============================================
-  #Sends a lean json that has all of the conveniton names matching the query string
+  #Sends a lean json that has all of the convention names matching the query string
   def client_search
     @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
 
@@ -201,6 +238,6 @@ class ConventionController < ApplicationController
     convention_info[:documents] = @documents.as_json
     render json: convention_info
   end
-  # Mobile app stuff ===============================================
+  # ================================================================
 
 end

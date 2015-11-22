@@ -4,8 +4,17 @@
 </ol>
 
 <div class="container-fluid">
-	<%# Time & Location %>
-	<div class="row">
+	<div class="row-fluid">
+		
+		<%# Description %>
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">Description</div>
+				<div class="panel-body"><%= @convention.description %></div>
+			</div>
+		</div>
+
+		<%# Time & Location %>
 		<div class="col-xs-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">Location</div>
@@ -15,68 +24,36 @@
 		<div class="col-xs-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">Start Time</div>
-				<div class="panel-body"><%= @convention.start.to_s(:details_display) %></div>
+				<div class="panel-body"><%= (@convention.start || DateTime.now).to_s(:details_display) %></div>
 			</div>
 		</div>
 		<div class="col-xs-4">
 			<div class="panel panel-default">
 				<div class="panel-heading">End Time</div>
-				<div class="panel-body"><%= @convention.end.to_s(:details_display) %></div>
+				<div class="panel-body"><%= (@convention.end || DateTime.now).to_s(:details_display) %></div>
 			</div>
 		</div>
-	</div>
-	<%# Rooms %>
-	<div class="row">
+
+		<%# Rooms %>
 		<div class="col-xs-6">
 			<ul class="list-group">
 				<li class="list-group-item disabled">Rooms</li>
 				<% @rooms.each do |r| %>
-				<li class="list-group-item">
-				  <%= r.room_name %>
-					<div class="pull-right">
-						<%= form_for r, url: { action: "remove_room", room_name: r.room_name } do |f| %>
-							<%= f.submit "Delete" %>
-						<% end %>
-				  </div>
-				</li>
+					<li class="list-group-item"><%= r.room_name %></li>
 				<% end %>
 			</ul>
 		</div>
 
-		<div class="col-xs-6">
-			<form action="/convention/<%= params[:con_name] %>/rooms/add" method="post">
-				<label for="room_name">Rooms to add</label><br>
-				<textarea id="room_name" name="room_name"></textarea><br>
-				<button type="submit" class="btn btn-default">Add rooms</button>
-			</form>
-		</div>
-
-	</div>
-
-	<%# Hosts %>
-	<div class="row">
+		<%# Hosts %>
 		<div class="col-xs-6">
 			<ul class="list-group">
 				<li class="list-group-item disabled">Hosts</li>
 				<% @hosts.each do |h| %>
-				<li class="list-group-item">
-				  <%= h.name %>
-					<div class="pull-right">
-						<%= form_for h, url: { action: "remove_host", host_name: h.name } do |f| %>
-							<%= f.submit "Delete" %>
-						<% end %>
-					</div>
-				</li>
+				  <li class="list-group-item"><%= h.name %></li>
 				<% end %>
-		</div>
-
-		<div class="col-xs-6">
-			<form action="/convention/<%= params[:con_name] %>/hosts/add" method="post">
-				<label for="host_name">Hosts to add</label><br>
-				<textarea id="host_name" name="host_name"></textarea><br>
-				<button type="submit" class="btn btn-default">Add hosts</button>
-			</form>
+			</ul>
 		</div>
 
 	</div>
+
 </div>

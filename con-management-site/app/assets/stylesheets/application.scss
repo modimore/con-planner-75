@@ -16,3 +16,20 @@
 @import "bootstrap";
 
 @import "home.scss";
+
+.cp75-colors {
+  background-color: #33cc33;
+  color: #ffcc00;
+}
+
+.cp75-text {
+  color: #ffcc00;
+}
+
+a.cp75-text, a.cp75-colors {
+  &:hover, &:focus, &.open {
+    color: #ddaa22;
+    background-color: #33cc33;
+    text-decoration: underline;
+  }
+}
