@@ -1,13 +1,26 @@
 <div class="container-fluid">
 
 	<div class="row">
+		<%# Convention Search Box %>
+		<div class="col-xs-12">
+			<form action="/convention/search">
+				<div class="input-group">
+					<input id="search-term" name="search_term" class="form-control" type="text" placeholder="Search Cons...">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit">Go!</button>
+					</span>
+				</div>
+		  </form>
+		</div>
+  </div>
 
-		<%# Convention List %>
+	<br>
+
+	<div class="row">
+		<%# List of query matching convention %>
 		<div class="col-xs-12">
 			<div class="panel panel-primary">
-
-				<div class="panel-heading"><h4><b>All Conventions</b></h4></div>
-
+				<div class="panel-heading"><h4><b>Matching Conventions</b></h4></div>
 				<table class="table">
 					<tbody>
 
@@ -36,6 +49,8 @@
 				</table>
 			</div>
 		</div>
+		<%# End matching convention list %>
+	</div>
 
 	</div>
 </div>

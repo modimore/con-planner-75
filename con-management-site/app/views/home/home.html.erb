@@ -1,0 +1,58 @@
+<div class="container-fluid">
+	<%#
+	<div class="row">
+		<div class="col-xs-12 page-header home-banner">
+			<h1>Con Planner 75</h1>
+		</div>
+	</div>
+	%>
+
+	<div class="row">
+
+		<%# Convention List %>
+		<div class="col-xs-8">
+			<div class="panel panel-primary">
+
+				<div class="panel-heading"><h4><b>Conventions managed on this site</b></h4></div>
+				<table class="table">
+					<tbody>
+						<%# Loop throught conventions, display names and descriptions %>
+						<% @conventions.each do |c| %>
+						  <% if logged_in? && is_organizer?(c.name) %>
+						    <tr><td><h4>
+									<a href="/convention/<%= c.name %>/index"><%= c.name %></a>
+									<small><%= c.description %></small>
+								</h4></td></tr>
+							<% else %>
+								<tr><td><h4>
+									<%= c.name %>
+									<small><%= c.description %></small>
+								</h4></td></tr>
+							<% end %>
+						<% end # convention loop %>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+
+		<%# Convention Search Box %>
+		<div class="col-xs-4">
+			<form action="/convention/search">
+				<div class="input-group">
+					<input id="search-term" name="search_term" class="form-control" type="text" placeholder="Search Cons...">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit">Go!</button>
+					</span>
+				</div>
+		  </form>
+			<br>
+			<form action="/convention/new">
+				<div class="input-group">
+						<button class="btn btn-default" type="submit">Create new convention</button>
+				</div>
+		  </form>
+		</div>
+
+	</div>
+</div>

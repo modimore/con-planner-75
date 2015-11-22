@@ -1,0 +1,30 @@
+<div class="container-fluid">
+
+	<div class="row">
+
+		<%# Convention List %>
+		<div class="col-xs-12">
+			<div class="panel panel-primary">
+
+				<div class="panel-heading"><h4>My Conventions</h4></div>
+
+				<table class="table">
+					<tbody>
+						<% @conventions.each do |c| %>
+						<tr><td>
+							<a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %>
+							<div class="pull-right">
+								<%= form_for c, url: { controller: "convention", action: "remove_organizer", con_name: c.name } do |f| %>
+								  <%= f.submit "Remove" %>
+								<% end %>
+							</div>
+						</td></tr>
+						<% end %>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+</div>

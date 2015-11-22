@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <%# Table showing all organizers of current convention %>
+      <table class="table table-bordered">
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Change Role</th>
+          <th>Remove</th>
+        </tr>
+
+        <% @organizers.each do |o| %>
+          <tr>
+            <td><%= o.username %></td>
+            <td><%= o.role %></td>
+            <td>
+              <%= form_tag({ action: "change_organizer_role", username: o.username }, class: "form") do %>
+                <select name="new_role">
+                  <% ["Administrator","Staff","Volunteer"].each do |role_type| %>
+                    <% if o.role == role_type %>
+                      <option value="<%= role_type %>" selected><%= role_type %></option>
+                    <% else %>
+                      <option value="<%= role_type %>"><%= role_type %></option>
+                    <% end %>
+                  <% end %>
+                </select>
+                <button type="submit" class="btn btn-warning">Change Role</button>
+              <% end %>
+            </td>
+            <td>
+              <%= form_tag({ action: "remove_organizer", username: o.username }, method: 'patch') do %>
+                <button type="submit" class="btn btn-danger">Remove</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+
+      </table>
+    </div>
+  </div>
+</div>
