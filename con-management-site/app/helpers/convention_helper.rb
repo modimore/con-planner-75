@@ -1,6 +1,11 @@
 module ConventionHelper
 end
 
+# convert any amount of time to the unit of time used by the scheduler
+def scheduler_unit_time(raw_time)
+  raw_time.to_i/3600
+end
+
 # mini event class (not connected to db) for testing purposes
 class EventX
   attr_reader :length, :hosts, :name
@@ -43,6 +48,9 @@ class Scheduler
         @availability[i] = @rooms.dup
       end
     end
+
+    puts "Scheduler initialization complete."
+    puts @times
   end
 
   # publicly accessed runner for scheduler; calls backtracking algorithm & changes @events to solution
@@ -123,6 +131,7 @@ class Scheduler
       end
     end
     puts "starting #{curr_event.name}, all times: #{curr_event.times}"
+
     # try each assigning each possible value until one works
     start_vals.each do |v1|
       v2 = v1+curr_event.length

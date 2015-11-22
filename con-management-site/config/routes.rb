@@ -45,6 +45,10 @@ Rails.application.routes.draw do
   post 'conventions/:con_name/organizers/change_role' => 'convention#change_organizer_role'
   patch 'convention/:con_name/remove_organizer' => 'convention#remove_organizer'
 
+  # breaks
+  post 'convention/:con_name/breaks/add' => 'convention#add_break'
+  patch 'convention/:con_name/breaks/remove' => 'convention#remove_break'
+
   # rooms
   post 'convention/:con_name/rooms/add' => 'convention#add_room'
   patch 'convention/:con_name/remove_room/:room_name' => 'convention#remove_room'

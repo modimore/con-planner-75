@@ -2,6 +2,7 @@ class ConventionController < ApplicationController
   protect_from_forgery except: [:edit_details,:add_room,:add_host]
   before_action :require_user, except: [:client_search,:download]
 
+  # convention-independent actions =================================
   # page to view all conventions
   def all; @conventions = Convention.all; end
 
@@ -39,6 +40,11 @@ class ConventionController < ApplicationController
       else; redirect_to '/'; end
     end
   end
+  # ================================================================
+
+  # convention-dependent actions ===================================
+  # convention's index page
+  def index; @convention = Convention.find_by(name: params[:con_name]); end
 
   # delete convention and everything associated from database
   def delete
@@ -54,20 +60,28 @@ class ConventionController < ApplicationController
     Convention.find_by(name: params[:con_name]).destroy
     redirect_to '/convention/all'
   end
+  # ================================================================
 
-  # convention's index page, send specific convention details
-  def index; @convention = Convention.find_by(name: params[:con_name]); end
+  # Convention information =========================================
+  def details
+    @convention = Convention.find_by(name: params[:con_name])
+    @rooms = Room.where(convention_name: params[:con_name])
+    @hosts = Host.where(convention_name: params[:con_name])
+    @breaks = Break.where(con_name: params[:con_name]).order(:start)
+  end
 
-  # convention table editing =======================================
-  # edit convention information page
+  # open page with forms for edits
   def edit
     @convention = Convention.find_by(name: params[:con_name])
     @rooms = Room.where(convention_name: params[:con_name])
     @room = Room.new
     @hosts = Host.where(convention_name: params[:con_name])
     @host = Host.new
+    @breaks = Break.where(con_name: params[:con_name])
+    @break = Break.new
   end
 
+  # submit edits to database
   def edit_details
     @convention = Convention.find_by(name: params[:con_name])
     @convention.description = params[:con_descr]
@@ -79,27 +93,20 @@ class ConventionController < ApplicationController
   end
   # ================================================================
 
-  # Convention information pages ===================================
-  def details
-    @convention = Convention.find_by(name: params[:con_name])
-    @rooms = Room.where(convention_name: params[:con_name])
-    @new_room = Room.new
-    @hosts = Host.where(convention_name: params[:con_name])
-    @new_host = Host.new
-  end
-  # ================================================================
-
   # Organizers =====================================================
+  # view all organizers for a specific convention
   def organizers
     @organizers = Organizer.where(convention: params[:con_name])
   end
 
+  # add organizer to a convention
   def add_organizer
     @organizer = Organizer.new({ username: session[:username], convention: params[:con_name], role: "Volunteer"})
     if @organizer.save; redirect_to '/conventions/mine'
     else; redirect_to '/conventions/search/' + params[:con_name]; end
   end
 
+  # change the role of an organizer for a convention (volunteer, staff, administrator)
   def change_organizer_role
     @organizer = Organizer.find_by(username: params[:username], convention: params[:con_name])
     @organizer.role = params[:new_role]
@@ -107,6 +114,8 @@ class ConventionController < ApplicationController
     redirect_to '/convention/' + params[:con_name] + '/organizers'
   end
 
+  # remove an organizer from a convention
+  # can be used either on yourself or as an administrator
   def remove_organizer
     username = params[:username] || session[:username]
     @organizer = Organizer.find_by(convention: params[:con_name], username: username)
@@ -115,6 +124,21 @@ class ConventionController < ApplicationController
       delete
     elsif username == session[:username]; redirect_to '/conventions/mine'
     else; redirect_to '/convention/' + params[:con_name] + '/organizers'; end
+  end
+  # ================================================================
+
+  # Breaks =========================================================
+  def add_break
+    @break = Break.new({ con_name: params[:con_name],
+                         start: params[:break_start_time],
+                         end: params[:break_end_time] })
+    @break.save
+    redirect_to '/convention/' + params[:con_name] + '/edit'
+  end
+
+  def remove_break
+    Break.find(params[:id]).destroy
+    redirect_to '/convention/' + params[:con_name] + '/edit'
   end
   # ================================================================
 
@@ -152,56 +176,84 @@ class ConventionController < ApplicationController
   end
   # ================================================================
 
-  # Schedule =======================================================
-  def schedule
-    require 'convention_helper'
-
-    @con = Convention.find_by(name: params[:con_name])
-
-    # get events for convention from database
-    elist = []
-    Event.where(convention_name: params[:con_name]).each do |e|
-      elist.append(EventX.new(e.length,[[0,48]],[e.host_name],e.name))
-    end
-
-    # get rooms for convention from database
-    rlist = []
-    Room.where(convention_name: params[:con_name]).each do |r|
-      rlist.append(r.room_name)
-    end
-
-    # proceed to scheduling
-    contime = [[0,(@con.end - @con.start).to_i/3600]]
-    scheduler = Scheduler.new(rlist,contime)
-    @schedule = scheduler.run(elist)
-  end
-  # ================================================================
-
   # Documents for convention =======================================
+  # view all documents for a convention
   def documents
     @documents = Document.where(convention_name: params[:con_name])
     @document = Document.new
   end
 
+  # add a document to a conventio, upload file
   def upload_document
-    uploaded_io = params[:document]
+    upload = params[:document] # uploaded file
+    # create database entry for file
     @document = Document.new({ display_name: params[:display_name],
                                convention_name: params[:con_name],
-                               location: 'uploads/'+uploaded_io.original_filename })
+                               location: 'uploads/'+upload.original_filename })
     if @document.display_name == ""; @document.display_name = "<no name>"; end
     if @document.save
-      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
-        file.write(uploaded_io.read)
+      # save file on server
+      File.open(Rails.root.join('public', 'uploads', upload.original_filename), 'wb') do |file|
+        file.write(upload.read)
       end
     end
     redirect_to '/convention/'+params[:con_name]+'/documents'
   end
 
+  # remove document from convention, delete file
   def remove_document
     @document = Document.find_by( convention_name: params[:con_name], display_name: params[:doc_name])
     File.delete(Rails.root.join('public', @document.location))
     @document.destroy
     redirect_to '/convention/'+params[:con_name]+'/documents'
+  end
+  # ================================================================
+
+  # Schedule =======================================================
+  # compute the times a convention is open
+  def times_open(con_name)
+    # get convention start time and end time
+    con = Convention.select("start","end").find_by(name: con_name)
+    # get all the breaks in the convention schedule, sorted by start time
+    breaks = Break.where(con_name: con_name).order(:start )
+
+    if breaks.empty? # if there are no breaks return full convention length
+      [[0,scheduler_unit_time(con.end-con.start)]]
+    else # otherwise
+      # the first time block is from the convention start to the beginning of the first break
+      times = [ [0,scheduler_unit_time(breaks[0].start-con.start)] ]
+      # time blocks in the middle are from a break's start time to the next break's end time
+      for i in 0..(breaks.length-2)
+        times.append([scheduler_unit_time(breaks[i].end-con.start),
+                      scheduler_unit_time(breaks[i+1].start-con.start)])
+      end
+      # the last time block is from the end of the last break to the convention's end
+      times.append([scheduler_unit_time(breaks[breaks.length-1].end-con.start),
+                    scheduler_unit_time(con.end-con.start)])
+    end
+  end
+
+  def schedule
+    #require 'convention_helper'
+
+    @con = Convention.find_by(name: params[:con_name])
+    con_hours = times_open(@con.name)
+
+    # get events for convention from database
+    # organize into an array of EventX objects
+    elist = []
+    Event.where(convention_name: params[:con_name]).each do |e|
+      elist.append(EventX.new(e.length,con_hours,[e.host_name],e.name))
+    end
+
+    # get rooms for convention from database
+    rlist = Room.where(convention_name: params[:con_name]).pluck("room_name")
+    puts rlist.to_s
+
+    # proceed to scheduling
+    scheduler = Scheduler.new(rlist,con_hours)
+    puts "Begin scheduling..."
+    @schedule = scheduler.run(elist)
   end
   # ================================================================
 
