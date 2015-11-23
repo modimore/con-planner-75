@@ -3,7 +3,7 @@
     package="lml.con_management_app" >
 
     <!-- Allows DB hookup -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Allow application to read&write data from external storage location -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,12 +18,20 @@
 
         <!-- list of activities: -->
 
-        <!-- Home Page: Hub for Conventions-->
-        <!-- Conventions pulled from Search activity-->
+
+        <!-- Home Page: Hub for Conventions -->
+        <!-- Conventions pulled from Search activity -->
         <activity
             android:name=".HomePageActivity"
             android:label="@string/title_activity_home_page"
             android:theme="@style/AppTheme.NoActionBar" >
+
+            <!-- Intent filter defines activity displayed on startup -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- Convention Page: Hub for Convention Attributes -->
@@ -37,12 +45,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomePageActivity" />
-
-            <!-- Intent filter defines activity displayed on startup -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- Schedule Page: Displays Convention Schedule to user as a list of events -->
@@ -97,8 +99,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lml.con_management_app.PersonalEventListActivity" />
         </activity>
-
-
+        <activity
+            android:name=".SearchPageActivity"
+            android:label="@string/title_activity_search_page"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.HomePageActivity" />
+        </activity>
     </application>
 
 </manifest>

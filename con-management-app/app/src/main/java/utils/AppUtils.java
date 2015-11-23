@@ -1,5 +1,5 @@
 package utils;
-
+import java.io.Serializable;
 import android.os.Environment;
 import android.util.Log;
 
@@ -24,7 +24,7 @@ import utils.Convention;
 /**
  * Created by samsok on 11/15/15.
  */
-public class AppUtils {
+public class AppUtils implements Serializable{
 
     /**
      * Deletes all of the downloaded conventions. Mainly used for testing.
@@ -32,6 +32,12 @@ public class AppUtils {
     public static void deleteDownloadedConventions() {
         File con_dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions");
         deleteFolder(con_dir);
+    }
+
+    public static void deleteConvention(Convention c) {
+        File con_dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/" + c.getName());
+        deleteFolder(con_dir);
+        con_dir.delete();
     }
 
     private static void deleteFolder(File folder) {

@@ -17,9 +17,40 @@
 
     <include layout="@layout/content_home_page" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <!-- add a linear layout to format buttons and display content properly-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:id="@+id/homeLayout_id"
+        android:weightSum="1">
+
+        <!--edit text to add offset for the toolbar - this is bad !-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05" />
+
+
+        <!-- BUTTONS: !-->
+        <Button
+            android:id="@+id/conventionButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+
+        <Button
+            android:id="@+id/searchButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Search for a Convention"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,9 +1,10 @@
 package utils;
+import java.io.Serializable;
 
 /**
  * Created by samsok on 11/15/15.
  */
-public class Document {
+public class Document implements Serializable{
     private String display_name;
     private String location;
 
