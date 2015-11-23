@@ -38,10 +38,10 @@
 			</div>
 		</div>
 
-		<%# Schedule (scheduler) %>
+		<%# Schedule %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule">Schedule(s)</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule">Schedule</a></h4></div>
 			</div>
 		</div>
 
@@ -52,6 +52,13 @@
 			</div>
 		</div>
 
-	</div>
+		<%# Scheduler %>
+		<div class="col-xs-6">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule/new">Generate Schedule</a></h4></div>
+			</div>
+		</div>
 
+	</div>
+	
 </div>

@@ -32,7 +32,7 @@ Rails.application.routes.draw do
   get 'convention/:con_name' => 'convention#index'
   get 'convention/:con_name/index' => 'convention#index'
   patch 'convention/:con_name/delete' => 'convention#delete'
-  get 'convention/:con_name/schedule' => 'convention#schedule'
+  #get 'convention/:con_name/schedule' => 'convention#schedule'
 
   #details
   get 'convention/:con_name/details' => 'convention#details'
@@ -74,6 +74,13 @@ Rails.application.routes.draw do
   get 'convention/:con_name/events/:event_name/edit' => 'event#edit'
   post 'convention/:con_name/events/:event_name/edit' => 'event#update'
   patch 'convention/:con_name/remove_event/:event_name' => 'event#delete'
+  # ============================================================================
+
+  # schedule controller ========================================================
+  get 'convention/:con_name/schedule/new' => 'schedule#new'
+  get 'convention/:con_name/schedule' => 'schedule#view'
+  get 'convention/:con_name/schedule/:schedule_version' => 'schedule#view'
+  post 'convention/:con_name/schedule/create' => 'schedule#create'
   # ============================================================================
 
   # The priority is based upon order of creation: first created -> highest priority.

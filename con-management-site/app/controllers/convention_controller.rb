@@ -41,7 +41,7 @@ class ConventionController < ApplicationController
         # make a new directory for file uploads for this convention
         FileUtils.mkdir_p(Rails.root.join('public','uploads',params[:convention][:name]))
         # redirect user to this convention's index page
-        redirect_to '/convention/'+params[:convention][:name]+'/index'
+        redirect_to '/convention/'+URI.escape(params[:convention][:name])+'/index'
       # otherwise redirect user to app home page
       else; redirect_to '/'; end
     end
@@ -50,7 +50,12 @@ class ConventionController < ApplicationController
 
   # convention-dependent actions ===================================
   # convention's index page
-  def index; @convention = Convention.find_by(name: params[:con_name]); end
+  def index
+    @convention = Convention.find_by(name: params[:con_name])
+    if @convention == nil
+      redirect_to '/conventions/all'
+    end
+  end
 
   # delete convention and everything associated from database
   def delete
