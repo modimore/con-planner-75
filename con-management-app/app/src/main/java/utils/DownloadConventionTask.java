@@ -37,7 +37,8 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
         Convention result = null;
 
         try {
-            URL url = new URL("http://127.0.0.1:3000/convention/" + params[0] + "/download");
+            String con = params[0].replaceAll(" ", "%20");
+            URL url = new URL("http://127.0.0.1:3000/convention/" + con + "/download");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -46,8 +47,9 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
             conn.connect();
             int response = conn.getResponseCode();
 
-            if(response == 500) {
-                return result;
+            if(response != HttpURLConnection.HTTP_OK) {
+                Log.e("Search", "Non-200: " + response);
+                return null;
             }
 
             is = conn.getInputStream();
