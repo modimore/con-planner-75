@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   patch 'convention/:con_name/remove_document/:doc_name' => 'convention#remove_document'
 
   # mobile application
-  get 'convention/client_search'
+  get 'client_search' => 'home#client_search'
   get 'convention/:convention_name/download' => 'convention#download'
   # ============================================================================
 

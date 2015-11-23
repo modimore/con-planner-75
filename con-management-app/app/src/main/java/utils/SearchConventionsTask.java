@@ -5,6 +5,8 @@ import java.io.Serializable;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.apache.http.HttpException;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
         ArrayList<Convention> results = new ArrayList<>();
 
         try {
-            URL url = new URL("http://127.0.0.1:3000/convention/client_search?query="  + params[0]);
+            URL url = new URL("http://127.0.0.1:3000/client_search?query="  + params[0]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -38,6 +40,11 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
             conn.connect();
             int response = conn.getResponseCode();
             is = conn.getInputStream();
+
+            if(response != HttpURLConnection.HTTP_OK)
+            {
+                throw new HttpException("Non-200: " + response);
+            }
 
             // Convert the InputStream into a string
             String contentAsString = AppUtils.convertInputStreamToString(is);

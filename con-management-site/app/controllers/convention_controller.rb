@@ -206,18 +206,6 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Mobile app stuff ===============================================
-  #Sends a lean json that has all of the convention names matching the query string
-  def client_search
-    @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
-
-    if @conventions.empty?
-      render json: {}
-    else
-      results = {}
-      results[:conventions] = @conventions.as_json
-      render json: results
-    end
-  end
 
   def download
     @convention = Convention.find_by(name: params[:convention_name])

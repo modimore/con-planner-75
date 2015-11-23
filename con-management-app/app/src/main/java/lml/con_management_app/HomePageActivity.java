@@ -11,14 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
 import utils.*;
 
 //TODO: persistent conventions
 public class HomePageActivity extends AppCompatActivity {
 
-    Button conventionButton;
+    //Button conventionButton;
     Button searchButton;
-    Convention searchResult; //this is bad code practice; todo: fix IT
+
+    //Convention searchResult; //this is bad code practice; todo: fix IT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +38,16 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
-        //check for bundle data
-        //   if coming back from Search page with info, build button
+        // Get list of downloaded convention
+        // SearchActivity should download the selected convention, showing it here.
+        List<Convention> conventions = AppUtils.getDownloadedConventions();
+        if(conventions != null) {
+            for(Convention c : conventions) {
+                populateButton(c);
+            }
+        }
 
+        /*
         searchResult = null;
         Intent homePageIntent = new Intent(HomePageActivity.this, EventListActivity.class);
         Bundle data = getIntent().getExtras();
@@ -49,14 +59,16 @@ public class HomePageActivity extends AppCompatActivity {
             }
         }
 
-        //*****GARBAGE FOR TESTING
+        /*****GARBAGE FOR TESTING
         //find convention using searchconvention
+        List<Convention> conventions = AppUtils.getDownloadedConventions();
+
         final Convention c = getConvention("DOGS");
 
         //per conventions found that fit that search term, create buttons
         //within each button:
         //  click to goto convention page, send parceled convention data
-        if (c != null) {
+        if (conventions != null) {
             //add loop for returning multiple via SearchConventionsTask
             conventionButton = (Button) findViewById(R.id.conventionButton_id);
             conventionButton.setText(c.getName());
@@ -73,10 +85,10 @@ public class HomePageActivity extends AppCompatActivity {
                 }
             });
         }
-        //********
+        */
     }
 
-    public void populateButton(Convention result){
+    public void populateButton(final Convention result){
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.homeLayout_id);
 
             Button button1=new Button(this);
@@ -84,7 +96,7 @@ public class HomePageActivity extends AppCompatActivity {
             button1.setText(result.getName());
             button1.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    gotoConventionPage(searchResult);
+                    gotoConventionPage(result);
                 }
             });
 

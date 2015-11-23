@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import utils.Convention;
+import utils.DownloadConventionTask;
 import utils.SearchConventionsTask;
 
 //TODO: add scroll functionality for > 10 conventions returned
@@ -94,7 +95,15 @@ public class SearchPageActivity extends AppCompatActivity {
     //Convention buttons parcel Convention data and send it back to homepage to build button
     public void gotoHome(Convention c) {
         Intent homeIntent = new Intent(SearchPageActivity.this, HomePageActivity.class);
-        homeIntent.putExtra("convention", c);
+        try {
+            new DownloadConventionTask().execute(c.getName()).get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         startActivity(homeIntent);
     }
 

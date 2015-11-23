@@ -47,6 +47,8 @@ public class UtilTests extends InstrumentationTestCase {
             List<Convention> allDownloaded = AppUtils.getDownloadedConventions();
             Log.d("DownloadResults", allDownloaded.toString());
 
+            AppUtils.deleteDownloadedConventions();
+
         } catch (Exception e) {
             Log.e("Results", e.getMessage(), e);
         }
