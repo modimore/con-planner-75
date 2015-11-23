@@ -41,7 +41,7 @@ class ConventionController < ApplicationController
         # make a new directory for file uploads for this convention
         FileUtils.mkdir_p(Rails.root.join('public','uploads',params[:convention][:name]))
         # redirect user to this convention's index page
-        redirect_to '/convention/'+params[:convention][:name]+'/index'
+        redirect_to '/convention/'+URI.escape(params[:convention][:name])+'/index'
       # otherwise redirect user to app home page
       else; redirect_to '/'; end
     end
