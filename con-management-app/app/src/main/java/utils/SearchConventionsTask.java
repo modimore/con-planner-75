@@ -10,6 +10,7 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,8 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
         ArrayList<Convention> results = new ArrayList<>();
 
         try {
-            URL url = new URL("http://127.0.0.1:3000/client_search?query="  + params[0]);
+            String query = URLEncoder.encode(params[0], "UTF-8");
+            URL url = new URL("http://127.0.0.1:3000/client_search?query="  + query);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
@@ -43,7 +45,8 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
 
             if(response != HttpURLConnection.HTTP_OK)
             {
-                throw new HttpException("Non-200: " + response);
+                Log.e("Search", "Non-200: " + response);
+                return null;
             }
 
             // Convert the InputStream into a string
