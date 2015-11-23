@@ -62,6 +62,14 @@
             android:layout_alignParentRight="true" />
 
         <Button
+            android:id="@+id/updateButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Update"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
             android:id="@+id/dbTestButton_id"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"

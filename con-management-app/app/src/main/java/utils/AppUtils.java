@@ -34,6 +34,12 @@ public class AppUtils implements Serializable{
         deleteFolder(con_dir);
     }
 
+    public static void deleteConvention(Convention c) {
+        File con_dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/" + c.getName());
+        deleteFolder(con_dir);
+        con_dir.delete();
+    }
+
     private static void deleteFolder(File folder) {
         File[] files = folder.listFiles();
         if(files!=null) {

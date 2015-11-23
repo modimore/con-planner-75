@@ -96,7 +96,10 @@ public class SearchPageActivity extends AppCompatActivity {
     public void gotoHome(Convention c) {
         Intent homeIntent = new Intent(SearchPageActivity.this, HomePageActivity.class);
         try {
-            new DownloadConventionTask().execute(c.getName()).get();
+            Convention d = new DownloadConventionTask().execute(c.getName()).get();
+            if(d == null) {
+                return;
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

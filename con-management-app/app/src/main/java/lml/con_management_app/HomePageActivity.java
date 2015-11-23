@@ -24,8 +24,20 @@ public class HomePageActivity extends AppCompatActivity {
     //Convention searchResult; //this is bad code practice; todo: fix IT
 
     @Override
+    protected void onResume() {
+
+        super.onResume();
+        setupView();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setupView();
+    }
+
+    protected void setupView() {
         setContentView(R.layout.activity_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,6 +123,7 @@ public class HomePageActivity extends AppCompatActivity {
         conventionIntent.putExtra("convention", c);
         //jump to the next Activity with Parcel in hand
         startActivity(conventionIntent);
+        onRestart();
     }
 
     //function for the search button, leads to search page

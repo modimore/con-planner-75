@@ -23,6 +23,7 @@ public class ConventionPageActivity extends AppCompatActivity {
     Button eventsButton;
     Button docsButton;
     Button personalButton;
+    Button updateButton;
     Button dbTestButton;
 
     @Override
@@ -54,6 +55,13 @@ public class ConventionPageActivity extends AppCompatActivity {
             }
         });
 
+        updateButton = (Button) findViewById(R.id.updateButton_id);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                updateConvention();
+            }
+        });
+
         //"up" button - links back to parent activity defined in manifest
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -75,7 +83,7 @@ public class ConventionPageActivity extends AppCompatActivity {
 
             }
 
-    });
+        });
     }
 
 
@@ -101,6 +109,26 @@ public class ConventionPageActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         personalIntent.putExtra("convention", data.getParcelable("convention"));
        startActivity(personalIntent);
+    }
+
+    public void updateConvention() {
+        Intent updateIntent = new Intent(ConventionPageActivity.this, ConventionPageActivity.class);
+        Bundle data = getIntent().getExtras();
+        Convention c = data.getParcelable("convention");
+        String con_name = c.getName();
+        AppUtils.deleteConvention(c);
+        try {
+            c = new DownloadConventionTask().execute(con_name).get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        updateIntent.putExtra("convention", c);
+        startActivity(updateIntent);
+        finish();
     }
 
 
