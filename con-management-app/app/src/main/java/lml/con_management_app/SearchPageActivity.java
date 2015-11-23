@@ -3,6 +3,7 @@ package lml.con_management_app;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +21,8 @@ import utils.Convention;
 import utils.DownloadConventionTask;
 import utils.SearchConventionsTask;
 
+//Search Page Activity - provides a text field and sends user input to database
+//  Builds buttons, Downloads results, brings the user back to HomePage, send HomePage that convention data
 //TODO: add scroll functionality for > 10 conventions returned
 public class SearchPageActivity extends AppCompatActivity {
 
@@ -36,7 +39,7 @@ public class SearchPageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //"up" button - links back to parent activity defined in manifest
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //Submit input to the database, dynamically create buttons
@@ -50,11 +53,8 @@ public class SearchPageActivity extends AppCompatActivity {
 
     }
 
-    //TODO:reset after search (might need to get button ids), or put them in a container
-    //TODO:make search note case sensitive
+    //TODO:make search not case sensitive
     public void submit(String input){
-
-        //<CLEAR BUTTONS//
 
         //Search database for input
         conventionList = null;
@@ -69,10 +69,8 @@ public class SearchPageActivity extends AppCompatActivity {
 
         //Dynamically build buttons for search results
         if(conventionList != null) {
-
             LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.layout_id);
             for (int i = 0; i < conventionList.size(); i++) {
-
                     Button button1=new Button(this);
                     button1.setText(conventionList.get(i).getName());
                     button1.setId(i);
@@ -92,7 +90,7 @@ public class SearchPageActivity extends AppCompatActivity {
 
     }
 
-    //Convention buttons parcel Convention data and send it back to homepage to build button
+    //Convention buttons download resultant Convention data
     public void gotoHome(Convention c) {
         Intent homeIntent = new Intent(SearchPageActivity.this, HomePageActivity.class);
         try {
@@ -107,9 +105,9 @@ public class SearchPageActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
         startActivity(homeIntent);
     }
-
 
 
 }

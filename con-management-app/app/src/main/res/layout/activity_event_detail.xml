@@ -34,4 +34,10 @@
         android:src="@android:drawable/ic_menu_add"
         app:layout_anchor="@+id/event_detail_container" app:layout_anchorGravity="top|end" />
 
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fab_return"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_revert" />
+
 </android.support.design.widget.CoordinatorLayout>

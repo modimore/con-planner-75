@@ -4,6 +4,11 @@ import java.io.Serializable;
 /**
  * Created by samsok on 11/14/15.
  */
+
+
+//Host Class; data unit for input from website
+//has get/set functions to access data
+//implements Serializable class for transition among Activites
 public class Host implements Serializable{
     private String name;
 

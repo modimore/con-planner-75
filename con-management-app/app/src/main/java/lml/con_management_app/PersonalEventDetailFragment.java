@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import lml.con_management_app.dummy.DummyContent;
 
+//SIMILAR TO EVENTLIST/DETAIL, CURRENTLY DOES NOT FUNCTION TO SPECIFICATIONS
 /**
  * A fragment representing a single PersonalEvent detail screen.
  * This fragment is either contained in a {@link PersonalEventListActivity}

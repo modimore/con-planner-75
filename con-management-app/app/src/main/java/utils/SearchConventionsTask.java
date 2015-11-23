@@ -31,10 +31,14 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
         InputStream is = null;
         ArrayList<Convention> results = new ArrayList<>();
 
+        //Returns null on exception
         try {
+            //Encode the query to not break when spaces are included
             String query = URLEncoder.encode(params[0], "UTF-8");
             URL url = new URL("http://127.0.0.1:3000/client_search?query="  + query);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            //Boilerplate for HTTP
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
@@ -56,6 +60,8 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
             JSONObject json = new JSONObject(contentAsString);
             JSONArray conventions = json.getJSONArray("conventions");
 
+            //construct a json object from information from http call
+            // then use that to populate a list of Convention objects
             for(int i = 0; i < conventions.length(); i++)
             {
                 JSONObject con_json = conventions.getJSONObject(i);

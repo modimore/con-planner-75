@@ -15,20 +15,20 @@ import java.util.List;
 
 import utils.*;
 
-//TODO: persistent conventions
+
+//Homepage Activity - Allows user to search for conventions (links to SearchPageActivity)
+//  Acts as a hub for conventions downloaded via Search
 public class HomePageActivity extends AppCompatActivity {
 
     //Button conventionButton;
     Button searchButton;
-
-    //Convention searchResult; //this is bad code practice; todo: fix IT
+    Button clearButton;
 
     //Exists so that this view is forced to refresh its contents on returning.
     //This handles the case where a convention is updated and this view in stack
     // contains an out of date convention as its reference.
     @Override
     protected void onResume() {
-
         super.onResume();
         setupView();
     }
@@ -36,10 +36,10 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setupView();
     }
 
+    //for onCreate; links to SearchPage, builds buttons based on downloaded conventions
     protected void setupView() {
         setContentView(R.layout.activity_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,72 +53,41 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
+
         // Get list of downloaded convention
         // SearchActivity should download the selected convention, showing it here.
         List<Convention> conventions = AppUtils.getDownloadedConventions();
-        if(conventions != null) {
-            for(Convention c : conventions) {
-                populateButton(c);
-            }
-        }
-
-        /*
-        searchResult = null;
-        Intent homePageIntent = new Intent(HomePageActivity.this, EventListActivity.class);
-        Bundle data = getIntent().getExtras();
-
-        if(data != null) {
-            searchResult = data.getParcelable("convention");
-            if(searchResult != null) {
-                populateButton(searchResult);
-            }
-        }
-
-        /*****GARBAGE FOR TESTING
-        //find convention using searchconvention
-        List<Convention> conventions = AppUtils.getDownloadedConventions();
-
-        final Convention c = getConvention("DOGS");
-
-        //per conventions found that fit that search term, create buttons
-        //within each button:
-        //  click to goto convention page, send parceled convention data
         if (conventions != null) {
-            //add loop for returning multiple via SearchConventionsTask
-            conventionButton = (Button) findViewById(R.id.conventionButton_id);
-            conventionButton.setText(c.getName());
-            conventionButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    final Convention c = getConvention("DOGS");
-
-                    if (c != null) {
-                        gotoConventionPage(c);
-                    }
-                    else {
-                        conventionButton.setText("nope :(");
-                    }
-                }
-            });
+            for (Convention c : conventions) {
+                populateButtons(c);
+            }
         }
-        */
+
+        //clearButton= (Button) findViewById(R.id.clearButton_id);
+        /*clearButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clear();
+            }
+        });*/
     }
 
-    public void populateButton(final Convention result){
+    //Create a button from a given Convention, links to ConventionPageActivity
+    // Parcels Convention data over to that activity
+    public void populateButtons(final Convention result) {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.homeLayout_id);
 
-            Button button1=new Button(this);
-            thisDangLayout.addView(button1);
-            button1.setText(result.getName());
-            button1.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    gotoConventionPage(result);
-                }
-            });
+        Button button1 = new Button(this);
+        thisDangLayout.addView(button1);
+        button1.setText(result.getName());
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                gotoConventionPage(result);
+            }
+        });
 
     }
 
-    //function for convention buttons
-
+    //Function for convention buttons
     public void gotoConventionPage(Convention c) {
         //create an Intent
         Intent conventionIntent = new Intent(HomePageActivity.this, ConventionPageActivity.class);
@@ -129,28 +98,17 @@ public class HomePageActivity extends AppCompatActivity {
         onRestart();
     }
 
-    //function for the search button, leads to search page
+    //Clear downloaded conventions
+    public void clear() {
+        AppUtils.deleteDownloadedConventions();
+        //TODO: refresh the layout
+    }
+
+
+
+    //Function for the search button, leads to search page
     public void gotoSearch() {
         Intent searchIntent = new Intent(HomePageActivity.this, SearchPageActivity.class);
         startActivity(searchIntent);
     }
-
-    //*****GARBAGE FOR TESTING
-
-    //Download convention for given search term (move to search page after, hard coded for test)
-    public Convention getConvention(String searchTerm) {
-        Convention c;
-        try {
-            c = new DownloadConventionTask().execute(searchTerm).get();
-        } catch (Exception ex) {
-            Log.e("Results", ex.getMessage(), ex);
-            c = null;
-        }
-
-        return c;
-    }
-    //********
-
-
-
 }

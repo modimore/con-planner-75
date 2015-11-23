@@ -69,13 +69,13 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" />
 
-        <Button
-            android:id="@+id/dbTestButton_id"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="tap me!"
+
+        <android.support.design.widget.FloatingActionButton android:id="@+id/fab_return"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_menu_revert"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"/>
 
     </LinearLayout>
 

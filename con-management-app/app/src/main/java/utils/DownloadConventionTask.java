@@ -36,10 +36,14 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
         InputStream is = null;
         Convention result = null;
 
+        //Returns null on exception
         try {
+            //Encode space into the uri
             String con = params[0].replaceAll(" ", "%20");
             URL url = new URL("http://127.0.0.1:3000/convention/" + con + "/download");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            //Boilerplate
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
             conn.setRequestMethod("GET");
@@ -59,6 +63,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
             JSONObject con_json = new JSONObject(contentAsString);
             Log.d("Download", contentAsString);
 
+            //get Convention's directory to place information
             File dir = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions/" +con_json.getString("name"));
 
             if (!dir.mkdirs()) {
@@ -108,6 +113,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
         }
 
         //download all documents
+        //TODO: not needed. Remove when convenient
         for(int i = 0; i < result.getDocuments().size(); i++) {
             Document doc = result.getDocuments().get(i);
             try {
