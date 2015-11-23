@@ -34,6 +34,7 @@ public class AppUtils implements Serializable{
         deleteFolder(con_dir);
     }
 
+    //Deletes the convention's directory. Used on update of a convnetion information
     public static void deleteConvention(Convention c) {
         File con_dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/" + c.getName());
         deleteFolder(con_dir);
@@ -73,6 +74,8 @@ public class AppUtils implements Serializable{
         return conventions;
     }
 
+    //Takes the .txt file in the specified convention directory
+    //Pareses the JSON into a full Convention object
     public static Convention parseConvention(String con_name) {
         //Find the directory for the SD Card using the API
         File sdcard = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/" + con_name);

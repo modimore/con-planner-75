@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lml.con_management_app" >
 
+    <!-- SAMSUNG MULTI-WINDOW? -->
+    <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+
+
     <!-- Allows DB hookup -->
     <uses-permission android:name="android.permission.INTERNET" />
 

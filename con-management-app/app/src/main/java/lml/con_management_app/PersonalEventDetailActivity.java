@@ -1,5 +1,6 @@
 package lml.con_management_app;
 
+
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+
+//SIMILAR TO EVENTLIST/DETAIL, CURRENTLY DOES NOT FUNCTION TO SPECIFICATIONS
 /**
  * An activity representing a single PersonalEvent detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
@@ -34,6 +37,14 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        FloatingActionButton fab_return = (FloatingActionButton) findViewById(R.id.fab_return);
+        fab_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPrevious();
             }
         });
 
@@ -79,4 +90,15 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(PersonalEventDetailActivity.this, PersonalEventListActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
+    }
+
 }

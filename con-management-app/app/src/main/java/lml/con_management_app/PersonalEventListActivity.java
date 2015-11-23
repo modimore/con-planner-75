@@ -10,6 +10,7 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+//SIMILAR TO EVENTLIST/DETAIL, CURRENTLY DOES NOT FUNCTION TO SPECIFICATIONS
 /**
  * An activity representing a list of PersonalEvents. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -45,7 +46,15 @@ public class PersonalEventListActivity extends AppCompatActivity
         toolbar.setTitle(getTitle());
 
         // Show the Up button in the action bar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton fab_return = (FloatingActionButton) findViewById(R.id.fab_return);
+        fab_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPrevious();
+            }
+        });
 
         if (findViewById(R.id.personalevent_detail_container) != null) {
             // The detail container view will be present only in the
@@ -106,5 +115,12 @@ public class PersonalEventListActivity extends AppCompatActivity
             detailIntent.putExtra(PersonalEventDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(PersonalEventListActivity.this, ConventionPageActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
     }
 }

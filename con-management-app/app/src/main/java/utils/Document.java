@@ -4,6 +4,11 @@ import java.io.Serializable;
 /**
  * Created by samsok on 11/15/15.
  */
+
+
+//Doucment Class; data unit for input from website
+//has get/set functions to access data
+//implements Serializable class for transition among Activites
 public class Document implements Serializable{
     private String display_name;
     private String location;

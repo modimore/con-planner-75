@@ -10,6 +10,9 @@ import java.util.ArrayList;
  * Created by samsok on 11/11/15.
  */
 
+//Convention Class; data unit for Conventions input from website
+    //has get/set functions to access data
+    //implements Parcelable class for transition among Activites
 public class Convention implements Parcelable {
     private String name;
     private String description;
@@ -23,8 +26,7 @@ public class Convention implements Parcelable {
 
     private List<Document> documents;
 
-    public Convention() {
-    }
+    public Convention() {}
 
     public String getName() {
         return name;

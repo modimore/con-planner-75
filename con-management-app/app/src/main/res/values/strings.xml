@@ -8,4 +8,5 @@
     <string name="title_personalevent_detail">PersonalEvent Detail</string>
     <string name="title_activity_home_page">HomePage</string>
     <string name="title_activity_search_page">SearchPageActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

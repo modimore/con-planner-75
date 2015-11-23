@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import utils.Convention;
 import utils.Document;
 
+//Activity for the Documents Page - allows user to view Convention Documents
 public class DocsPageActivity extends AppCompatActivity {
 
     @Override
@@ -32,11 +33,30 @@ public class DocsPageActivity extends AppCompatActivity {
             addDocumentButton(d);
         }
 
+        //Button to return to previous activity
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPrevious();
+            }
+        });
 
         //"up" button - links back to parent activity defined in manifest
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    //Methods for Button behavior
+
+    //Go to previous Activity, bundles data back
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(DocsPageActivity.this, ConventionPageActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
+    }
+
+    //Add buttons based on Documents in Convention
     public void addDocumentButton(final Document doc){
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.docLayout_id);
 
@@ -51,6 +71,7 @@ public class DocsPageActivity extends AppCompatActivity {
 
     }
 
+    //View documents - launch phone's default browser to view documents
     public void viewDocument(Document doc)
     {
         String uri = "http://127.0.0.1:3000/" + doc.getLocation();

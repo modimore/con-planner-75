@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import lml.con_management_app.dummy.DummyContent;
+import java.util.ArrayList;
 
+import lml.con_management_app.dummy.DummyContent;
+import utils.Event;
+import android.R;
 /**
  * A list fragment representing a list of Events. This fragment
  * also supports tablet devices by allowing list items to be given an
@@ -43,10 +46,8 @@ public class EventListFragment extends ListFragment {
      * selections.
      */
     public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public void onItemSelected(String id);
+        // Modify the callback interface to pass event object
+        void onItemSelected(Event e);
     }
 
     /**
@@ -55,7 +56,8 @@ public class EventListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        // Modify the local dummy callback to also pass event
+        public void onItemSelected(Event e) {
         }
     };
 
@@ -66,16 +68,24 @@ public class EventListFragment extends ListFragment {
     public EventListFragment() {
     }
 
+    private ArrayList<Event> events = new ArrayList<Event>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        // Get events array from arguments bundled in EventListActivity
+        if (getArguments() != null && getArguments().containsKey("events")) {
+            events = getArguments().getParcelableArrayList("events");
+        }
+        // Initialize the display adapter
+        //R.text1 is default textview
+        //RIGHT NOW THIS IS PRINTING THE EVENT DIRECTLY, NEED A TOSTRING THING
+        setListAdapter(new ArrayAdapter<Event>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+                R.id.text1,
+                events));
     }
 
     @Override
@@ -115,7 +125,8 @@ public class EventListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        //pass event rather than dummy data
+        mCallbacks.onItemSelected( (Event) listView.getItemAtPosition(position) );
     }
 
     @Override

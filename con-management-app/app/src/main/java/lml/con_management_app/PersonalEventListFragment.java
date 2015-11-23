@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import lml.con_management_app.dummy.DummyContent;
 
+//SIMILAR TO EVENTLIST/DETAIL, CURRENTLY DOES NOT FUNCTION TO SPECIFICATIONS
 /**
  * A list fragment representing a list of PersonalEvents. This fragment
  * also supports tablet devices by allowing list items to be given an

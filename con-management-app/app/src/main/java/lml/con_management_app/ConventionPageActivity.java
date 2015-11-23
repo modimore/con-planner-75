@@ -2,6 +2,7 @@ package lml.con_management_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,7 +16,7 @@ import utils.*;
 import test.UtilTests;
 import android.os.Environment;
 
-
+//Activity for the Convention Page - acts as a hub for Convention data (Schedule, Personal Schedule, Documents
 public class ConventionPageActivity extends AppCompatActivity {
 
     //BUTTONS FOR THE CONVENTION PAGE:
@@ -24,7 +25,6 @@ public class ConventionPageActivity extends AppCompatActivity {
     Button docsButton;
     Button personalButton;
     Button updateButton;
-    Button dbTestButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,34 +62,32 @@ public class ConventionPageActivity extends AppCompatActivity {
             }
         });
 
-        //"up" button - links back to parent activity defined in manifest
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-        dbTestButton = (Button) findViewById(R.id.dbTestButton_id);
-        dbTestButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Bundle data = getIntent().getExtras();
-
-                Convention c = data.getParcelable("convention");
-
-                if(c != null) {
-                    dbTestButton.setText(c.getName());
-                }
-                else{
-                    dbTestButton.setText("null");
-                }
-
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPrevious();
             }
-
         });
+
+        //"up" button - links back to parent activity defined in manifest
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
     //Methods for Button behavior
-    //CONVENTION PAGE BUTTONS: lead to respective activities (docs, eventlist, personalschedule)
-    //bundle convention data parcel to their respective activities
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(ConventionPageActivity.this, HomePageActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
+    }
+
+
+        //CONVENTION PAGE BUTTONS: lead to respective activities (docs, eventlist, personalschedule)
+        //bundle convention data parcel to their respective activities
+
     public void gotoEvents() {
         Intent eventIntent = new Intent(ConventionPageActivity.this, EventListActivity.class);
         Bundle data = getIntent().getExtras();
@@ -111,7 +109,7 @@ public class ConventionPageActivity extends AppCompatActivity {
        startActivity(personalIntent);
     }
 
-    
+    //Update downloaded data from database
     public void updateConvention() {
         Intent updateIntent = new Intent(ConventionPageActivity.this, ConventionPageActivity.class);
         Bundle data = getIntent().getExtras();
@@ -132,6 +130,5 @@ public class ConventionPageActivity extends AppCompatActivity {
         //exit the stack because it references an out of date convention object now.
         finish();
     }
-
 
 }

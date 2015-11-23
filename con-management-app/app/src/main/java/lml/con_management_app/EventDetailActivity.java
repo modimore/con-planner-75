@@ -10,12 +10,12 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-/*
+
 import utils.Convention;
 import utils.DownloadConventionTask;
 import utils.SearchConventionsTask;
-*/
 
+//Event Detail activity - shows Event description & name, allows user to add to personal schedule
 public class EventDetailActivity extends AppCompatActivity {
 
     @Override
@@ -25,6 +25,7 @@ public class EventDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        //Button to add Event to Personal Schedule --------------- DOES NOT FUNCTION (TODO: functionality)
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,7 +36,16 @@ public class EventDetailActivity extends AppCompatActivity {
         });
 
         // Show the Up button in the action bar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Button to return to previous Activity, re-bundle and send back convention data
+        FloatingActionButton fab_return = (FloatingActionButton) findViewById(R.id.fab_return);
+        fab_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoPrevious();
+            }
+        });
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -50,8 +60,7 @@ public class EventDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(EventDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(EventDetailFragment.ARG_ITEM_ID));
+            arguments.putParcelable("event", getIntent().getParcelableExtra("event"));
             EventDetailFragment fragment = new EventDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -76,4 +85,13 @@ public class EventDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(EventDetailActivity.this, EventListActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
+    }
+
 }

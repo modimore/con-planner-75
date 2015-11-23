@@ -35,12 +35,14 @@
 
 
         <!-- BUTTONS: !-->
+        <!--
         <Button
             android:id="@+id/conventionButton_id"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"/>
+            -->
 
         <Button
             android:id="@+id/searchButton_id"
@@ -49,6 +51,14 @@
             android:text="Search for a Convention"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"/>
+
+        <!--<Button
+            android:id="@+id/clearButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Clear Downloaded Conventions"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>-->
 
     </LinearLayout>
 

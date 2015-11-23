@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import lml.con_management_app.dummy.DummyContent;
+import utils.Event;
 
 /**
  * A fragment representing a single Event detail screen.
@@ -38,32 +39,39 @@ public class EventDetailFragment extends Fragment {
     public EventDetailFragment() {
     }
 
+    private Event event;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+
+            // If intent arguments have a event object, get it
+            if (getArguments().containsKey("event")) {
+                event = getArguments().getParcelable("event");
+
+                //also set app bar title to event name
+                if (appBarLayout != null) {
+                    appBarLayout.setTitle(event.getName());
+                }
             }
         }
     }
 
+    //Display Event data passed from EventListActivity
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.event_detail)).setText(mItem.details);
+        if (event != null) {
+            ((TextView) rootView.findViewById(R.id.event_detail)).setText(event.getDescription());
+        }
+        else{
+            ((TextView) rootView.findViewById(R.id.event_detail)).setText("test");
         }
 
         return rootView;
