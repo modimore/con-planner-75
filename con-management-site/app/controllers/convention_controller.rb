@@ -52,9 +52,6 @@ class ConventionController < ApplicationController
   # convention's index page
   def index
     @convention = Convention.find_by(name: params[:con_name])
-    if @convention == nil
-      redirect_to '/conventions/all'
-    end
   end
 
   # delete convention and everything associated from database
@@ -104,7 +101,7 @@ class ConventionController < ApplicationController
     @convention.location = params[:con_location]
     @convention.start = params[:con_start_time]
     @convention.end = params[:con_end_time]
-    if @convention.save; redirect_to '/convention/'+params[:con_name]
+    if @convention.save; redirect_to '/convention/'+URI.escape(params[:con_name])
     else; redirect_to '/'; end
   end
   # ================================================================
@@ -127,7 +124,7 @@ class ConventionController < ApplicationController
     @organizer = Organizer.find_by(username: params[:username], convention: params[:con_name])
     @organizer.role = params[:new_role]
     @organizer.save
-    redirect_to '/convention/' + params[:con_name] + '/organizers'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/organizers'
   end
 
   # remove an organizer from a convention
@@ -139,7 +136,7 @@ class ConventionController < ApplicationController
     if Organizer.where(convention: params[:con_name]).length <= 0
       delete
     elsif username == session[:username]; redirect_to '/conventions/mine'
-    else; redirect_to '/convention/' + params[:con_name] + '/organizers'; end
+    else; redirect_to '/convention/' + URI.escape(params[:con_name]) + '/organizers'; end
   end
   # ================================================================
 
@@ -150,13 +147,13 @@ class ConventionController < ApplicationController
                          start: params[:break_start_time],
                          end: params[:break_end_time] })
     @break.save
-    redirect_to '/convention/' + params[:con_name] + '/edit'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
 
   # remove time block when a convention is closed
   def remove_break
     Break.find(params[:id]).destroy
-    redirect_to '/convention/' + params[:con_name] + '/edit'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
   # ================================================================
 
@@ -164,18 +161,15 @@ class ConventionController < ApplicationController
   # add room to list of rooms for a convention
   def add_room
     @room = Room.new({ room_name: params[:room_name], convention_name: params[:con_name] })
-    if @room.save
-      redirect_to '/convention/'+params[:con_name]+'/details'
-    else
-      redirect_to '/convention/'+params[:con_name]+'/details'
-    end
+    @room.save
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
   end
 
   # remove room from list of rooms for a convention
   def remove_room
     @room = Room.where( room_name: params[:room_name], convention_name: params[:con_name] )
     @room.each { |r| r.destroy }
-    redirect_to '/convention/' + params[:con_name] + '/details'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
   # ================================================================
 
@@ -183,18 +177,15 @@ class ConventionController < ApplicationController
   # add host to list of hosts for a convention
   def add_host
     @host = Host.new({ name: params[:host_name], convention_name: params[:con_name] })
-    if @host.save
-      redirect_to '/convention/'+params[:con_name]+'/details'
-    else
-      redirect_to '/convention/'+params[:con_name]+'/details'
-    end
+    @host.save
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
   end
 
   # remove host from lists of hosts for a convention
   def remove_host
     @host = Host.where( name: params[:host_name], convention_name: params[:con_name] )
     @host.each { |h| h.destroy }
-    redirect_to '/convention/' + params[:con_name] + '/details'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
   # ================================================================
 
@@ -220,7 +211,7 @@ class ConventionController < ApplicationController
         file.write(upload.read)
       end
     end
-    redirect_to '/convention/'+params[:con_name]+'/documents'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/documents'
   end
 
   # remove document from convention, delete file
@@ -228,7 +219,7 @@ class ConventionController < ApplicationController
     @document = Document.find_by( convention_name: params[:con_name], display_name: params[:doc_name])
     File.delete(Rails.root.join('public', @document.location))
     @document.destroy
-    redirect_to '/convention/'+params[:con_name]+'/documents'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/documents'
   end
   # ================================================================
 

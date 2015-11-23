@@ -50,8 +50,10 @@ class ScheduleController < ApplicationController
     # find convention and the hours that it is open
     con = Convention.find_by(name: params[:con_name])
     con_hours = times_open(con.name)
-    versions = Schedule.where(convention: params[:con_name]).pluck("version") || 0
-    version = (versions.max { |a, b| a <=> b }) + 1
+    if Schedule.where(convention: params[:con_name]).length > 0
+      versions = Schedule.where(convention: params[:con_name]).pluck("version")
+      version = (versions.max { |a, b| a <=> b }) + 1
+    else; version = 1; end
 
 
     # get events for convention from database
@@ -79,7 +81,7 @@ class ScheduleController < ApplicationController
                        room: r }).save
       end
     end
-    redirect_to '/convention/' + params[:con_name]
+    redirect_to '/convention/' + URI.escape(params[:con_name])
   end
 
   def view
