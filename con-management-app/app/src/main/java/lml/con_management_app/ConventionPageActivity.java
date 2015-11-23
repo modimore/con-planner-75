@@ -111,6 +111,7 @@ public class ConventionPageActivity extends AppCompatActivity {
        startActivity(personalIntent);
     }
 
+    
     public void updateConvention() {
         Intent updateIntent = new Intent(ConventionPageActivity.this, ConventionPageActivity.class);
         Bundle data = getIntent().getExtras();
@@ -128,6 +129,7 @@ public class ConventionPageActivity extends AppCompatActivity {
         }
         updateIntent.putExtra("convention", c);
         startActivity(updateIntent);
+        //exit the stack because it references an out of date convention object now.
         finish();
     }
 

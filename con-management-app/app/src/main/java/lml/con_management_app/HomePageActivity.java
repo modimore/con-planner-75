@@ -23,6 +23,9 @@ public class HomePageActivity extends AppCompatActivity {
 
     //Convention searchResult; //this is bad code practice; todo: fix IT
 
+    //Exists so that this view is forced to refresh its contents on returning.
+    //This handles the case where a convention is updated and this view in stack
+    // contains an out of date convention as its reference.
     @Override
     protected void onResume() {
 
