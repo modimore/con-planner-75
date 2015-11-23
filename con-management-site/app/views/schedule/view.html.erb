@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="row-fluid">
+
+    <% @schedule.keys.each do |r| %>
+  	<div class="row-fluid">
+  		<ul class="list-group">
+  	  <li class="list-group-item disabled"><%= r %></li>
+  		<%# Show name, start time, and end time for each event in this room %>
+  	  <% @schedule[r].each do |e| %>
+  		  <li class="list-group-item">
+  				<%= "#{e.name}" %>: <%= e.start_time.to_s(:details_display) %> - <%= e.end_time.to_s(:details_display) %>
+  			</li>
+  		<% end %>
+  	<% end %>
+
+  </div>
+</div>

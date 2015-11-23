@@ -17,8 +17,8 @@ class EventController < ApplicationController
                          host_name: params[:host_name],
                          description: params[:event][:description],
                          length: params[:event][:length] })
-    if @event.save; redirect_to '/convention/'+params[:con_name]+'/events'
-    else; redirect_to '/convention/'+params[:con_name]+'/events'; end
+    if @event.save; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
+    else; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'; end
   end
 
   # page for editing event details
@@ -38,14 +38,14 @@ class EventController < ApplicationController
     @event.description = params[:event][:description]
     @event.length = params[:event][:length]
     @event.save
-    redirect_to '/convention/'+params[:con_name]+'/events'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
   end
 
   # delete record of an event
   def delete
     @event = Event.find_by(convention_name: params[:con_name], name: params[:event_name])
     @event.destroy
-    redirect_to '/convention/'+params[:con_name]+'/events'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
   end
 
 end
