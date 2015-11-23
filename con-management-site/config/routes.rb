@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   get 'conventions/all' => 'convention#all'
   get 'convention/search'
   get 'convention/new'
-  post 'convention/new' => 'convention#create_convention'
+  post 'convention/new' => 'convention#create'
 
   # actions for a specific convention
   get 'convention/:con_name' => 'convention#index'
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   #details
   get 'convention/:con_name/details' => 'convention#details'
   get 'convention/:con_name/edit' => 'convention#edit'
-  post 'convention/:con_name/edit' => 'convention#edit_details'
+  post 'convention/:con_name/edit' => 'convention#update'
 
   # organizers
   get 'convention/:con_name/organizers' => 'convention#organizers'

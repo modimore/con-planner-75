@@ -19,7 +19,7 @@ class UserController < ApplicationController
   # login page
   def login_page; end
 
-  # authenticate user, add info to session
+  # login: authenticate user, add info to session
   def login
     @user = User.find_by(username: params[:username])
     if @user && @user.authenticate(params[:password])
@@ -28,7 +28,7 @@ class UserController < ApplicationController
     else; redirect_to '/login'; end
   end
 
-  # remove username from session
+  # logout: remove username from session
   def logout
     session.delete(:username)
     redirect_to '/'

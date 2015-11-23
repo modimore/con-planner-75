@@ -1,12 +1,13 @@
+<%# Page on which edits can be made to a convention %>
 <ol class="breadcrumb">
 	<li><a href="/convention/<%= params[:con_name] %>/index"><%= params[:con_name] %></a></li>
 	<li class="active">Edit</li>
 </ol>
 
 <div class="container-fluid">
-
-	<%# General details %>
   <div class="row-fluid">
+
+		<%# General details %>
     <form action="/convention/<%= params[:con_name] %>/edit" method="post">
 			<%# Convention name %>
       <div class="form-group col-xs-12">
@@ -31,59 +32,60 @@
 			<%# Submit %>
       <div class="pull-right"><button role="submit" class="btn">Edit Convention</button></div>
     </form>
-  </div>
 
-	<%# Line Break %>
-	<div class="col-xs-12"><b>Add Breaks</b></div>
+		<%# Line break %>
+		<div class="col-xs-12"><b>Add Breaks</b></div>
 
-	<div class="col-xs-12">
-		<%= form_tag({ action: "add_break" }) do %>
-			<%# Break start time %>
-			<div class="form-group col-xs-6">
-				<label for="con_start_time">Start Time</label>
-				<input type="datetime-local" class="form-control" id="break_start_time" name="break_start_time" value="<%= (@convention.start || DateTime.now).to_s(:html_datetime_local) %>">
-			</div>
-			<%# Break end time %>
-			<div class="form-group col-xs-6">
-				<label for="con_end_time">End Time</label>
-				<input type="datetime-local" class="form-control" id="break_end_time" name="break_end_time" value="<%= (@convention.end || DateTime.now).to_s(:html_datetime_local) %>">
-			</div>
-			<%# Submit %>
-			<div class="pull-right">
-				<button type="submit" class="btn">Add Break</button>
-			</div>
-		<% end %>
-	</div>
+		<%# Add break %>
+		<div class="col-xs-12">
+			<%= form_tag({ action: "add_break" }) do %>
+				<%# Break start time %>
+				<div class="form-group col-xs-6">
+					<label for="con_start_time">Start Time</label>
+					<input type="datetime-local" class="form-control" id="break_start_time" name="break_start_time" value="<%= (@convention.start || DateTime.now).to_s(:html_datetime_local) %>">
+				</div>
+				<%# Break end time %>
+				<div class="form-group col-xs-6">
+					<label for="con_end_time">End Time</label>
+					<input type="datetime-local" class="form-control" id="break_end_time" name="break_end_time" value="<%= (@convention.end || DateTime.now).to_s(:html_datetime_local) %>">
+				</div>
+				<%# Submit %>
+				<div class="pull-right">
+					<button type="submit" class="btn">Add Break</button>
+				</div>
+			<% end %>
+		</div>
 
-	<div class="col-xs-12"></div>
+		<%# Line Break %>
+		<div class="col-xs-12"></div>
 
-	<div class="col-xs-12">
-		<ul class="list-group">
-			<li class="list-group-item disabled">Breaks</li>
-			<li class="list-group-item">
-				<table class="table table-bordered">
-					<tr><th>Start</th><th>End</th><th>Remove</th></tr>
-					<% @breaks.each do |b| %>
-						<tr>
-							<td><%= b.start.to_s(:details_display) %></td>
-							<td><%= b.end.to_s(:details_display) %></td>
-							<td>
-								<%= form_tag({ action: "remove_break", id: b.id }, method: "patch") do %>
-									<button type="submit" class="btn btn-danger">Remove</button>
-								<% end %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			</li>
-		</ul>
-	</div>
+		<%# List and remove breaks %>
+		<div class="col-xs-12">
+			<ul class="list-group">
+				<li class="list-group-item disabled">Breaks</li>
+				<li class="list-group-item">
+					<table class="table table-bordered">
+						<tr><th>Start</th><th>End</th><th>Remove</th></tr>
+						<% @breaks.each do |b| %>
+							<tr>
+								<td><%= b.start.to_s(:details_display) %></td>
+								<td><%= b.end.to_s(:details_display) %></td>
+								<td>
+									<%= form_tag({ action: "remove_break", id: b.id }, method: "patch") do %>
+										<button type="submit" class="btn btn-danger">Remove</button>
+									<% end %>
+								</td>
+							</tr>
+						<% end %>
+					</table>
+				</li>
+			</ul>
+		</div>
 
-	<%# Line Break %>
-	<div class="col-xs-12"></div>
+		<%# Line Break %>
+		<div class="col-xs-12"></div>
 
-	<%# Rooms and hosts %>
-	<div class="row-fluid">
+		<%# Rooms and hosts %>
 		<%# Add rooms %>
 		<div class="col-xs-6">
 			<form action="/convention/<%= params[:con_name] %>/rooms/add" method="post">
@@ -133,7 +135,5 @@
 				<% end %>
 		</div>
 
-
 	</div>
-
 </div>

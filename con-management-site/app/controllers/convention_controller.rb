@@ -1,5 +1,5 @@
 class ConventionController < ApplicationController
-  protect_from_forgery except: [:edit_details,:add_room,:add_host]
+  protect_from_forgery except: [:update,:add_room,:add_host]
   before_action :require_user, except: [:client_search,:download]
 
   # convention-independent actions =================================
@@ -16,27 +16,33 @@ class ConventionController < ApplicationController
   def new; @convention = Convention.new; end
 
   # add convention to database
-  def create_convention
+  def create
     # if the convention exists already return to list of conventions
     # if not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
       redirect_to '/convention/all'
     else
       # create an entry in the conventions table
-      # and an administrator in the organizers table
       @convention = Convention.new({ name: params[:convention][:name],
                                      description: params[:convention][:description],
                                      location: params[:convention][:location],
                                      start: params[:convention][:start],
                                      end: params[:convention][:end] })
+      # add the creating user as an administrator
       @organizer = Organizer.new({ username: session[:username],
                                    convention: params[:convention][:name],
                                    role: "Administrator" })
-      g_admin = Organizer.new({ username: session[:username],
+      # add the global administrator as an administrator
+      g_admin = Organizer.new({ username: "GlobalAdmin",
                                 convention: params[:convention][:name],
                                 role: "Administrator" })
+      # if creating all of those succeeds
       if @convention.save && @organizer.save && g_admin.save
+        # make a new directory for file uploads for this convention
+        FileUtils.mkdir_p(Rails.root.join('public','uploads',params[:convention][:name]))
+        # redirect user to this convention's index page
         redirect_to '/convention/'+params[:convention][:name]+'/index'
+      # otherwise redirect user to app home page
       else; redirect_to '/'; end
     end
   end
@@ -48,21 +54,26 @@ class ConventionController < ApplicationController
 
   # delete convention and everything associated from database
   def delete
+    # remove all documents and convention's upload folder
     @documents = Document.where(convention_name: params[:con_name])
     @documents.each do |d|
       File.delete(Rails.root.join('public', d.location))
       d.destroy
     end
+    FileUtils.remove_dir(Rails.root.join('public','uploads',params[:con_name]))
+    # remove convention's information in other database records
     Room.where(convention_name: params[:con_name]).each { |r| r.destroy }
     Host.where(convention_name: params[:con_name]).each { |h| h.destroy }
     Event.where(convention_name: params[:con_name]).each { |e| e.destroy }
     Organizer.where(convention: params[:con_name]).each { |o| o.destroy }
     Convention.find_by(name: params[:con_name]).destroy
-    redirect_to '/convention/all'
+    # redirect to list of all conventions
+    redirect_to '/conventions/all'
   end
   # ================================================================
 
   # Convention information =========================================
+  # get all convention details
   def details
     @convention = Convention.find_by(name: params[:con_name])
     @rooms = Room.where(convention_name: params[:con_name])
@@ -82,7 +93,7 @@ class ConventionController < ApplicationController
   end
 
   # submit edits to database
-  def edit_details
+  def update
     @convention = Convention.find_by(name: params[:con_name])
     @convention.description = params[:con_descr]
     @convention.location = params[:con_location]
@@ -128,6 +139,7 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Breaks =========================================================
+  # add time block when a convention is closed
   def add_break
     @break = Break.new({ con_name: params[:con_name],
                          start: params[:break_start_time],
@@ -136,6 +148,7 @@ class ConventionController < ApplicationController
     redirect_to '/convention/' + params[:con_name] + '/edit'
   end
 
+  # remove time block when a convention is closed
   def remove_break
     Break.find(params[:id]).destroy
     redirect_to '/convention/' + params[:con_name] + '/edit'
@@ -143,15 +156,17 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Rooms ==========================================================
+  # add room to list of rooms for a convention
   def add_room
     @room = Room.new({ room_name: params[:room_name], convention_name: params[:con_name] })
     if @room.save
-      redirect_to '/convention/'+params[:con_name]+'/details' #breaks when I use string interpolation??
+      redirect_to '/convention/'+params[:con_name]+'/details'
     else
-      redirect_to '/convention/'+params[:con_name]+'/details' #breaks when I use string interpolation??
+      redirect_to '/convention/'+params[:con_name]+'/details'
     end
   end
 
+  # remove room from list of rooms for a convention
   def remove_room
     @room = Room.where( room_name: params[:room_name], convention_name: params[:con_name] )
     @room.each { |r| r.destroy }
@@ -160,15 +175,17 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Hosts ==========================================================
+  # add host to list of hosts for a convention
   def add_host
     @host = Host.new({ name: params[:host_name], convention_name: params[:con_name] })
     if @host.save
-      redirect_to '/convention/'+params[:con_name]+'/details' #breaks when I use string interpolation??
+      redirect_to '/convention/'+params[:con_name]+'/details'
     else
-      redirect_to '/convention/'+params[:con_name]+'/details' #breaks when I use string interpolation??
+      redirect_to '/convention/'+params[:con_name]+'/details'
     end
   end
 
+  # remove host from lists of hosts for a convention
   def remove_host
     @host = Host.where( name: params[:host_name], convention_name: params[:con_name] )
     @host.each { |h| h.destroy }
@@ -177,23 +194,24 @@ class ConventionController < ApplicationController
   # ================================================================
 
   # Documents for convention =======================================
-  # view all documents for a convention
+  # view all documents for a convention and form to upload document
   def documents
     @documents = Document.where(convention_name: params[:con_name])
     @document = Document.new
   end
 
-  # add a document to a conventio, upload file
+  # add a document to a convention, upload file
   def upload_document
     upload = params[:document] # uploaded file
     # create database entry for file
     @document = Document.new({ display_name: params[:display_name],
                                convention_name: params[:con_name],
-                               location: 'uploads/'+upload.original_filename })
+                               location: 'uploads/' + params[:con_name] + '/' + upload.original_filename })
     if @document.display_name == ""; @document.display_name = "<no name>"; end
     if @document.save
       # save file on server
-      File.open(Rails.root.join('public', 'uploads', upload.original_filename), 'wb') do |file|
+      File.open(Rails.root.join('public', 'uploads', params[:con_name], upload.original_filename),
+                'wb') do |file|
         file.write(upload.read)
       end
     end
@@ -236,6 +254,7 @@ class ConventionController < ApplicationController
   def schedule
     #require 'convention_helper'
 
+    # find correct convention and the hours it is open
     @con = Convention.find_by(name: params[:con_name])
     con_hours = times_open(@con.name)
 
