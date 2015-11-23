@@ -25,7 +25,7 @@
 						  <%= e.name %>
 							<%# Button to delete %>
 							<div class="pull-right">
-								<%= form_tag({ action: "delete", event_name: e.name }) do %>
+								<%= form_tag({ action: "delete", event_name: e.name }, method: "patch") do %>
 									<button type="submit" class="btn btn-danger">Delete</button>
 								<% end %>
 							</div>
