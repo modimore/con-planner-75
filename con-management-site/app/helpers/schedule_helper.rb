@@ -6,6 +6,7 @@ def scheduler_unit_time(raw_time)
   raw_time.to_i/3600
 end
 
+# mini event class used in viewing schedules
 class EventY
   attr_reader :name, :start_time, :end_time
 
@@ -16,7 +17,7 @@ class EventY
   end
 end
 
-# mini event class (not connected to db) for testing purposes
+# mini event class for use in scheduler
 class EventX
   attr_reader :length, :hosts, :name
   attr_accessor :times

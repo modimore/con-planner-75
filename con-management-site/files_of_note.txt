@@ -1,0 +1,19 @@
+This is a list of files that has code written specifically for the project.
+Application logic, view templates, and style-sheets are listed.
+Locations are shown assuming con-management-site is your base directory.
+A '*' denotes that everything in the folder is used.
+
+app/controllers/*
+
+app/helpers/application_helper.rb
+app/helpers/schedule_helper.rb
+
+app/views/*
+
+config/routes.rb
+
+Project dependencies are listed in:
+Gemfile
+
+The database schema is not edited manually, but can be seen at:
+db/schema.rb

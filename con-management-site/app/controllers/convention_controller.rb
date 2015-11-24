@@ -223,56 +223,7 @@ class ConventionController < ApplicationController
   end
   # ================================================================
 
-  # Schedule =======================================================
-  # compute the times a convention is open
-  def times_open(con_name)
-    # get convention start time and end time
-    con = Convention.select("start","end").find_by(name: con_name)
-    # get all the breaks in the convention schedule, sorted by start time
-    breaks = Break.where(con_name: con_name).order(:start )
-
-    if breaks.empty? # if there are no breaks return full convention length
-      [[0,scheduler_unit_time(con.end-con.start)]]
-    else # otherwise
-      # the first time block is from the convention start to the beginning of the first break
-      times = [ [0,scheduler_unit_time(breaks[0].start-con.start)] ]
-      # time blocks in the middle are from a break's start time to the next break's end time
-      for i in 0..(breaks.length-2)
-        times.append([scheduler_unit_time(breaks[i].end-con.start),
-                      scheduler_unit_time(breaks[i+1].start-con.start)])
-      end
-      # the last time block is from the end of the last break to the convention's end
-      times.append([scheduler_unit_time(breaks[breaks.length-1].end-con.start),
-                    scheduler_unit_time(con.end-con.start)])
-    end
-  end
-
-  def schedule
-    #require 'convention_helper'
-
-    # find correct convention and the hours it is open
-    @con = Convention.find_by(name: params[:con_name])
-    con_hours = times_open(@con.name)
-
-    # get events for convention from database
-    # organize into an array of EventX objects
-    elist = []
-    Event.where(convention_name: params[:con_name]).each do |e|
-      elist.append(EventX.new(e.length,con_hours,[e.host_name],e.name))
-    end
-
-    # get rooms for convention from database
-    rlist = Room.where(convention_name: params[:con_name]).pluck("room_name")
-    puts rlist.to_s
-
-    # proceed to scheduling
-    scheduler = Scheduler.new(rlist,con_hours)
-    puts "Begin scheduling..."
-    @schedule = scheduler.run(elist)
-  end
-  # ================================================================
-
-  # Mobile app stuff ===============================================
+  # Mobile app action ==============================================
   def download
     @convention = Convention.find_by(name: params[:convention_name])
     @events = Event.where(convention_name: params[:convention_name])
