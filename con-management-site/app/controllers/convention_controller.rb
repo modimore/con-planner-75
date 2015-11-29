@@ -230,6 +230,7 @@ class ConventionController < ApplicationController
     @rooms = Room.where(convention_name: params[:convention_name])
     @hosts = Host.where(convention_name: params[:convention_name])
     @documents = Document.where(convention_name: params[:convention_name])
+    @schedule = Schedule.where(convention: params[:convention_name])
 
     convention_info = {}
     convention_info[:name] = @convention.name
@@ -238,6 +239,7 @@ class ConventionController < ApplicationController
     convention_info[:start] = @convention.start
     convention_info[:end] = @convention.end
     convention_info[:events] = @events.as_json
+    convention_info[:schedule] = @schedule.as_json
     convention_info[:rooms] = @rooms.as_json
     convention_info[:hosts] = @hosts.as_json
     convention_info[:documents] = @documents.as_json

@@ -112,55 +112,6 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
             }
         }
 
-        //download all documents
-        //TODO: not needed. Remove when convenient
-        for(int i = 0; i < result.getDocuments().size(); i++) {
-            Document doc = result.getDocuments().get(i);
-            try {
-                File dir = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions/" +result.getName());
-                File file = new File(dir, doc.getLocation().substring(doc.getLocation().lastIndexOf('/')+1));
-                URL url = new URL("http://127.0.0.1:3000/" + doc.getLocation());
-
-                Log.d("Download", url.toString());
-                Log.d("Download", dir.toString());
-                Log.d("Download", file.toString());
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.connect();
-                int response = conn.getResponseCode();
-
-               /*
-                * Define InputStreams to read from the URLConnection.
-                */
-                is = conn.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-
-               /*
-                * Read bytes to the Buffer until there is nothing more to read(-1).
-                */
-                ByteArrayBuffer baf = new ByteArrayBuffer(5000);
-                int current = 0;
-                while ((current = bis.read()) != -1) {
-                    baf.append((byte) current);
-                }
-
-
-                /* Convert the Bytes read to a String. */
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(baf.toByteArray());
-                fos.flush();
-                fos.close();
-
-            } catch (Exception e) {
-                Log.e("Download", e.getMessage(), e);
-                return null;
-            }
-        }
-
         return result;
     }
 

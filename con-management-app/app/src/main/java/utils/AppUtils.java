@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import utils.Convention;
 
@@ -113,7 +115,8 @@ public class AppUtils implements Serializable{
             result.setEnd(con_json.getString("end"));
 
             JSONArray events_json = con_json.getJSONArray("events");
-            List<Event> events = new ArrayList<>();
+            //List<Event> events = new ArrayList<>();
+            Map<String, Event> events = new HashMap<>();
             for(int i = 0; i < events_json.length(); i++)
             {
                 JSONObject e_json = events_json.getJSONObject(i);
@@ -124,7 +127,20 @@ public class AppUtils implements Serializable{
                 e.setDescription(e_json.getString("description"));
                 e.setLength(e_json.getInt("length"));
 
-                events.add(e);
+                events.put(e.getName(),e);
+            }
+
+            JSONArray schedule_json = con_json.getJSONArray("schedule");
+            for(int i = 0; i < schedule_json.length(); i++)
+            {
+                JSONObject s_json = schedule_json.getJSONObject(i);
+                Event e = events.get(s_json.getString("event"));
+                if(e == null) continue;
+                e.setStart(s_json.getString("start"));
+                e.setEnd(s_json.getString("end"));
+                e.setRoom(s_json.getString("room"));
+
+                events.put(e.getName(), e);
             }
 
             JSONArray rooms_json = con_json.getJSONArray("rooms");
@@ -164,7 +180,7 @@ public class AppUtils implements Serializable{
                 documents.add(d);
             }
 
-            result.setEventList(events);
+            result.setEventList(new ArrayList<Event>(events.values()));
             result.setHostList(hosts);
             result.setRoomList(rooms);
             result.setDocuments(documents);

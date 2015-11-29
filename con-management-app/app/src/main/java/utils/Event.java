@@ -11,10 +11,40 @@ import android.os.Parcel;
 //Event Class; data unit for input from website
 //has get/set functions to access data
 //implements Serializable & Parcelable classes for transition among Activites
-public class Event implements Serializable, Parcelable {
+public class Event implements Serializable, Parcelable, Comparable<Event> {
     private String name;
     private String description;
     private int length;
+
+    private String start;
+    private String end;
+    private String room;
+
+    private String host_name;
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
 
     public Event(){}
 
@@ -22,8 +52,6 @@ public class Event implements Serializable, Parcelable {
     public String toString () {
         return name;
     }
-
-    private String host_name;
 
     public String getName() {
         return name;
@@ -62,6 +90,9 @@ public class Event implements Serializable, Parcelable {
         description = in.readString();
         length = in.readInt();
         host_name = in.readString();
+        start = in.readString();
+        end = in.readString();
+        room = in.readString();
     }
 
     @Override
@@ -75,6 +106,9 @@ public class Event implements Serializable, Parcelable {
         dest.writeString(description);
         dest.writeInt(length);
         dest.writeString(host_name);
+        dest.writeString(start);
+        dest.writeString(end);
+        dest.writeString(room);
     }
 
     @SuppressWarnings("unused")
@@ -89,4 +123,34 @@ public class Event implements Serializable, Parcelable {
             return new Event[size];
         }
     };
+
+    @Override
+    public int compareTo(Event another) {
+        if (another == null)
+        {
+            return -1;
+        }
+        if(this.getStart().equals(""))
+        {
+            if(another.getStart().equals(""))
+            {
+                return this.getName().compareTo(another.getName());
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        if(another.getStart().equals(""))
+        {
+            return -1;
+        }
+
+        if(this.getStart().compareTo(another.getStart()) == 0){
+            return this.getName().compareTo(another.getName());
+        }
+        else {
+            return this.getStart().compareTo(another.getStart());
+        }
+    }
 }

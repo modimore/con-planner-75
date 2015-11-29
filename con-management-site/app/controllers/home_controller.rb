@@ -5,7 +5,7 @@ class HomeController < ApplicationController
 
   #Sends a lean json that has all of the convention names matching the query string
   def client_search
-    @conventions = Convention.where("name LIKE ?" , "%" + params[:query] + "%")
+    @conventions = Convention.where("lower(name) LIKE lower(?)" , "%" + params[:query] + "%")
 
     if @conventions.empty?
       render json: {}

@@ -92,11 +92,14 @@ public class EventListActivity extends AppCompatActivity
      */
    @Override
     public void onItemSelected(Event e) {
+       Bundle data = getIntent().getExtras();
+
        if (mTwoPane) {
            // It's a tablet, so update the detail fragment
            Bundle arguments = new Bundle();
            // Pass the selected event object to the DetailFragment
            arguments.putParcelable("event", e);
+           arguments.putParcelable("convention", data.getParcelable("convention"));
            EventDetailFragment fragment = new EventDetailFragment();
            fragment.setArguments(arguments);
            getSupportFragmentManager().beginTransaction()
@@ -108,6 +111,7 @@ public class EventListActivity extends AppCompatActivity
            // Pass the selected event object to the DetailActivity
            Parcelable p = e;
            detailIntent.putExtra("event", p);
+           detailIntent.putExtra("convention", data.getParcelable("convention"));
            startActivity(detailIntent);
        }
 
