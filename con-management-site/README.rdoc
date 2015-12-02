@@ -3,6 +3,10 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
+RUBY VERSION: 2.2.3p173
+
+RAILS VERSION: 4.2.4
+
 Things you may want to cover:
 
 * Ruby version
