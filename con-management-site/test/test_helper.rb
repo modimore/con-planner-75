@@ -6,8 +6,9 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
-        file.write(uploaded_io.read)
+  #File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+  #      file.write(uploaded_io.read)
+  #end
 
   # Add more helper methods to be used by all tests here...
   # Runs assert_difference with a number of conditions and varying difference
@@ -27,8 +28,10 @@ class ActiveSupport::TestCase
       e = pair[0]
       difference = pair[1]
       error = "#{e.inspect} didn't change by #{difference}"
-      error = "#{message}\n#{error}" if message
-      assert_equal(before[i] + difference, eval(e, b), error)
+      error = "#{message}\n#{error}" 
+      if message
+        assert_equal(before[i] + difference, eval(e, b), error)
+      end
     end
   end
 end

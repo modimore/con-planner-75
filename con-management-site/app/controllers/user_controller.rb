@@ -5,6 +5,14 @@ class UserController < ApplicationController
 
   # add user to the database
   def create
+    if params[:username] == ""
+      redirect_to '/signup'
+      return
+    end
+    if params[:password] == ""
+      redirect_to '/signup'
+      return
+    end
     if User.where(username: params[:username]).length > 0
       redirect_to '/signup'
     else

@@ -4,10 +4,19 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-base:
-    name: "Testcon"
-    description: "A test"
-    location: "A place"
+one:
+    name: Test Convention 1
+    description: A test
+    location: A place
+    start: 2015-01-01 09:00:00
+    end: 2015-01-01 17:00:00
+
+two:
+    name: Test Convention 3
+    description: A test
+    location: A place
+    start: 2015-01-01 09:00:00
+    end: 2015-01-01 17:00:00
 
 #empty_name:
 #    name: ""
