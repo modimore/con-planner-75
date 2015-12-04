@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:fitsSystemWindows="true"
-    tools:context="lml.con_management_app.HomePageActivity">
+    tools:context="lml.con_management_app.PersonalEventActivity">
 
     <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
@@ -15,52 +15,27 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_home_page" />
+    <include layout="@layout/content_personal_event" />
 
-    <!-- add a linear layout to format buttons and display content properly-->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:orientation="vertical"
-        android:id="@+id/homeLayout_id"
+        android:id="@+id/eventLayout_id"
         android:weightSum="1">
 
-        <!--edit text to add offset for the toolbar - this is bad !-->
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.05" />
 
 
-        <!-- BUTTONS: !-->
-        <!--
-        <Button
-            android:id="@+id/conventionButton_id"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
-            -->
-
-        <Button
-            android:id="@+id/searchButton_id"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="Search for a Convention"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
-
-        <Button
-            android:id="@+id/clearButton_id"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:text="Clear Downloaded Conventions"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"/>
-
+        <android.support.design.widget.FloatingActionButton android:id="@+id/fab_return"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_menu_revert" />
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

@@ -9,4 +9,9 @@
     <string name="title_activity_home_page">HomePage</string>
     <string name="title_activity_search_page">SearchPageActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_event">EventActivity</string>
+    <string name="title_activity_event_description">EventDescriptionActivity</string>
+    <string name="title_activity_convention_detail">ConventionDetailActivity</string>
+    <string name="title_activity_personal_event">PersonalEventActivity</string>
+    <string name="title_activity_personal_event_detail">PersonalEventDetailActivity</string>
 </resources>

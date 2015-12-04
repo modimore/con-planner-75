@@ -24,6 +24,7 @@ public class ConventionPageActivity extends AppCompatActivity {
     Button eventsButton;
     Button docsButton;
     Button personalButton;
+    Button detailButton;
     Button updateButton;
 
     @Override
@@ -33,7 +34,13 @@ public class ConventionPageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Set toolbar title to convention name
+        Bundle data = getIntent().getExtras();
+        Convention c = data.getParcelable("convention");
+        getSupportActionBar().setTitle(c.getName());
+
         //Articulate Buttons:
+
         eventsButton = (Button) findViewById(R.id.eventsButton_id);
         eventsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,6 +59,13 @@ public class ConventionPageActivity extends AppCompatActivity {
         personalButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 gotoPersonal();
+            }
+        });
+
+        detailButton = (Button) findViewById(R.id.detailButton_id);
+        detailButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                gotoDetail();
             }
         });
 
@@ -89,7 +103,7 @@ public class ConventionPageActivity extends AppCompatActivity {
         //bundle convention data parcel to their respective activities
 
     public void gotoEvents() {
-        Intent eventIntent = new Intent(ConventionPageActivity.this, EventListActivity.class);
+        Intent eventIntent = new Intent(ConventionPageActivity.this, EventActivity.class);
         Bundle data = getIntent().getExtras();
         eventIntent.putExtra("convention", data.getParcelable("convention"));
         startActivity(eventIntent);
@@ -103,10 +117,17 @@ public class ConventionPageActivity extends AppCompatActivity {
     }
 
     public void gotoPersonal() {
-       Intent personalIntent = new Intent(ConventionPageActivity.this, EventListActivity.class);
+       Intent personalIntent = new Intent(ConventionPageActivity.this, PersonalEventActivity.class);
         Bundle data = getIntent().getExtras();
         personalIntent.putExtra("convention", data.getParcelable("convention"));
        startActivity(personalIntent);
+    }
+
+    public void gotoDetail() {
+        Intent detailIntent = new Intent(ConventionPageActivity.this, ConventionDetailActivity.class);
+        Bundle data = getIntent().getExtras();
+        detailIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(detailIntent);
     }
 
     //Update downloaded data from database

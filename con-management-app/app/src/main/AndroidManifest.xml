@@ -5,7 +5,6 @@
     <!-- SAMSUNG MULTI-WINDOW? -->
     <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
 
-
     <!-- Allows DB hookup -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -53,23 +52,7 @@
 
         <!-- Schedule Page: Displays Convention Schedule to user as a list of events -->
         <!-- Uses master/detail template ! -->
-        <activity
-            android:name=".EventListActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ConventionPageActivity" />
-        </activity>
-        <activity
-            android:name=".EventDetailActivity"
-            android:label="@string/title_event_detail"
-            android:parentActivityName=".EventListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventListActivity" />
-        </activity>
+
 
         <!-- Documents Page: Displays list of uploaded documents -->
         <activity
@@ -85,24 +68,7 @@
         <!-- Personal Schedule Page: Displays events added to personal schedule as a list of events -->
         <!-- personal schedule items are added from the Schedule page -->
         <!-- Uses master/detail template ! -->
-        <activity
-            android:name=".PersonalEventListActivity"
-            android:label="@string/title_personalevent_list"
-            android:parentActivityName=".ConventionPageActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="lml.con_management_app.ConventionPageActivity" />
-        </activity>
-        <activity
-            android:name=".PersonalEventDetailActivity"
-            android:label="@string/title_personalevent_detail"
-            android:parentActivityName=".PersonalEventListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="lml.con_management_app.PersonalEventListActivity" />
-        </activity>
+
         <activity
             android:name=".SearchPageActivity"
             android:label="@string/title_activity_search_page"
@@ -111,6 +77,51 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="lml.con_management_app.HomePageActivity" />
+        </activity>
+        <activity
+            android:name=".EventActivity"
+            android:label="@string/title_activity_event"
+            android:parentActivityName=".ConventionPageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.ConventionPageActivity" />
+        </activity>
+        <activity
+            android:name=".EventDescriptionActivity"
+            android:label="@string/title_activity_event_description"
+            android:parentActivityName=".EventActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.EventActivity" />
+        </activity>
+        <activity
+            android:name=".ConventionDetailActivity"
+            android:label="@string/title_activity_convention_detail"
+            android:parentActivityName=".ConventionPageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.ConventionPageActivity" />
+        </activity>
+        <activity
+            android:name=".PersonalEventActivity"
+            android:label="@string/title_activity_personal_event"
+            android:parentActivityName=".ConventionPageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.ConventionPageActivity" />
+        </activity>
+        <activity
+            android:name=".PersonalEventDetailActivity"
+            android:label="@string/title_activity_personal_event_detail"
+            android:parentActivityName=".PersonalEventActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.PersonalEventActivity" />
         </activity>
     </application>
 

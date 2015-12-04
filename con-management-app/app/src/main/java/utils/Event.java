@@ -20,7 +20,14 @@ public class Event implements Serializable, Parcelable, Comparable<Event> {
     private String end;
     private String room;
 
+    //for tagging personal events
+    private boolean personal;
+
     private String host_name;
+
+    public boolean isPersonal() { return personal;}
+
+    public void setPersonal(boolean p){personal = p;}
 
     public String getStart() {
         return start;

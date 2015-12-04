@@ -62,13 +62,20 @@
             android:layout_alignParentRight="true" />
 
         <Button
+            android:id="@+id/detailButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="DETAILS"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
             android:id="@+id/updateButton_id"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:text="Update"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" />
-
 
         <android.support.design.widget.FloatingActionButton android:id="@+id/fab_return"
             android:layout_width="wrap_content" android:layout_height="wrap_content"

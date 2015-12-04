@@ -27,6 +27,11 @@ public class DocsPageActivity extends AppCompatActivity {
 
         Bundle data = getIntent().getExtras();
         Convention con = data.getParcelable("convention");
+        con.setName("TEST!!!!!!!!!!!!!!!!!!");
+
+
+        //Set toolbar title
+        getSupportActionBar().setTitle(con.getName() + "Documents");
 
         for(Document d : con.getDocuments()) {
             Log.d("DocsAct", "Adding document: " + d.getDisplayName());
@@ -59,7 +64,6 @@ public class DocsPageActivity extends AppCompatActivity {
     //Add buttons based on Documents in Convention
     public void addDocumentButton(final Document doc){
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.docLayout_id);
-
         Button button1=new Button(this);
         thisDangLayout.addView(button1);
         button1.setText(doc.getDisplayName());

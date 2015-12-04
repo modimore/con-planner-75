@@ -11,14 +11,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import utils.Convention;
 import utils.Event;
 
-public class PersonalEventDetailActivity extends AppCompatActivity {
+public class EventDescriptionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_event_detail);
+        setContentView(R.layout.activity_event_description);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -27,51 +28,54 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
         Event e = data.getParcelable("event");
         getSupportActionBar().setTitle(e.getName());
 
-        //Button to remove Event from the Personal Schedule
-        removePersonalButton(e);
-
         //Edit text
         addEventText(e);
 
+        //Button to add event to personal schedule
+        addPersonalButton(e);
+
+        //Button to return to the schedule page
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              gotoPrevious();
+                gotoPrevious();
             }
         });
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void gotoPrevious() {
-        Intent eventIntent = new Intent(PersonalEventDetailActivity.this, PersonalEventActivity.class);
-        Bundle data = getIntent().getExtras();
-        eventIntent.putExtra("convention", data.getParcelable("convention"));
-        startActivity(eventIntent);
-    }
-
-    public void removePersonalButton(final Event e) {
-        LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
-        Button button1 = new Button(this);
-        thisDangLayout.addView(button1);
-        button1.setText("REMOVE FROM PERSONAL SCHEDULE");
-        button1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                removeFromPersonalSchedule(e);
-            }
-        });
-    }
-
-    public void removeFromPersonalSchedule(Event e){
-
-    }
 
 
     public void addEventText(Event e) {
         TextView textView = (TextView) findViewById(R.id.textView);
         String text = String.format("Host: %s\n\nRoom: %s\n\nDescription: %s \n\n", e.getHostName(), e.getRoom(), e.getDescription());
         textView.setText(text);
+    }
+
+    public void addPersonalButton(final Event e) {
+        LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
+        Button button1 = new Button(this);
+        thisDangLayout.addView(button1);
+        button1.setText("ADD TO PERSONAL SCHEDULE");
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                addToPersonalSchedule(e);
+            }
+        });
+    }
+
+    public void addToPersonalSchedule(Event e){
+
+    }
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(EventDescriptionActivity.this, EventActivity.class);
+        Bundle data = getIntent().getExtras();
+        eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
     }
 
 
