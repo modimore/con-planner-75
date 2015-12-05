@@ -94,7 +94,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
                 }
                 Log.d("Download", file.exists() ? "Yes" : "No");
 
-                if(personal.exists()) {
+                if(!personal.exists()) {
                     FileWriter pWriter;
                     FileOutputStream pos;
                     pos = new FileOutputStream(personal);

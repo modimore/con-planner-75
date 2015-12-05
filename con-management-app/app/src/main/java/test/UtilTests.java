@@ -25,8 +25,19 @@ public class UtilTests extends InstrumentationTestCase {
 
     @Test
     public void testPersonalSchedule() throws Exception {
+        AppUtils.deleteDownloadedConventions();
         Convention c = new DownloadConventionTask().execute("Test Convention 1").get();
-        
+
+        AppUtils.addToPersonalSchedule("Event 1", c.getName());
+        List<Event> e = AppUtils.getPersonalSchedule(c);
+
+        assertEquals("Event 1", e.get(0).getName());
+
+        AppUtils.removeFromPersonalSchedule("Event 1", c.getName());
+        e = AppUtils.getPersonalSchedule(c);
+
+        assertEquals(0, e.size());
+
     }
 
     @Test
