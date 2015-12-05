@@ -75,6 +75,7 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
 
             try {
                 File file = new File(dir, con_json.getString("name")+".txt");
+                File personal = new File(dir, "personal.txt");
                 Log.d("Download", file.getAbsolutePath());
                 Log.d("Download", file.exists() ? "Yes" : "No");
                 fos = new FileOutputStream(file);
@@ -92,6 +93,23 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
                     fos.close();
                 }
                 Log.d("Download", file.exists() ? "Yes" : "No");
+
+                if(personal.exists()) {
+                    FileWriter pWriter;
+                    FileOutputStream pos;
+                    pos = new FileOutputStream(personal);
+
+                    try {
+                        pWriter = new FileWriter(pos.getFD());
+                        pWriter.write("{\"personal\":[]}");
+                        pWriter.close();
+                    } catch (Exception e) {
+                        Log.e("Download", e.getMessage(), e);
+                    } finally {
+                        fos.getFD().sync();
+                        fos.close();
+                    }
+                }
 
             } catch (Exception e) {
                 Log.e("Download", e.getMessage(), e);

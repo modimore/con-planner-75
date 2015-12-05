@@ -1,4 +1,6 @@
 package utils;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.Serializable;
 import android.os.Environment;
 import android.util.Log;
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,115 @@ public class AppUtils implements Serializable{
                 f.delete();
             }
         }
+    }
+
+    public static void addToPersonalSchedule(String event, String con_name) {
+        List<String> personals = parsePersonals(con_name);
+        personals.add(event);
+        writePersonalSchedule(personals, con_name);
+    }
+
+    public static void removeFromPersonalSchedule(String event, String con_name) {
+        List<String> personals = parsePersonals(con_name);
+        personals.remove(event);
+        writePersonalSchedule(personals, con_name);
+    }
+
+    public static List<Event> getPersonalSchedule(Convention con) {
+        Map<String, Event> con_event_map = new HashMap<>();
+
+        for(Event e : con.getEventList()) {
+            con_event_map.put(e.getName(), e);
+        }
+
+        List<Event> personal = new LinkedList<>();
+        String con_name = con.getName();
+        List<String> personal_names = parsePersonals(con_name);
+
+        for(String name: personal_names) {
+            Event e = con_event_map.get(name);
+
+            if(e != null) {
+                personal.add(e);
+            }
+        }
+        Collections.sort(personal);
+        return personal;
+
+    }
+
+    public static void writePersonalSchedule(List<String> events, String con_name) {
+        //get Convention's directory to place information
+        File dir = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions/" +con_name);
+
+        if (!dir.mkdirs()) {
+            Log.d("WritePersonals", "File exists");
+        }
+        Log.d("WritePersonals", dir.getAbsolutePath());
+
+
+        try {
+            File personal = new File(dir, "personal.txt");
+            FileWriter pWriter;
+            FileOutputStream pos;
+            pos = new FileOutputStream(personal);
+
+            try {
+                pWriter = new FileWriter(pos.getFD());
+                JSONObject personal_json = new JSONObject();
+                JSONArray personal_array = new JSONArray(events);
+                personal_json.put("personal", personal_array);
+                pWriter.write(personal_json.toString());
+                pWriter.close();
+            } catch (Exception e) {
+                Log.e("Download", e.getMessage(), e);
+            } finally {
+                pos.getFD().sync();
+                pos.close();
+            }
+
+        } catch (Exception e) {
+            Log.e("Download", e.getMessage(), e);
+        }
+    }
+
+    public static List<String> parsePersonals(String con_name) {
+        List<String> personal = new LinkedList<>();
+
+        File dir = new File(Environment.getExternalStorageDirectory().toString() + "/Conventions/" + con_name);
+        File file = new File(dir,"personal.txt");
+
+        //Read text from file
+        StringBuilder text = new StringBuilder();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        }
+        catch (IOException e) {
+            Log.e("Parse", e.getMessage(), e);
+        }
+        try {
+            JSONArray events = new JSONObject(text.toString()).getJSONArray("personal");
+
+            for(int i = 0; i < events.length(); i++)
+            {
+                String str = events.getString(i);
+                personal.add(str);
+            }
+
+            return personal;
+        }
+        catch (JSONException e) {
+            Log.e("Parse", e.getMessage(), e);
+        }
+        return null;
     }
 
     /**

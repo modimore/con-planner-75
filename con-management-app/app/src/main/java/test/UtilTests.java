@@ -19,6 +19,17 @@ import static org.junit.Assert.*;
  */
 public class UtilTests extends InstrumentationTestCase {
     @Test
+    public void testRemoveConventions() {
+        AppUtils.deleteDownloadedConventions();
+    }
+
+    @Test
+    public void testPersonalSchedule() throws Exception {
+        Convention c = new DownloadConventionTask().execute("Test Convention 1").get();
+        
+    }
+
+    @Test
     public void testConventionExists() throws Exception {
 
         try {
