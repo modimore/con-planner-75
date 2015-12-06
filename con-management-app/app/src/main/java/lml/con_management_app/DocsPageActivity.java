@@ -27,11 +27,11 @@ public class DocsPageActivity extends AppCompatActivity {
 
         Bundle data = getIntent().getExtras();
         Convention con = data.getParcelable("convention");
-        con.setName("TEST!!!!!!!!!!!!!!!!!!");
+        //con.setName("TEST!!!!!!!!!!!!!!!!!!");
 
 
         //Set toolbar title
-        getSupportActionBar().setTitle(con.getName() + "Documents");
+        getSupportActionBar().setTitle(con.getName() + " Documents");
 
         for(Document d : con.getDocuments()) {
             Log.d("DocsAct", "Adding document: " + d.getDisplayName());
