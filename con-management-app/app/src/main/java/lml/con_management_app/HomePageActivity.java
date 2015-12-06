@@ -44,6 +44,7 @@ public class HomePageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Con Planner 75");
 
 
         searchButton = (Button) findViewById(R.id.searchButton_id);
@@ -63,19 +64,20 @@ public class HomePageActivity extends AppCompatActivity {
             }
         }
 
-        //clearButton= (Button) findViewById(R.id.clearButton_id);
-        /*clearButton.setOnClickListener(new View.OnClickListener() {
+        clearButton= (Button) findViewById(R.id.clearButton_id);
+        clearButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clear();
+                finish();
+                startActivity(getIntent());
             }
-        });*/
+        });
     }
 
     //Create a button from a given Convention, links to ConventionPageActivity
     // Parcels Convention data over to that activity
     public void populateButtons(final Convention result) {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.homeLayout_id);
-
         Button button1 = new Button(this);
         thisDangLayout.addView(button1);
         button1.setText(result.getName());

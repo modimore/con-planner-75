@@ -1,5 +1,6 @@
 package utils;
 import java.io.Serializable;
+import java.util.StringTokenizer;
 
 import android.os.Parcelable;
 import android.os.Parcel;
@@ -20,10 +21,39 @@ public class Event implements Serializable, Parcelable, Comparable<Event> {
     private String end;
     private String room;
 
+    //for tagging personal events
+    private boolean personal;
+
     private String host_name;
 
+    private String timeTokenizer(String t){
+        String s1 = t;
+        String t1 = "T";
+        String t2 = ".";
+        String t3 = ":";
+
+        //Tokenize the time
+        StringTokenizer st = new StringTokenizer(s1,t1);
+        st.nextToken(); //first half
+        String s2 = st.nextToken();//Time chunk: xx:xx:xx.xxxZ
+
+        //Remove the decimal
+        st = new StringTokenizer(s2, t2);
+        String s3 = st.nextToken();//Time chunk: xx:xx:xx
+
+        //Remove the needless precision
+        st = new StringTokenizer(s3, t3);
+        String result = st.nextToken() + ":" + st.nextToken();
+
+        return result;
+    }
+
+    public boolean isPersonal() { return personal;}
+
+    public void setPersonal(boolean p){personal = p;}
+
     public String getStart() {
-        return start;
+        return timeTokenizer(start);
     }
 
     public void setStart(String start) {
@@ -31,7 +61,7 @@ public class Event implements Serializable, Parcelable, Comparable<Event> {
     }
 
     public String getEnd() {
-        return end;
+        return timeTokenizer(end);
     }
 
     public void setEnd(String end) {
