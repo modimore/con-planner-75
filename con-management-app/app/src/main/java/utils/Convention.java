@@ -5,6 +5,7 @@ import android.os.Parcel;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by samsok on 11/11/15.
@@ -25,6 +26,28 @@ public class Convention implements Parcelable {
     private List<Room> room_list;
 
     private List<Document> documents;
+
+    private String timeTokenizer(String t){
+        String s1 = t;
+        String t1 = "T";
+        String t2 = ".";
+        String t3 = ":";
+
+        //Tokenize the time
+        StringTokenizer st = new StringTokenizer(s1,t1);
+        st.nextToken(); //first half
+        String s2 = st.nextToken();//Time chunk: xx:xx:xx.xxxZ
+
+        //Remove the decimal
+        st = new StringTokenizer(s2, t2);
+        String s3 = st.nextToken();//Time chunk: xx:xx:xx
+
+        //Remove the needless precision
+        st = new StringTokenizer(s3, t3);
+        String result = st.nextToken() + ":" + st.nextToken();
+
+        return result;
+    }
 
     public Convention() {}
 
@@ -53,7 +76,7 @@ public class Convention implements Parcelable {
     }
 
     public String getStart() {
-        return start;
+        return timeTokenizer(start);
     }
 
     public void setStart(String start) {
@@ -61,7 +84,7 @@ public class Convention implements Parcelable {
     }
 
     public String getEnd() {
-        return end;
+        return timeTokenizer(end);
     }
 
     public void setEnd(String end) {

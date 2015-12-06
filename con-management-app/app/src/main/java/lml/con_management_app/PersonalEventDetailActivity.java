@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import utils.AppUtils;
+import utils.Convention;
 import utils.Event;
 
 public class PersonalEventDetailActivity extends AppCompatActivity {
@@ -25,10 +27,11 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
         //Set page title
         Bundle data = getIntent().getExtras();
         Event e = data.getParcelable("event");
+        Convention c = data.getParcelable("convention");
         getSupportActionBar().setTitle(e.getName());
 
         //Button to remove Event from the Personal Schedule
-        removePersonalButton(e);
+        removePersonalButton(e,c);
 
         //Edit text
         addEventText(e);
@@ -51,19 +54,21 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
         startActivity(eventIntent);
     }
 
-    public void removePersonalButton(final Event e) {
+    public void removePersonalButton(final Event e, final Convention c) {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
-        Button button1 = new Button(this);
+        final Button button1 = new Button(this);
         thisDangLayout.addView(button1);
         button1.setText("REMOVE FROM PERSONAL SCHEDULE");
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                removeFromPersonalSchedule(e);
+                removeFromPersonalScheduleClick(e, c);
+                button1.setText("REMOVED FROM PERSONAL SCHEDULE");
             }
         });
     }
 
-    public void removeFromPersonalSchedule(Event e){
+    public void removeFromPersonalScheduleClick(Event e, Convention c){
+        AppUtils.removeFromPersonalSchedule(e.getName(), c.getName());
 
     }
 

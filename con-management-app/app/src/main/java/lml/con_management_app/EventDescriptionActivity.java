@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import utils.AppUtils;
 import utils.Convention;
 import utils.Event;
 
@@ -26,13 +27,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
         //Set page title
         Bundle data = getIntent().getExtras();
         Event e = data.getParcelable("event");
+        Convention c = data.getParcelable("convention");
         getSupportActionBar().setTitle(e.getName());
 
         //Edit text
         addEventText(e);
 
         //Button to add event to personal schedule
-        addPersonalButton(e);
+        addPersonalButton(e, c);
 
         //Button to return to the schedule page
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
@@ -55,19 +57,21 @@ public class EventDescriptionActivity extends AppCompatActivity {
         textView.setText(text);
     }
 
-    public void addPersonalButton(final Event e) {
+    public void addPersonalButton(final Event e, final Convention c) {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
-        Button button1 = new Button(this);
+        final Button button1 = new Button(this);
         thisDangLayout.addView(button1);
         button1.setText("ADD TO PERSONAL SCHEDULE");
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                addToPersonalSchedule(e);
+                addToPersonalScheduleClick(e, c);
+                button1.setText("ADDED TO PERSONAL SCHEDULE");
             }
         });
     }
 
-    public void addToPersonalSchedule(Event e){
+    public void addToPersonalScheduleClick(Event e, Convention c) {
+        AppUtils.addToPersonalSchedule(e.getName(),c.getName());
 
     }
 

@@ -37,7 +37,6 @@ public class EventActivity extends AppCompatActivity {
             populateButtons(e);
         }
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +60,7 @@ public class EventActivity extends AppCompatActivity {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
         Button button1 = new Button(this);
         thisDangLayout.addView(button1);
-        String text = String.format("%s\n%s - %s", e.getName(), e.getStart(), e.getEnd());
+        String text = String.format("%s\n%s\n%s - %s", e.getName(), e.getRoom(), e.getStart(), e.getEnd());
         button1.setText(text);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

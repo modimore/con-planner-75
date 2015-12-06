@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import java.util.Collections;
 import java.util.List;
 
+import utils.AppUtils;
 import utils.Convention;
 import utils.Event;
 
@@ -31,12 +32,12 @@ public class PersonalEventActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(c.getName() + " Schedule");
 
         //Get & Sort Events List
-        List<Event> eventList = c.getEventList();
+        List<Event> eventList = AppUtils.getPersonalSchedule(c);
         Collections.sort(eventList);
 
         //If event has been added to the personal list previously
         for(final Event e : eventList) {
-            if(e.isPersonal()) {
+            if(!e.isPersonal()) {
                 populateButtons(e);
             }
         }
@@ -56,7 +57,7 @@ public class PersonalEventActivity extends AppCompatActivity {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
         Button button1 = new Button(this);
         thisDangLayout.addView(button1);
-        String text = String.format("%s\n%s - %s", e.getName(), e.getStart(), e.getEnd());
+        String text = String.format("%s\n%s\n%s - %s", e.getName(), e.getRoom(), e.getStart(), e.getEnd());
         button1.setText(text);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
