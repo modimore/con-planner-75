@@ -1,148 +1,248 @@
 class ConventionController < ApplicationController
-  protect_from_forgery except: :details
+  protect_from_forgery except: [:update,:add_room,:add_host]
+  before_action :require_user, except: [:client_search,:download]
 
-  def all
-    @conventions = Convention.all
+  # convention-independent actions =================================
+  # page to view all conventions
+  def all; @conventions = Convention.all; end
+
+  # search for convention
+  def search
+    # currently entire search term must be in convention's name
+    @conventions = Convention.where("name LIKE ?", "%#{params[:search_term]}%")
   end
 
-  # Convention information
-  def new
-    @convention = Convention.new
-  end
+  # convention creation page, given new empty convention
+  def new; @convention = Convention.new; end
 
-  def create_convention
+  # add convention to database
+  def create
+    # if the convention exists already return to list of conventions
+    # if not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
       redirect_to '/convention/all'
     else
+      # create an entry in the conventions table
       @convention = Convention.new({ name: params[:convention][:name],
                                      description: params[:convention][:description],
-                                     location: params[:convention][:location] })
-      if @convention.save
-        redirect_to '/convention/'+params[:convention][:name]+'/index'
-      else
-        redirect_to '/'
-      end
+                                     location: params[:convention][:location],
+                                     start: params[:convention][:start],
+                                     end: params[:convention][:end] })
+      # add the creating user as an administrator
+      @organizer = Organizer.new({ username: session[:username],
+                                   convention: params[:convention][:name],
+                                   role: "Administrator" })
+      # add the global administrator as an administrator
+      g_admin = Organizer.new({ username: "GlobalAdmin",
+                                convention: params[:convention][:name],
+                                role: "Administrator" })
+      # if creating all of those succeeds
+      if @convention.save && @organizer.save && g_admin.save
+        # make a new directory for file uploads for this convention
+        FileUtils.mkdir_p(Rails.root.join('public','uploads',params[:convention][:name]))
+        # redirect user to this convention's index page
+        redirect_to '/convention/'+URI.escape(params[:convention][:name])+'/index'
+      # otherwise redirect user to app home page
+      else; redirect_to '/'; end
     end
   end
+  # ================================================================
 
+  # convention-dependent actions ===================================
+  # convention's index page
+  def index
+    @convention = Convention.find_by(name: params[:con_name])
+  end
+
+  # delete convention and everything associated from database
   def delete
-    @documents = Document.where(convention_name: params[:convention_name])
+    # remove all documents and convention's upload folder
+    @documents = Document.where(convention_name: params[:con_name])
     @documents.each do |d|
       File.delete(Rails.root.join('public', d.location))
       d.destroy
     end
-    Room.where(convention_name: params[:convention_name]).each { |r| r.destroy }
-    Host.where(convention_name: params[:convention_name]).each { |h| h.destroy }
-    Event.where(convention_name: params[:convention_name]).each { |e| e.destroy }
-    Convention.find_by(name: params[:convention_name]).destroy
-    redirect_to '/convention/all'
+    FileUtils.remove_dir(Rails.root.join('public','uploads',params[:con_name]))
+    # remove convention's information in other database records
+    Room.where(convention_name: params[:con_name]).each { |r| r.destroy }
+    Host.where(convention_name: params[:con_name]).each { |h| h.destroy }
+    Event.where(convention_name: params[:con_name]).each { |e| e.destroy }
+    Organizer.where(convention: params[:con_name]).each { |o| o.destroy }
+    Convention.find_by(name: params[:con_name]).destroy
+    # redirect to list of all conventions
+    redirect_to '/conventions/all'
   end
+  # ================================================================
 
-  def index
-    @convention = Convention.find_by(name: params[:convention_name])
-  end
-
-  def edit
-    @convention = Convention.find_by(name: params[:convention_name])
-  end
-
-  # Convention details
+  # Convention information =========================================
+  # get all convention details
   def details
-    @convention = Convention.find_by(name: params[:convention_name])
-    @rooms = Room.where(convention_name: params[:convention_name])
-    @new_room = Room.new
-    @hosts = Host.where(convention_name: params[:convention_name])
-    @new_host = Host.new
+    @convention = Convention.find_by(name: params[:con_name])
+    @rooms = Room.where(convention_name: params[:con_name])
+    @hosts = Host.where(convention_name: params[:con_name])
+    @breaks = Break.where(con_name: params[:con_name]).order(:start)
   end
 
-  def edit_details
-    @convention = Convention.find_by(name: params[:convention_name])
+  # open page with forms for edits
+  def edit
+    @convention = Convention.find_by(name: params[:con_name])
+    @rooms = Room.where(convention_name: params[:con_name])
+    @room = Room.new
+    @hosts = Host.where(convention_name: params[:con_name])
+    @host = Host.new
+    @breaks = Break.where(con_name: params[:con_name])
+    @break = Break.new
+  end
+
+  # submit edits to database
+  def update
+    @convention = Convention.find_by(name: params[:con_name])
     @convention.description = params[:con_descr]
     @convention.location = params[:con_location]
     @convention.start = params[:con_start_time]
     @convention.end = params[:con_end_time]
-    @convention.save
-    redirect_to '/convention/'+params[:convention_name]+'/details'
+    if @convention.save; redirect_to '/convention/'+URI.escape(params[:con_name])
+    else; redirect_to '/'; end
+  end
+  # ================================================================
+
+  # Organizers =====================================================
+  # view all organizers for a specific convention
+  def organizers
+    @organizers = Organizer.where(convention: params[:con_name])
   end
 
+  # add organizer to a convention
+  def add_organizer
+    @organizer = Organizer.new({ username: session[:username], convention: params[:con_name], role: "Volunteer"})
+    if @organizer.save; redirect_to '/conventions/mine'
+    else; redirect_to '/conventions/search/' + params[:con_name]; end
+  end
+
+  # change the role of an organizer for a convention (volunteer, staff, administrator)
+  def change_organizer_role
+    @organizer = Organizer.find_by(username: params[:username], convention: params[:con_name])
+    @organizer.role = params[:new_role]
+    @organizer.save
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/organizers'
+  end
+
+  # remove an organizer from a convention
+  # can be used either on yourself or as an administrator
+  def remove_organizer
+    username = params[:username] || session[:username]
+    @organizer = Organizer.find_by(convention: params[:con_name], username: username)
+    @organizer.destroy
+    if Organizer.where(convention: params[:con_name]).length <= 0
+      delete
+    elsif username == session[:username]; redirect_to '/conventions/mine'
+    else; redirect_to '/convention/' + URI.escape(params[:con_name]) + '/organizers'; end
+  end
+  # ================================================================
+
+  # Breaks =========================================================
+  # add time block when a convention is closed
+  def add_break
+    @break = Break.new({ con_name: params[:con_name],
+                         start: params[:break_start_time],
+                         end: params[:break_end_time] })
+    @break.save
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
+  end
+
+  # remove time block when a convention is closed
+  def remove_break
+    Break.find(params[:id]).destroy
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
+  end
+  # ================================================================
+
+  # Rooms ==========================================================
+  # add room to list of rooms for a convention
   def add_room
-    @room = Room.new({ room_name: params[:room_name], convention_name: params[:convention_name] })
-    if @room.save
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    end
+    @room = Room.new({ room_name: params[:room_name], convention_name: params[:con_name] })
+    @room.save
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
   end
 
+  # remove room from list of rooms for a convention
   def remove_room
-    @room = Room.where( room_name: params[:room_name], convention_name: params[:convention_name] )
+    @room = Room.where( room_name: params[:room_name], convention_name: params[:con_name] )
     @room.each { |r| r.destroy }
-    redirect_to '/convention/' + params[:convention_name] + '/details'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
+  # ================================================================
 
+  # Hosts ==========================================================
+  # add host to list of hosts for a convention
   def add_host
-    @host = Host.new({ name: params[:host_name], convention_name: params[:convention_name] })
-    if @host.save
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/details' #breaks when I use string interpolation??
-    end
+    @host = Host.new({ name: params[:host_name], convention_name: params[:con_name] })
+    @host.save
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
   end
 
+  # remove host from lists of hosts for a convention
   def remove_host
-    @host = Host.where( name: params[:host_name], convention_name: params[:convention_name] )
+    @host = Host.where( name: params[:host_name], convention_name: params[:con_name] )
     @host.each { |h| h.destroy }
-    redirect_to '/convention/' + params[:convention_name] + '/details'
+    redirect_to '/convention/' + URI.escape(params[:con_name]) + '/edit'
   end
+  # ================================================================
 
-  # Event information for Convetion
-  def events
-    @events = Event.where(convention_name: params[:convention_name])
-  end
-
-  def add_event
-    @event = Event.new
-  end
-
-  def create_event
-    @event = Event.new({ name: params[:event][:name],
-                         convention_name: params[:convention_name],
-                         host_name: params[:event][:host_name],
-                         description: params[:event][:description] })
-    if @event.save
-      redirect_to '/convention/'+params[:convention_name]+'/events'
-    else
-      redirect_to '/convention/'+params[:convention_name]+'/events'
-    end
-  end
-
-  def schedule
-  end
-
-  # Documents for convention
+  # Documents for convention =======================================
+  # view all documents for a convention and form to upload document
   def documents
-    @documents = Document.where(convention_name: params[:convention_name])
+    @documents = Document.where(convention_name: params[:con_name])
     @document = Document.new
   end
 
+  # add a document to a convention, upload file
   def upload_document
-    uploaded_io = params[:document]
+    upload = params[:document] # uploaded file
+    # create database entry for file
     @document = Document.new({ display_name: params[:display_name],
-                               convention_name: params[:convention_name],
-                               location: 'uploads/'+uploaded_io.original_filename })
+                               convention_name: params[:con_name],
+                               location: 'uploads/' + params[:con_name] + '/' + upload.original_filename })
+    if @document.display_name == ""; @document.display_name = "<no name>"; end
     if @document.save
-      File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
-        file.write(uploaded_io.read)
+      # save file on server
+      File.open(Rails.root.join('public', 'uploads', params[:con_name], upload.original_filename),
+                'wb') do |file|
+        file.write(upload.read)
       end
     end
-    redirect_to '/convention/'+params[:convention_name]+'/documents'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/documents'
   end
 
+  # remove document from convention, delete file
   def remove_document
-    @document = Document.find_by( convention_name: params[:convention_name], display_name: params[:doc_name])
+    @document = Document.find_by( convention_name: params[:con_name], display_name: params[:doc_name])
     File.delete(Rails.root.join('public', @document.location))
     @document.destroy
-    redirect_to '/convention/'+params[:convention_name]+'/documents'
+    redirect_to '/convention/'+URI.escape(params[:con_name])+'/documents'
   end
+  # ================================================================
+
+  # Mobile app action ==============================================
+  def download
+    @convention = Convention.find_by(name: params[:convention_name])
+    @events = Event.where(convention_name: params[:convention_name])
+    @rooms = Room.where(convention_name: params[:convention_name])
+    @hosts = Host.where(convention_name: params[:convention_name])
+    @documents = Document.where(convention_name: params[:convention_name])
+
+    convention_info = {}
+    convention_info[:name] = @convention.name
+    convention_info[:description] = @convention.description
+    convention_info[:location] = @convention.location
+    convention_info[:start] = @convention.start
+    convention_info[:end] = @convention.end
+    convention_info[:events] = @events.as_json
+    convention_info[:rooms] = @rooms.as_json
+    convention_info[:hosts] = @hosts.as_json
+    convention_info[:documents] = @documents.as_json
+    render json: convention_info
+  end
+  # ================================================================
 
 end

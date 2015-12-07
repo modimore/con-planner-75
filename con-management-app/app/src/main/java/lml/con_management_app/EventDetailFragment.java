@@ -17,6 +17,8 @@ import lml.con_management_app.dummy.DummyContent;
  * in two-pane mode (on tablets) or a {@link EventDetailActivity}
  * on handsets.
  */
+
+//test
 public class EventDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment

@@ -2,21 +2,60 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="lml.con_management_app" >
 
+    <!-- Allows DB hookup -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Allow application to read&write data from external storage location -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+
+        <!-- list of activities: -->
+
+
+        <!-- Home Page: Hub for Conventions -->
+        <!-- Conventions pulled from Search activity -->
         <activity
-            android:name=".EventListActivity"
-            android:label="@string/app_name"
+            android:name=".HomePageActivity"
+            android:label="@string/title_activity_home_page"
             android:theme="@style/AppTheme.NoActionBar" >
+
+            <!-- Intent filter defines activity displayed on startup -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- Convention Page: Hub for Convention Attributes -->
+        <!-- Schedule, Docs, Personal Schedule -->
+        <activity
+            android:name=".ConventionPageActivity"
+            android:label="@string/title_activity_convention_page"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+            <!-- metadata defines parent activity for "up" button -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomePageActivity" />
+        </activity>
+
+        <!-- Schedule Page: Displays Convention Schedule to user as a list of events -->
+        <!-- Uses master/detail template ! -->
+        <activity
+            android:name=".EventListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ConventionPageActivity" />
         </activity>
         <activity
             android:name=".EventDetailActivity"
@@ -26,6 +65,48 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EventListActivity" />
+        </activity>
+
+        <!-- Documents Page: Displays list of uploaded documents -->
+        <activity
+            android:name=".DocsPageActivity"
+            android:label="@string/title_activity_docs_page"
+            android:parentActivityName=".ConventionPageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.ConventionPageActivity" />
+        </activity>
+
+        <!-- Personal Schedule Page: Displays events added to personal schedule as a list of events -->
+        <!-- personal schedule items are added from the Schedule page -->
+        <!-- Uses master/detail template ! -->
+        <activity
+            android:name=".PersonalEventListActivity"
+            android:label="@string/title_personalevent_list"
+            android:parentActivityName=".ConventionPageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.ConventionPageActivity" />
+        </activity>
+        <activity
+            android:name=".PersonalEventDetailActivity"
+            android:label="@string/title_personalevent_detail"
+            android:parentActivityName=".PersonalEventListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.PersonalEventListActivity" />
+        </activity>
+        <activity
+            android:name=".SearchPageActivity"
+            android:label="@string/title_activity_search_page"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="lml.con_management_app.HomePageActivity" />
         </activity>
     </application>
 

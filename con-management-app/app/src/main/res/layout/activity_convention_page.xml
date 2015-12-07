@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- CoordinatorLayout acts as a base, provides floating action button and toolbar !-->
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="lml.con_management_app.ConventionPageActivity">
+
+    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+            android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_convention_page" />
+
+    <!-- add a linear layout to format buttons and display content properly-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <!--edit text to add offset for the toolbar - this is bad !-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05" />
+
+
+        <!-- BUTTONS: !-->
+        <Button
+            android:id="@+id/eventsButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="SCHEDULE OF EVENTS"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+
+        <Button
+            android:id="@+id/docsButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="DOCUMENTS"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+           <!-- android:onClick="(method)t"/> !-->
+
+        <Button
+            android:id="@+id/personalButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="PERSONAL SCHEDULE"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
+            android:id="@+id/updateButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="Update"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
+            android:id="@+id/dbTestButton_id"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="tap me!"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+

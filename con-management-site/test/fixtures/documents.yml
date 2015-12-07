@@ -1,11 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  display_name: MyString
-  convention_name: MyString
-  location: MyString
+stronk:
+    display_name: "stronk"
+    convention_name: "Testcon"
+    location: "uploads/stronk.png"
 
-two:
-  display_name: MyString
-  convention_name: MyString
-  location: MyString
+# two:
+#   display_name: MyString
+#   convention_name: MyString
+#   location: MyString
+

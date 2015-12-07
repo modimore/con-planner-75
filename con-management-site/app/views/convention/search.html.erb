@@ -1,0 +1,59 @@
+<%# Search for all conventions matching user query in the database %>
+<div class="container-fluid">
+
+	<div class="row">
+		<%# Form for a new search %>
+		<div class="col-xs-12">
+			<form action="/convention/search">
+				<div class="input-group">
+					<input id="search-term" name="search_term" class="form-control" type="text" placeholder="Search Cons...">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit">Go!</button>
+					</span>
+				</div>
+		  </form>
+		</div>
+  </div>
+
+	<%# Line break %>
+	<br>
+
+	<%# Results of current search %>
+	<div class="row">
+		<%# List of query matching convention %>
+		<div class="col-xs-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading"><h4><b>Matching Conventions</b></h4></div>
+				<table class="table">
+					<tbody>
+
+						<%# Loop through conventions, provide the name and description of each %>
+						<% @conventions.each do |c| %>
+							<tr><td>
+									<% if is_organizer?(c.name) %>
+									  <%# Render link to convention page for organizers %>
+										<h4>
+											<a href="/convention/<%= c.name %>/index"><%= c.name %></a>
+											<small><%= c.description %></small>
+										</h4>
+									<% else %>
+										<%# Give option to add convention to other users %>
+										<h4 style="display:inline-block"><%= c.name %> <small><%= c.description %></small></h4>
+										<div class="pull-right">
+											<%= form_for c, url: { action: "add_organizer", con_name: c.name }, method: "post" do |f| %>
+												<%= f.submit "Add" %>
+											<% end %>
+										</div>
+									<% end %>
+							</td></tr>
+						<% end # convention loop %>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<%# End matching convention list %>
+	</div>
+
+	</div>
+</div>

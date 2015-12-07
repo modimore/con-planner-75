@@ -1,9 +1,23 @@
-<%= form_for @convention, url: { action: "create_convention"} do |f| %>
-  <%= label_tag(:name, "Convention Name:") %><br>
-  <%= f.text_field :name %><br>
-  <%= label_tag(:description, "Description:") %><br>
-  <%= f.text_area :description, size: "60x12" %><br>
-  <%= label_tag(:location, "Location:") %><br>
-  <%= f.text_field :location %><br>
-  <%= f.submit "Create" %>
-<% end %>
+<%# Form for convention creation %>
+<%# Contains all attributes in convention database relation %>
+<div class="container-fluid">
+  <%= form_for @convention, url: { action: "create"} do |f| %>
+    <%# Name %>
+    <%= label_tag(:name, "Convention Name:") %><br>
+    <%= f.text_field :name %><br>
+    <%# Desciption %>
+    <%= label_tag(:description, "Description:") %><br>
+    <%= f.text_area :description, size: "60x12" %><br>
+    <%# Location %>
+    <%= label_tag(:location, "Location:") %><br>
+    <%= f.text_field :location %><br>
+    <%# Start time %>
+    <%= label_tag(:start, "Start:") %><br>
+    <%= f.datetime_local_field :start %><br>
+    <%# End time %>
+    <%= label_tag(:end, "End:") %><br>
+    <%= f.datetime_local_field :end %><br>
+    <%# Submit form %>
+    <%= f.submit "Create" %>
+  <% end %>
+</div>

@@ -1,43 +1,64 @@
+<%# Index for a convention, contains links to most other pages for the convention %>
 <div class="container-fluid">
 
+	<%# Convention banner %>
 	<div class="row">
 		<div class="col-xs-12 page-header home-banner">
-			<h1><%= @convention.name %> <small><%= @convention.description %></small></h1>
+			<h1 style="display:inline-block"><%= @convention.name %> <small><%= @convention.description %></small></h1>
+			<div class="pull-right" style="display:inline-block">
+				<%# Button to edit convention %>
+				<%= form_tag({ action: "edit" }, method: "get") do %>
+					<button type="submit" class="btn btn-warning">Edit</button>
+				<% end %>
+			</div>
 		</div>
 	</div>
 
+	<%# Links to convention's other pages %>
 	<div class="row-fluid">
 
+		<%# Details %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/details">Details</a></h4></div>
 			</div>
 		</div>
 
+		<%# Organizers %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="#">Organizers</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/organizers">Organizers</a></h4></div>
 			</div>
 		</div>
 
+		<%# Events %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/events">Events</a></h4></div>
 			</div>
 		</div>
 
+		<%# Schedule %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
-				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule">Schedule(s)</a></h4></div>
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule">Schedule</a></h4></div>
 			</div>
 		</div>
 
+		<%# Documents %>
 		<div class="col-xs-6">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/documents">Documents</a></h4></div>
 			</div>
 		</div>
 
-	</div>
+		<%# Scheduler %>
+		<div class="col-xs-6">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h4><a href="/convention/<%= @convention.name %>/schedule/new">Generate Schedule</a></h4></div>
+			</div>
+		</div>
 
+	</div>
+	
 </div>

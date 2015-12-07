@@ -1,33 +1,40 @@
+<%# Page to list all conventions %>
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-xs-12 page-header home-banner">
-			<h1>Con Planner 75</h1>
-		</div>
-	</div>
 
 	<div class="row">
 
-		<%# Convention List %>
+		<%# List of all conventions in system %>
 		<div class="col-xs-12">
 			<div class="panel panel-primary">
 
-				<div class="panel-heading"><h4>My Conventions</h4></div>
+				<div class="panel-heading"><h4><b>All Conventions</b></h4></div>
 
 				<table class="table">
 					<tbody>
+
+						<%# Loop through conventions, provide the name and description of each %>
 						<% @conventions.each do |c| %>
-						<tr><td>
-							<a href="/convention/<%= c.name %>/index"><%= c.name %></a> <%= c.description %>
-							<div class="pull-right">
-								<%= form_for c, url: { action: "delete", convention_name: c.name } do |f| %>
-								  <%= f.submit "Delete" %>
-								<% end %>
-							</div>
-						</td></tr>
-						<% end %>
+							<tr><td>
+								  <%# Render link to convention page for organizers %>
+									<% if is_organizer?(c.name) %>
+										<h4>
+											<a href="/convention/<%= c.name %>/index"><%= c.name %></a>
+											<small><%= c.description %></small>
+										</h4>
+									<%# Give option to add convention to other users %>
+									<% else %>
+										<h4 style="display:inline-block"><%= c.name %> <small><%= c.description %></small></h4>
+										<div class="pull-right">
+											<%= form_for c, url: { action: "add_organizer", con_name: c.name }, method: "post" do |f| %>
+												<%= f.submit "Add" %>
+											<% end %>
+										</div>
+									<% end %>
+							</td></tr>
+						<% end # convention loop %>
+
 					</tbody>
 				</table>
-
 			</div>
 		</div>
 

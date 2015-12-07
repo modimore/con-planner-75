@@ -3,4 +3,17 @@
 
 require File.expand_path('../config/application', __FILE__)
 
+require 'rake/testtask'
+
+=begin
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'test'
+  t.pattern = 'test/test_*.rb'
+  t.verbose = false # or true
+end
+
+desc "Run Tests"
+task :default => :test
+=end
+
 Rails.application.load_tasks

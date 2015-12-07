@@ -1,0 +1,43 @@
+<%# Page on which to add events to a convention %>
+<ol class="breadcrumb">
+	<li><a href="/convention/<%= params[:con_name] %>"><%= params[:con_name] %></a></li>
+	<li><a href="/convention/<%= params[:con_name] %>/events">Events</a></li>
+	<li class="active">Add</li>
+</ol>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<%# Form for event creation %>
+		<%= form_for @event, url: { action: "create"} do |f| %>
+			<%# Name %>
+			<div class="form-group col-xs-4">
+			  <%= label_tag(:name, "Event Name") %><br>
+			  <%= f.text_field :name, class: "form-control" %><br>
+			</div>
+			<%# Host %>
+			<div class="form-group col-xs-4">
+				<label for="host-name">Host Name</label>
+				<%# Chosen from dropdown of existing hosts for the convention %>
+				<select id="host-name" name="host_name" class="form-control">
+					<%= @hosts.each do |h| %>
+					  <option value="<%= h %>"><%= h %></option>
+					<% end %>
+				</select>
+			</div>
+			<%# Length %>
+			<div class="form-group col-xs-4">
+				<%= label_tag(:length, "Length (in hours)") %><br>
+				<%= f.number_field :length, class: "form-control", min: 0, value: 1 %><br>
+			</div>
+			<%# Description %>
+			<div class="form-group col-xs-12">
+		  	<%= label_tag(:description, "Description") %><br>
+		  	<%= f.text_area :description, class: "form-control" %><br>
+			</div>
+			<%# Submit %>
+			<div class="pull-right">
+		  	<button type="submit" class="btn cp75-colors">Add Event</button>
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -1,0 +1,54 @@
+<%# List of all organizers for a convention %>
+<%# Administrators can change roles and remove organizers %>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <%# Table showing all organizers of current convention %>
+      <table class="table table-bordered">
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <%# only allow administrators to change roles and remove organizers %>
+          <% if is_administrator?(params[:con_name]) %>
+            <th>Change Role</th>
+            <th>Remove</th>
+          <% end %>
+        </tr>
+
+        <%# Display information for each organizers %>
+        <% @organizers.each do |o| %>
+          <tr>
+            <td><%= o.username %></td>
+            <td><%= o.role %></td>
+            <%# administrator-restricted actions %>
+            <% if is_administrator?(params[:con_name]) %>
+              <td>
+                <%# form with dropdown menu for organizer roles %>
+                <%= form_tag({ action: "change_organizer_role", username: o.username }, class: "form") do %>
+                  <select name="new_role">
+                    <% ["Administrator","Staff","Volunteer"].each do |role_type| %>
+                      <% if o.role == role_type %>
+                        <option value="<%= role_type %>" selected><%= role_type %></option>
+                      <% else %>
+                        <option value="<%= role_type %>"><%= role_type %></option>
+                      <% end %>
+                    <% end %>
+                  </select>
+                  <button type="submit" class="btn btn-warning">Change Role</button>
+                <% end %>
+              </td>
+              <td>
+                <%# button to remove the user's organizer status %>
+                <%= form_tag({ action: "remove_organizer", username: o.username }, method: 'patch') do %>
+                  <button type="submit" class="btn btn-danger">Remove</button>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+
+      </table>
+    </div>
+  </div>
+</div>

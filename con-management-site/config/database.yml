@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: con-management-site_production
-  username: con-management-site
+  username: postgres
   password: <%= ENV['CON-MANAGEMENT-SITE_DATABASE_PASSWORD'] %>

@@ -1,44 +1,90 @@
 Rails.application.routes.draw do
 
-  # start at 'home/index' page
-  root 'home#index'
+  # site root
+  root 'home#home'
 
-  # home controller pages
-  get 'home/index'
+  # home controller ============================================================
+  get 'home' => 'home#home'
+  get 'client_search' => 'home#client_search'
+  # ============================================================================
 
-  # convention controller pages
+  # user controller ============================================================
+  # new accounts
+  get 'signup' => 'user#new'
+  post 'signup' => 'user#create'
+
+  # session management
+  get 'login' => 'user#login_page'
+  post 'login' => 'user#login'
+  post 'logout' => 'user#logout'
+
+  # user's conventions
+  get 'conventions/mine' => 'user#conventions'
+  # ============================================================================
+
+  # convention controller ======================================================
+  # actions not for a specific convention
+  get 'conventions/all' => 'convention#all'
+  get 'convention/search'
   get 'convention/new'
-  get 'convention/all'
-  get 'convention/:convention_name/index' => 'convention#index'
-  get 'convention/:convention_name/edit' => 'convention#edit'
-  get 'convention/:convention_name/details' => 'convention#details'
-  get 'convention/:convention_name/events' => 'convention#events'
-  get 'convention/:convention_name/schedule' => 'convention#schedule'
-  get 'convention/:convention_name/documents' => 'convention#documents'
-  get 'convention/:convention_name/events/add' => 'convention#add_event'
+  post 'convention/new' => 'convention#create'
 
-  # convention controller creations
-  post 'convention/new' => 'convention#create_convention'
-  post 'convention/:convention_name/rooms/add' => 'convention#add_room'
-  post 'convention/:convention_name/hosts/add' => 'convention#add_host'
-  post 'convention/:convention_name/events/add' => 'convention#create_event'
-  post 'convention/:convention_name/documents/add' => 'convention#upload_document'
-  # convention controller deletions
-  post 'convention/:convention_name/edit' => 'convention#edit_details'
-  patch 'convention/:convention_name/delete' => 'convention#delete'
-  patch 'convention/:convention_name/remove_event/:event_name' => 'convention#remove_event'
-  patch 'convention/:convention_name/remove_room/:room_name' => 'convention#remove_room'
-  patch 'convention/:convention_name/remove_host/:host_name' => 'convention#remove_host'
-  patch 'convention/:convention_name/remove_document/:doc_name' => 'convention#remove_document'
+  # actions for a specific convention
+  get 'convention/:con_name' => 'convention#index'
+  get 'convention/:con_name/index' => 'convention#index'
+  patch 'convention/:con_name/delete' => 'convention#delete'
+  #get 'convention/:con_name/schedule' => 'convention#schedule'
+
+  #details
+  get 'convention/:con_name/details' => 'convention#details'
+  get 'convention/:con_name/edit' => 'convention#edit'
+  post 'convention/:con_name/edit' => 'convention#update'
+
+  # organizers
+  get 'convention/:con_name/organizers' => 'convention#organizers'
+  post 'convention/:con_name/add_organizer' => 'convention#add_organizer'
+  post 'conventions/:con_name/organizers/change_role' => 'convention#change_organizer_role'
+  patch 'convention/:con_name/remove_organizer' => 'convention#remove_organizer'
+
+  # breaks
+  post 'convention/:con_name/breaks/add' => 'convention#add_break'
+  patch 'convention/:con_name/breaks/remove' => 'convention#remove_break'
+
+  # rooms
+  post 'convention/:con_name/rooms/add' => 'convention#add_room'
+  patch 'convention/:con_name/remove_room/:room_name' => 'convention#remove_room'
+
+  # hosts
+  post 'convention/:con_name/hosts/add' => 'convention#add_host'
+  patch 'convention/:con_name/remove_host/:host_name' => 'convention#remove_host'
+
+  #documents
+  get 'convention/:con_name/documents' => 'convention#documents'
+  post 'convention/:con_name/documents/add' => 'convention#upload_document'
+  patch 'convention/:con_name/remove_document/:doc_name' => 'convention#remove_document'
+
+  # mobile application
+  get 'convention/:convention_name/download' => 'convention#download'
+  # ============================================================================
+
+  # event controller ===========================================================
+  get 'convention/:con_name/events' => 'event#events'
+  get 'convention/:con_name/events/add' => 'event#add'
+  post 'convention/:con_name/events/add' => 'event#create'
+  get 'convention/:con_name/events/:event_name/edit' => 'event#edit'
+  post 'convention/:con_name/events/:event_name/edit' => 'event#update'
+  patch 'convention/:con_name/remove_event/:event_name' => 'event#delete'
+  # ============================================================================
+
+  # schedule controller ========================================================
+  get 'convention/:con_name/schedule/new' => 'schedule#new'
+  get 'convention/:con_name/schedule' => 'schedule#view'
+  get 'convention/:con_name/schedule/:schedule_version' => 'schedule#view'
+  post 'convention/:con_name/schedule/create' => 'schedule#create'
+  # ============================================================================
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

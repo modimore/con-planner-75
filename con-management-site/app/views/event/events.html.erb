@@ -1,0 +1,50 @@
+<%# Page to list all events for a convention %>
+<ol class="breadcrumb">
+	<li><a href="/convention/<%= params[:con_name] %>/index"><%= params[:con_name] %></a></li>
+	<li class="active">Events</li>
+</ol>
+
+<div class="container">
+	<div class="row-fluid">
+
+		<%# Link to add an event %>
+		<div class="col-xs-12">
+			<div class="well">
+				<a href="/convention/<%= params[:con_name] %>/events/add">Add event</a>
+			</div>
+		</div>
+
+		<%# List of events %>
+		<div class="col-xs-12">
+			<%# For each event %>
+			<% @events.each do |e| %>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3>
+							<%# Event name %>
+						  <%= e.name %>
+							<%# Button to delete %>
+							<div class="pull-right">
+								<%= form_tag({ action: "delete", event_name: e.name }, method: "patch") do %>
+									<button type="submit" class="btn btn-danger">Delete</button>
+								<% end %>
+							</div>
+							<%# Button to edit %>
+							<div class="pull-right">
+								<%= form_tag({ action: "edit", event_name: e.name }, method: "get") do %>
+									<button type="submit" class="btn btn-warning">Edit</button>
+								<% end %>
+							</div>
+						</h3>
+					</div>
+					<%# Host and description%>
+					<div class="panel-body">
+						<p><b>Host:</b> <%= e.host_name %></p>
+						<p><b>Description:</b> <%= e.description %></p>
+					</div>
+				</div>
+			<% end %>
+		</div>
+
+	</div>
+</div>

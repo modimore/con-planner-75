@@ -1,0 +1,27 @@
+<%# Display a generated schedule for a convention %>
+<ol class="breadcrumb">
+	<li><a href="/convention/<%= params[:con_name] %>/index"><%= params[:con_name] %></a></li>
+	<li class="active">Schedule</li>
+</ol>
+
+<div class="container">
+	<%# Create a separate list for each possible room %>
+	<% @schedule.keys.each do |r| %>
+	<div class="row-fluid">
+		<ul class="list-group">
+	  <li class="list-group-item disabled"><%= r %></li>
+		<%# Show name, start time, and end time for each event in this room %>
+	  <% @schedule[r].each do |e| %>
+		  <li class="list-group-item">
+				<%= "#{e.name}: #{(@con.start+e.times[0][0]*3600).to_s(:details_display)} - #{(@con.start+e.times[0][1]*3600).to_s(:details_display)}" %>
+			</li>
+		<% end %>
+	<% end %>
+</div>
+
+<%# Save Schedule %>
+<div class="pull-right">
+  <%= form_tag({action: "create", schedule: @schedule}) do %>
+    <button type="submit" class="btn btn-mini cp75-colors">Accept</button>
+  <% end %>
+</div>

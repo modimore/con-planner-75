@@ -10,15 +10,12 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-/**
- * An activity representing a single Event detail screen. This
- * activity is only used on handset devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link EventListActivity}.
- * <p/>
- * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link EventDetailFragment}.
- */
+/*
+import utils.Convention;
+import utils.DownloadConventionTask;
+import utils.SearchConventionsTask;
+*/
+
 public class EventDetailActivity extends AppCompatActivity {
 
     @Override
@@ -32,7 +29,7 @@ public class EventDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Added to Personal Schedule", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
