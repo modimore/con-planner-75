@@ -7,9 +7,12 @@ import android.util.Log;
 
 import utils.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -18,13 +21,70 @@ import static org.junit.Assert.*;
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
 public class UtilTests extends InstrumentationTestCase {
+
     @Test
-    public void testRemoveConventions() {
-        AppUtils.deleteDownloadedConventions();
+    public void testSearchConvention() throws Exception{
+        boolean contains_a = false;
+        boolean contains_b = false;
+        boolean contains_ab = false;
+        boolean contains_o = false;
+
+        //test single letter
+        List<Convention> results = new SearchConventionsTask().execute("A").get();
+        for(Convention c : results) {
+            if(c.getName().equals("Test A")) { contains_a = true; }
+            else if(c.getName().equals("Test AB")) { contains_ab = true; }
+            else if(c.getName().equals("Test B")) { contains_b = true; }
+            else if(c.getName().equals("Test O")) { contains_o = true; }
+        }
+
+        assertTrue(contains_a);
+        assertTrue(contains_ab);
+        assertTrue(!contains_b);
+        assertTrue(!contains_o);
+
+        contains_a = false;
+        contains_b = false;
+        contains_ab = false;
+        contains_o = false;
+
+        //test phrase
+        results = new SearchConventionsTask().execute("AB").get();
+        for(Convention c : results) {
+            if(c.getName().equals("Test A")) { contains_a = true; }
+            else if(c.getName().equals("Test AB")) { contains_ab = true; }
+            else if(c.getName().equals("Test B")) { contains_b = true; }
+            else if(c.getName().equals("Test O")) { contains_o = true; }
+        }
+
+        assertTrue(!contains_a);
+        assertTrue(contains_ab);
+        assertTrue(!contains_b);
+        assertTrue(!contains_o);
+
+        contains_a = false;
+        contains_b = false;
+        contains_ab = false;
+        contains_o = false;
+
+        //test no results
+        results = new SearchConventionsTask().execute("C").get();
+        for(Convention c : results) {
+            if(c.getName().equals("Test A")) { contains_a = true; }
+            else if(c.getName().equals("Test AB")) { contains_ab = true; }
+            else if(c.getName().equals("Test B")) { contains_b = true; }
+            else if(c.getName().equals("Test O")) { contains_o = true; }
+        }
+
+        assertTrue(!contains_a);
+        assertTrue(!contains_ab);
+        assertTrue(!contains_b);
+        assertTrue(!contains_o);
+
     }
 
     @Test
-    public void testPersonalSchedule() throws Exception {
+    public void testPersonalScheduleAdd() throws Exception {
         AppUtils.deleteDownloadedConventions();
         Convention c = new DownloadConventionTask().execute("Test Convention 1").get();
 
@@ -38,41 +98,5 @@ public class UtilTests extends InstrumentationTestCase {
 
         assertEquals(0, e.size());
 
-    }
-
-    @Test
-    public void testConventionExists() throws Exception {
-
-        try {
-
-            File convention = new File(Environment.getExternalStorageDirectory().toString() +"/Conventions");
-            assertTrue(convention.exists());
-
-            AppUtils.deleteDownloadedConventions();
-
-            List<Convention> conventionList = new SearchConventionsTask().execute("o").get(); //"o" is the search term
-            Log.d("SearchResults", conventionList.toString());
-
-            Convention c = new DownloadConventionTask().execute("holds").get(); //"holds" is the con name
-            if(c != null) {
-                Log.d("DownloadResults", c.toString());
-            } else {
-                Log.d("DownloadResults", "null");
-            }
-            c = new DownloadConventionTask().execute("bold").get(); //"bold is the con name
-            if(c != null) {
-                Log.d("DownloadResults", c.toString());
-            } else {
-                Log.d("DownloadResults", "null");
-            }
-
-            List<Convention> allDownloaded = AppUtils.getDownloadedConventions();
-            Log.d("DownloadResults", allDownloaded.toString());
-
-            AppUtils.deleteDownloadedConventions();
-
-        } catch (Exception e) {
-            Log.e("Results", e.getMessage(), e);
-        }
     }
 }
