@@ -17,7 +17,6 @@ class ConventionController < ApplicationController
 
   # add convention to database
   def create
-    puts params[:convention]
     # if the convention exists already return to list of conventions
     # if not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
