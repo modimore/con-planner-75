@@ -8,13 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.File;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import android.util.Log;
+
 import utils.*;
-import test.UtilTests;
-import android.os.Environment;
 
 //Activity for the Convention Page - acts as a hub for Convention data (Schedule, Personal Schedule, Documents
 public class ConventionPageActivity extends AppCompatActivity {

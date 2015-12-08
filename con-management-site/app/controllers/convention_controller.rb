@@ -17,10 +17,19 @@ class ConventionController < ApplicationController
 
   # add convention to database
   def create
-    # if the convention exists already return to list of conventions
+    # if the convention exists already return to edit page
+    # Also do this for empty name, time, or invalid times
     # if not make it and go to its page
     if Convention.where(name: params[:convention][:name]).length > 0
-      redirect_to '/convention/all'
+      redirect_to '/convention/new'
+    elsif params[:convention][:name] == ''
+      redirect_to '/convention/new'
+    elsif params[:convention][:start] == ''
+      redirect_to '/convention/new'
+    elsif params[:convention][:end] == ''
+      redirect_to '/convention/new'
+    elsif (params[:convention][:start] <=> params[:convention][:end]) > 0
+      redirect_to '/convention/new'
     else
       # create an entry in the conventions table
       @convention = Convention.new({ name: params[:convention][:name],
@@ -96,13 +105,22 @@ class ConventionController < ApplicationController
 
   # submit edits to database
   def update
-    @convention = Convention.find_by(name: params[:con_name])
-    @convention.description = params[:con_descr]
-    @convention.location = params[:con_location]
-    @convention.start = params[:con_start_time]
-    @convention.end = params[:con_end_time]
-    if @convention.save; redirect_to '/convention/'+URI.escape(params[:con_name])
-    else; redirect_to '/'; end
+    # check for invalid edits, rerouting back if there is an issue
+    if params[:con_start_time] == ''
+      redirect_to URI.escape('/convention/' + params[:con_name] + '/edit')
+    elsif params[:con_end_time] == ''
+      redirect_to URI.escape('/convention/' + params[:con_name] + '/edit')
+    elsif (params[:con_start_time] <=> params[:con_end_time]) > 0
+      redirect_to URI.escape('/convention/' + params[:con_name] + '/edit')
+    else
+      @convention = Convention.find_by(name: params[:con_name])
+      @convention.description = params[:con_descr]
+      @convention.location = params[:con_location]
+      @convention.start = params[:con_start_time]
+      @convention.end = params[:con_end_time]
+      if @convention.save; redirect_to '/convention/'+URI.escape(params[:con_name])
+      else; redirect_to '/'; end
+    end
   end
   # ================================================================
 
@@ -160,9 +178,15 @@ class ConventionController < ApplicationController
   # Rooms ==========================================================
   # add room to list of rooms for a convention
   def add_room
-    @room = Room.new({ room_name: params[:room_name], convention_name: params[:con_name] })
-    @room.save
-    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
+    if Room.where(room_name: params[:room_name]).length > 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/edit')
+    elsif params[:room_name] == ''
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/edit')
+    else
+      @room = Room.new({ room_name: params[:room_name], convention_name: params[:con_name] })
+      @room.save
+      redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
+    end
   end
 
   # remove room from list of rooms for a convention
@@ -176,9 +200,15 @@ class ConventionController < ApplicationController
   # Hosts ==========================================================
   # add host to list of hosts for a convention
   def add_host
-    @host = Host.new({ name: params[:host_name], convention_name: params[:con_name] })
-    @host.save
-    redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
+    if Host.where(name: params[:host_name]).length > 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/edit')
+    elsif params[:host_name] == ''
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/edit')
+    else
+      @host = Host.new({ name: params[:host_name], convention_name: params[:con_name] })
+      @host.save
+      redirect_to '/convention/'+URI.escape(params[:con_name])+'/edit'
+    end
   end
 
   # remove host from lists of hosts for a convention

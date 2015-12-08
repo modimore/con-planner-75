@@ -36,7 +36,7 @@ class ConventionControllerTest < ActionController::TestCase
     end
 
     test "convention create duplicate name" do
-        @convention = {'name' => 'Test Convention 1', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T09:00', 'end' => '2015-01-01T17:00:00'}
+        @convention = {'name' => 'Test Convention 1', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T09:00', 'end' => '2015-01-01T17:00'}
         assert_no_difference('Convention.count') do
             get :create, {'convention' => @convention}, {'username' => 'test1'}
         end
@@ -44,7 +44,7 @@ class ConventionControllerTest < ActionController::TestCase
     end
 
     test "convention create invalid times" do
-        @convention = {'name' => 'Test Convention 2', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T17:00', 'end' => '2015-01-01T09:00:00'}
+        @convention = {'name' => 'Test Convention 2', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T17:00', 'end' => '2015-01-01T09:00'}
         assert_no_difference('Convention.count') do
             get :create, {'convention' => @convention}, {'username' => 'test1'}
         end
@@ -52,7 +52,7 @@ class ConventionControllerTest < ActionController::TestCase
     end
 
     test "convention create valid convention" do
-        @convention = {'name' => 'Test Convention 2', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T09:00', 'end' => '2015-01-01T17:00:00'}
+        @convention = {'name' => 'Test Convention 2', 'description' => 'a convention', 'location' => 'a place', 'start' => '2015-01-01T09:00', 'end' => '2015-01-01T17:00'}
         assert_difference('Convention.count') do
             get :create, {'convention' => @convention}, {'username' => 'test1'}
         end
@@ -65,7 +65,7 @@ class ConventionControllerTest < ActionController::TestCase
     end
 
     test "convention edit empty start" do
-        @convention = {'con_name' => 'Test Convention 1', 'con_descr' => 'asdfg', 'con_location' => 'here', 'con_start_time' => '', 'con_end_time' => '2015-01-01T17:00:00'}
+        @convention = {'con_name' => 'Test Convention 1', 'con_descr' => 'asdfg', 'con_location' => 'here', 'con_start_time' => '', 'con_end_time' => '2015-01-01T17:00'}
         get :update, @convention, {'username' => 'test1'}
         @result = Convention.find_by(name: 'Test Convention 1')
         assert_not_equal(nil, @result.start,  'Able to set empty start time')
@@ -114,7 +114,7 @@ class ConventionControllerTest < ActionController::TestCase
         assert_no_difference('Host.count') do
             get :add_host, {'con_name' => 'Test Convention 1', 'host_name' => 'Host 1'}, {'username' => 'test1'}
         end
-        assert_equal(2, Host.where(name: 'Host 1'))
+        assert_equal(1, Host.where(name: 'Host 1').length)
         assert_redirected_to '/convention/Test%20Convention%201/edit'
     end
 
@@ -146,7 +146,7 @@ class ConventionControllerTest < ActionController::TestCase
         assert_no_difference('Room.count') do
             get :add_room, {'con_name' => 'Test Convention 1', 'room_name' => 'Room 1'}, {'username' => 'test1'}
         end
-        assert_equal(2, Room.where(room_name: 'Room 1'))
+        assert_equal(1, Room.where(room_name: 'Room 1').length)
         assert_redirected_to '/convention/Test%20Convention%201/edit'
     end
 

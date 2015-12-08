@@ -55,7 +55,7 @@ class EventControllerTest < ActionController::TestCase
     test "event edit invalid length" do
         @event = {'name' => 'Event 1', 'host_name' => 'Host 1', 'description' => 'an event', 'length' => 0}
         get :update, {'con_name' => 'Test Convention 1', 'event_name' => 'Event 1', 'event' => @event}, {'username' => 'test1'}
-        assert_equal(nil, Event.find_by(name: 'Event 2'), 'Stored invalid length')
+        assert_not_equal(0, Event.find_by(name: 'Event 1').length, 'Stored invalid length')
         assert_not_equal(nil, Event.find_by(name: 'Event 1'), 'Does not preserve original event')
         assert_redirected_to '/convention/Test%20Convention%201/events/Event%201/edit'
     end

@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
 
 import android.os.AsyncTask;
@@ -30,32 +32,39 @@ public class SearchConventionsTask extends AsyncTask<String, Void, List<Conventi
         //URL("localhost:3000/convention/search?query="  + query);
         InputStream is = null;
         ArrayList<Convention> results = new ArrayList<>();
+        String contentAsString = "";
 
         //Returns null on exception
         try {
             //Encode the query to not break when spaces are included
             String query = URLEncoder.encode(params[0], "UTF-8");
-            URL url = new URL("http://127.0.0.1:3000/client_search?query="  + query);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //Boilerplate for HTTP
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            int response = conn.getResponseCode();
-            is = conn.getInputStream();
-
-            if(response != HttpURLConnection.HTTP_OK)
+            URL url = null;
+            if(params.length == 1)
             {
-                Log.e("Search", "Non-200: " + response);
-                return null;
-            }
+                url = new URL("http://127.0.0.1:3000/client_search?query="  + query);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            // Convert the InputStream into a string
-            String contentAsString = AppUtils.convertInputStreamToString(is);
-            Log.d("Search",contentAsString);
+                //Boilerplate for HTTP
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+                int response = conn.getResponseCode();
+                is = conn.getInputStream();
+
+                if(response != HttpURLConnection.HTTP_OK)
+                {
+                    Log.e("Search", "Non-200: " + response);
+                    return null;
+                }
+
+                // Convert the InputStream into a string
+                contentAsString = AppUtils.convertInputStreamToString(is);
+                Log.d("Search",contentAsString);
+            } else {
+                contentAsString = params[1];
+            }
 
             JSONObject json = new JSONObject(contentAsString);
             JSONArray conventions = json.getJSONArray("conventions");

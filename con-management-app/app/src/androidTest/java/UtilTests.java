@@ -1,5 +1,5 @@
-package test;
-
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.test.ActivityTestCase;
 import android.test.InstrumentationTestCase;
@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -24,13 +25,16 @@ public class UtilTests extends InstrumentationTestCase {
 
     @Test
     public void testSearchConvention() throws Exception{
+
         boolean contains_a = false;
         boolean contains_b = false;
         boolean contains_ab = false;
         boolean contains_o = false;
 
         //test single letter
-        List<Convention> results = new SearchConventionsTask().execute("A").get();
+        InputStream in = getInstrumentation().getContext().getAssets().open("search_test_a.json");
+        String json = AppUtils.convertInputStreamToString(in);
+        List<Convention> results = new SearchConventionsTask().execute("A",json).get();
         for(Convention c : results) {
             if(c.getName().equals("Test A")) { contains_a = true; }
             else if(c.getName().equals("Test AB")) { contains_ab = true; }
@@ -49,7 +53,9 @@ public class UtilTests extends InstrumentationTestCase {
         contains_o = false;
 
         //test phrase
-        results = new SearchConventionsTask().execute("AB").get();
+        in = getInstrumentation().getContext().getAssets().open("search_test_ab.json");
+        json = AppUtils.convertInputStreamToString(in);
+        results = new SearchConventionsTask().execute("AB",json).get();
         for(Convention c : results) {
             if(c.getName().equals("Test A")) { contains_a = true; }
             else if(c.getName().equals("Test AB")) { contains_ab = true; }
@@ -68,7 +74,10 @@ public class UtilTests extends InstrumentationTestCase {
         contains_o = false;
 
         //test no results
-        results = new SearchConventionsTask().execute("C").get();
+        in = getInstrumentation().getContext().getAssets().open("search_test_d.json");
+        json = AppUtils.convertInputStreamToString(in);
+        results = new SearchConventionsTask().execute("D",json).get();
+        if(results == null) return;
         for(Convention c : results) {
             if(c.getName().equals("Test A")) { contains_a = true; }
             else if(c.getName().equals("Test AB")) { contains_ab = true; }
@@ -84,9 +93,12 @@ public class UtilTests extends InstrumentationTestCase {
     }
 
     @Test
-    public void testPersonalScheduleAdd() throws Exception {
+    public void testDownlaodAndPersonalSchedule() throws Exception {
         AppUtils.deleteDownloadedConventions();
-        Convention c = new DownloadConventionTask().execute("Test Convention 1").get();
+
+        InputStream in = getInstrumentation().getContext().getAssets().open("personal_schedule_test.json");
+        String json = AppUtils.convertInputStreamToString(in);
+        Convention c = new DownloadConventionTask().execute("Test Convention 1", json).get();
 
         AppUtils.addToPersonalSchedule("Event 1", c.getName());
         List<Event> e = AppUtils.getPersonalSchedule(c);

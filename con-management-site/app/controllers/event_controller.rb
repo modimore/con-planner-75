@@ -12,13 +12,21 @@ class EventController < ApplicationController
 
   # function to update database with event
   def create
-    @event = Event.new({ name: params[:event][:name],
-                         convention_name: params[:con_name],
-                         host_name: params[:host_name],
-                         description: params[:event][:description],
-                         length: params[:event][:length] })
-    if @event.save; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
-    else; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'; end
+    if Event.where(name: params[:event][:name]).length > 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/add')
+    elsif params[:event][:length].to_i <= 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/add')
+    elsif params[:event][:name] == ''
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/add')
+    else
+      @event = Event.new({ name: params[:event][:name],
+                           convention_name: params[:con_name],
+                           host_name: params[:host_name],
+                           description: params[:event][:description],
+                           length: params[:event][:length] })
+      if @event.save; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
+      else; redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'; end
+    end
   end
 
   # page for editing event details
@@ -32,13 +40,21 @@ class EventController < ApplicationController
 
   # update database record for an event
   def update
-    @event = Event.find_by(convention_name: params[:con_name], name: params[:event_name])
-    @event.name = params[:event][:name]
-    @event.host_name = params[:host_name]
-    @event.description = params[:event][:description]
-    @event.length = params[:event][:length]
-    @event.save
-    redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
+    if Event.where(name: params[:event][:name]).length > 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/'+params[:event_name]+'/edit')
+    elsif params[:event][:length].to_i <= 0
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/'+params[:event_name]+'/edit')
+    elsif params[:event][:name] == ''
+      redirect_to URI.escape('/convention/'+params[:con_name]+'/events/'+params[:event_name]+'/edit')
+    else
+      @event = Event.find_by(convention_name: params[:con_name], name: params[:event_name])
+      @event.name = params[:event][:name]
+      @event.host_name = params[:host_name]
+      @event.description = params[:event][:description]
+      @event.length = params[:event][:length]
+      @event.save
+      redirect_to '/convention/'+URI.escape(params[:con_name])+'/events'
+    end
   end
 
   # delete record of an event

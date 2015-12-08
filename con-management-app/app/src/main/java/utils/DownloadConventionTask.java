@@ -35,31 +35,39 @@ public class DownloadConventionTask extends AsyncTask<String, Void, Convention> 
         //URL("localhost:3000/convention/search?query="  + query);
         InputStream is = null;
         Convention result = null;
+        String contentAsString = "";
 
         //Returns null on exception
         try {
             //Encode space into the uri
-            String con = params[0].replaceAll(" ", "%20");
-            URL url = new URL("http://127.0.0.1:3000/convention/" + con + "/download");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if(params.length == 1) {
+                String con = params[0].replaceAll(" ", "%20");
+                URL url = new URL("http://127.0.0.1:3000/convention/" + con + "/download");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            //Boilerplate
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.connect();
-            int response = conn.getResponseCode();
+                //Boilerplate
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                conn.connect();
+                int response = conn.getResponseCode();
 
-            if(response != HttpURLConnection.HTTP_OK) {
-                Log.e("Search", "Non-200: " + response);
-                return null;
+                if (response != HttpURLConnection.HTTP_OK) {
+                    Log.e("Search", "Non-200: " + response);
+                    return null;
+                }
+
+                is = conn.getInputStream();
+                contentAsString = AppUtils.convertInputStreamToString(is);
+            }
+            else
+            {
+                contentAsString = params[1];
             }
 
-            is = conn.getInputStream();
-
             // Convert the InputStream into a string
-            String contentAsString = AppUtils.convertInputStreamToString(is);
+
             JSONObject con_json = new JSONObject(contentAsString);
             Log.d("Download", contentAsString);
 
