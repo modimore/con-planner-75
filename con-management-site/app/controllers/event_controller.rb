@@ -40,7 +40,7 @@ class EventController < ApplicationController
 
   # update database record for an event
   def update
-    if Event.where(name: params[:event][:name]).length > 0
+    if Event.where(name: params[:event][:name]).length > 0 && params[:event][:name] != params[:event_name]
       redirect_to URI.escape('/convention/'+params[:con_name]+'/events/'+params[:event_name]+'/edit')
     elsif params[:event][:length].to_i <= 0
       redirect_to URI.escape('/convention/'+params[:con_name]+'/events/'+params[:event_name]+'/edit')

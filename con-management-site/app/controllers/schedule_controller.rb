@@ -43,6 +43,10 @@ class ScheduleController < ApplicationController
     scheduler = Scheduler.new(rlist,con_hours)
     puts "Begin scheduling..."
     @schedule = scheduler.run(elist)
+
+    if @schedule == "failure"
+      @schedule = {'There is a conflict in event times. Please fix this.' => []}
+    end
   end
 
   # create new schedule version for a convention in the database
