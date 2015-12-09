@@ -1,6 +1,8 @@
 package lml.con_management_app;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -53,6 +55,8 @@ public class HomePageActivity extends AppCompatActivity {
                 gotoSearch();
             }
         });
+        searchButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        searchButton.setTextColor(Color.parseColor("#FFFFFF"));
 
 
         // Get list of downloaded convention
@@ -72,6 +76,8 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(getIntent());
             }
         });
+        clearButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        clearButton.setTextColor(Color.parseColor("#FFFFFF"));
     }
 
     //Create a button from a given Convention, links to ConventionPageActivity
@@ -86,6 +92,8 @@ public class HomePageActivity extends AppCompatActivity {
                 gotoConventionPage(result);
             }
         });
+        button1.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
 
     }
 

@@ -1,6 +1,8 @@
 package lml.con_management_app;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         Event e = data.getParcelable("event");
         Convention c = data.getParcelable("convention");
+        String text = String.format("Host: %s\n\nRoom: %s\n\nDescription: %s \n\n", e.getHostName(), e.getRoom(), e.getDescription());
         getSupportActionBar().setTitle(e.getName());
 
         //Edit text
@@ -37,13 +40,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         addPersonalButton(e, c);
 
         //Button to return to the schedule page
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gotoPrevious();
-            }
-        });
+        addReturnButton();
 
 
         // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,6 +65,24 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 button1.setText("ADDED TO PERSONAL SCHEDULE");
             }
         });
+
+        button1.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
+    }
+
+    public void addReturnButton(){
+        LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
+        Button button1=new Button(this);
+        thisDangLayout.addView(button1);
+        button1.setText("Return to Schedule");
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                gotoPrevious();
+            }
+        });
+
+        button1.getBackground().setColorFilter(Color.parseColor("#51d43c"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
     }
 
     public void addToPersonalScheduleClick(Event e, Convention c) {

@@ -1,6 +1,8 @@
 package lml.con_management_app;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public class ConventionPageActivity extends AppCompatActivity {
     Button personalButton;
     Button detailButton;
     Button updateButton;
+    Button returnButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public class ConventionPageActivity extends AppCompatActivity {
                 gotoEvents();
             }
         });
+        eventsButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        eventsButton.setTextColor(Color.parseColor("#FFFFFF"));
 
         docsButton = (Button) findViewById(R.id.docsButton_id);
         docsButton.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +55,8 @@ public class ConventionPageActivity extends AppCompatActivity {
                 gotoDocs();
             }
         });
+        docsButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        docsButton.setTextColor(Color.parseColor("#FFFFFF"));
 
         personalButton = (Button) findViewById(R.id.personalButton_id);
         personalButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +64,8 @@ public class ConventionPageActivity extends AppCompatActivity {
                 gotoPersonal();
             }
         });
+        personalButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        personalButton.setTextColor(Color.parseColor("#FFFFFF"));
 
         detailButton = (Button) findViewById(R.id.detailButton_id);
         detailButton.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +73,8 @@ public class ConventionPageActivity extends AppCompatActivity {
                 gotoDetail();
             }
         });
+        detailButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        detailButton.setTextColor(Color.parseColor("#FFFFFF"));
 
         updateButton = (Button) findViewById(R.id.updateButton_id);
         updateButton.setOnClickListener(new View.OnClickListener() {
@@ -71,14 +82,19 @@ public class ConventionPageActivity extends AppCompatActivity {
                 updateConvention();
             }
         });
+        updateButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        updateButton.setTextColor(Color.parseColor("#FFFFFF"));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        returnButton = (Button) findViewById(R.id.returnButton_id);
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 gotoPrevious();
             }
         });
+        returnButton.getBackground().setColorFilter(Color.parseColor("#51d43c"), PorterDuff.Mode.MULTIPLY);
+        returnButton.setTextColor(Color.parseColor("#FFFFFF"));
+
+
 
         //"up" button - links back to parent activity defined in manifest
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -93,7 +109,6 @@ public class ConventionPageActivity extends AppCompatActivity {
         eventIntent.putExtra("convention", data.getParcelable("convention"));
         startActivity(eventIntent);
     }
-
 
         //CONVENTION PAGE BUTTONS: lead to respective activities (docs, eventlist, personalschedule)
         //bundle convention data parcel to their respective activities

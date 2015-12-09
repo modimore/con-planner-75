@@ -1,6 +1,8 @@
 package lml.con_management_app;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,20 +33,29 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(e.getName());
 
         //Button to remove Event from the Personal Schedule
-        removePersonalButton(e,c);
+        removePersonalButton(e, c);
 
         //Edit text
         addEventText(e);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              gotoPrevious();
-            }
-        });
+        addReturnButton();
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    public void addReturnButton(){
+        LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
+        Button button1=new Button(this);
+        thisDangLayout.addView(button1);
+        button1.setText("Return to Personal Schedule");
+        button1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                gotoPrevious();
+            }
+        });
+
+        button1.getBackground().setColorFilter(Color.parseColor("#51d43c"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
     }
 
     public void gotoPrevious() {
@@ -65,11 +76,15 @@ public class PersonalEventDetailActivity extends AppCompatActivity {
                 button1.setText("REMOVED FROM PERSONAL SCHEDULE");
             }
         });
+
+
+        button1.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
+
     }
 
     public void removeFromPersonalScheduleClick(Event e, Convention c){
         AppUtils.removeFromPersonalSchedule(e.getName(), c.getName());
-
     }
 
 

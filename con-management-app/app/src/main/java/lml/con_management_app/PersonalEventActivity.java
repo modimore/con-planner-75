@@ -1,6 +1,8 @@
 package lml.con_management_app;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
@@ -42,16 +44,23 @@ public class PersonalEventActivity extends AppCompatActivity {
             }
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_return);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
+        addReturnButton();
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    public void addReturnButton(){
+        LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
+        Button button1=new Button(this);
+        thisDangLayout.addView(button1);
+        button1.setText("Return to Convention");
+        button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 gotoPrevious();
             }
         });
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
 
+        button1.getBackground().setColorFilter(Color.parseColor("#51d43c"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
+    }
 
     public void populateButtons(final Event e) {
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
@@ -64,6 +73,8 @@ public class PersonalEventActivity extends AppCompatActivity {
                 gotoDetailPage(e);
             }
         });
+        button1.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        button1.setTextColor(Color.parseColor("#FFFFFF"));
     }
 
 

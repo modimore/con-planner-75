@@ -2,6 +2,7 @@ package lml.con_management_app;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import utils.SearchConventionsTask;
 public class SearchPageActivity extends AppCompatActivity {
 
     Button submitButton;
+    Button returnButton;
     EditText searchInput;
     TextView feedbackText;
     List<Convention> conventionList;
@@ -51,9 +53,21 @@ public class SearchPageActivity extends AppCompatActivity {
             }
         });
 
+        submitButton.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+        submitButton.setTextColor(Color.parseColor("#FFFFFF"));
+
+
+        returnButton = (Button) findViewById(R.id.returnButton_id);
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                gotoPrevious();
+            }
+        });
+        returnButton.getBackground().setColorFilter(Color.parseColor("#51d43c"), PorterDuff.Mode.MULTIPLY);
+        returnButton.setTextColor(Color.parseColor("#FFFFFF"));
+
     }
 
-    //TODO:make search not case sensitive
     public void submit(String input){
 
         //Search database for input
@@ -80,6 +94,9 @@ public class SearchPageActivity extends AppCompatActivity {
                             gotoHome(conventionList.get(view.getId()));
                         }
                     });
+
+                    button1.getBackground().setColorFilter(Color.parseColor("#5a97ec"), PorterDuff.Mode.MULTIPLY);
+                    button1.setTextColor(Color.parseColor("#FFFFFF"));
             }
         }
         else{
@@ -107,6 +124,14 @@ public class SearchPageActivity extends AppCompatActivity {
         }
 
         startActivity(homeIntent);
+    }
+
+
+    public void gotoPrevious() {
+        Intent eventIntent = new Intent(SearchPageActivity.this, HomePageActivity.class);
+       // Bundle data = getIntent().getExtras();
+       // eventIntent.putExtra("convention", data.getParcelable("convention"));
+        startActivity(eventIntent);
     }
 
 
