@@ -20,6 +20,7 @@ import utils.AppUtils;
 import utils.Convention;
 import utils.Event;
 
+//Activity for Personal Event Page - front-end users view convention events bookmarked in the general events page 
 public class PersonalEventActivity extends AppCompatActivity {
 
     @Override
@@ -47,6 +48,9 @@ public class PersonalEventActivity extends AppCompatActivity {
         addReturnButton();
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    
+    //Methods for button behavior: 
+    
     public void addReturnButton(){
         LinearLayout thisDangLayout = (LinearLayout) findViewById(R.id.eventLayout_id);
         Button button1=new Button(this);
